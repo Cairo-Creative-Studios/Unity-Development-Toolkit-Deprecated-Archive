@@ -52,33 +52,35 @@ namespace CairoEngine
             runtime = runtimeGameObject.AddComponent<Runtime>();
 
             //Initialize Managers
-            CameraManager.Init();
-            ControllerManager.Init();
-            EntityManager.Init();
-            GameModeManager.Init();
-            InventoryManager.Init();
-            LevelManager.Init();
-            ObjectManager.Init();
-            PlayerManager.Init();
-            StateMachineManager.Init();
-            BehaviourManager.Init();
-            UIManager.Init();
+            CameraModule.Init();
+            ControllerModule.Init();
+            EntityModule.Init();
+            GameModeModule.Init();
+            InventoryModule.Init();
+            LevelModule.Init();
+            NNModule.Init();
+            ObjectModule.Init();
+            PlayerModule.Init();
+            StateMachineModule.Init();
+            BehaviourModule.Init();
+            UIModule.Init();
         }
 
         void Update()
         {
             //Update Managers
-            CameraManager.Update();
-            ControllerManager.Update();
-            EntityManager.Update();
-            GameModeManager.Update();
-            InventoryManager.Update();
-            LevelManager.Update();
-            ObjectManager.Update();
-            PlayerManager.Update();
-            StateMachineManager.Update();
-            BehaviourManager.Update();
-            UIManager.Update();
+            CameraModule.Update();
+            ControllerModule.Update();
+            EntityModule.Update();
+            GameModeModule.Update();
+            InventoryModule.Update();
+            LevelModule.Update();
+            NNModule.Update();
+            ObjectModule.Update();
+            PlayerModule.Update();
+            StateMachineModule.Update();
+            BehaviourModule.Update();
+            UIModule.Update();
         }
         #endregion
 
