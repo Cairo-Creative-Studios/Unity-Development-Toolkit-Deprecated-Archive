@@ -58,7 +58,7 @@ namespace CairoEngine
             GameModeModule.Init();
             InventoryModule.Init();
             LevelModule.Init();
-            NNModule.Init();
+            MLModule.Init();
             ObjectModule.Init();
             PlayerModule.Init();
             StateMachineModule.Init();
@@ -75,7 +75,7 @@ namespace CairoEngine
             GameModeModule.Update();
             InventoryModule.Update();
             LevelModule.Update();
-            NNModule.Update();
+            MLModule.Update();
             ObjectModule.Update();
             PlayerModule.Update();
             StateMachineModule.Update();

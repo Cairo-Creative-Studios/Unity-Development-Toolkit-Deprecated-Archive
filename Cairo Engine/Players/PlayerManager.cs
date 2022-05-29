@@ -5,9 +5,9 @@ using UnityEngine;
 namespace CairoEngine
 {
     /// <summary>
-    /// The Player Manager controls functionality related to each Player's presence in the game, and ensuring that Players are given appropriate Player Controllers.
+    /// The Player Module controls functionality related to each Player's presence in the game, and ensuring that Players are given appropriate Player Controllers.
     /// </summary>
-    public class PlayerManager
+    public class PlayerModule
     {
         /// <summary>
         /// The players.
@@ -34,7 +34,7 @@ namespace CairoEngine
         /// </summary>
         public static void AddPlayer()
         {
-            players.Add(new Player(ControllerManager.CreatePlayerController(-1)));
+            players.Add(new Player(ControllerModule.CreatePlayerController(-1)));
         }
 
         public static void SetPlayerControllers(PlayerController playerController)

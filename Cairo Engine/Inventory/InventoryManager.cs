@@ -7,7 +7,7 @@ namespace CairoEngine
     /// <summary>
     /// The Inventory Manager enables global control over Items that are added and used in the game by Entities.
     /// </summary>
-    public class InventoryManager
+    public class InventoryModule
     {
         /// <summary>
         /// The pool of Items that the Inventory Manager uses. 

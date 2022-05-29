@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 //TODO: Implement the UI Manager.
 namespace CairoEngine
 {
-    public class UIManager
+    public class UIModule
     {
         /// <summary>
         /// The data to use for the UI that should be Displayed.
