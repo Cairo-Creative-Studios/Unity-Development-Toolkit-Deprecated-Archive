@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650f886d328bb2ad4874892555360d15, type: 3}
+  m_Name: ShiftGrid_Default
+  m_EditorClassIdentifier: 
+  ID: ShiftGrid_Default
+  MonoBehaviour: CairoEngine.MachineLearning.Sensers.Senser_ShiftGrid
+  prefab: {fileID: 8438842345789933500, guid: 381ce8faeafd8c72a9fc7d1a67397131, type: 3}
+  properties:
+  - objectType: 1
+    name: Spaces
+    value: 10
+  - objectType: 1
+    name: Size
+    value: 32
+  - objectType: 1
+    name: Tracked Tags
+    value: 4
+  - objectType: 0
+    name: Tag_0
+    value: '"Pawn"'
+  - objectType: 0
+    name: Tag_1
+    value: '"Team_0"'
+  - objectType: 0
+    name: Tag_2
+    value: '"Team_1"'
+  - objectType: 0
+    name: Tag_3
+    value: '"Wall"'
+  inputs:
+  - Grid

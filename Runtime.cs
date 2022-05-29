@@ -14,37 +14,53 @@ public class Runtime : MonoBehaviour
 
     void Start()
     {
-        StateMachineManager.EnableStateMachine(gameObject, this);
+        StateMachineModule.EnableStateMachine(gameObject, this);
     }
 
     #region Game Modes
     public class GameMode_DeathMatch : State
     {
+        List<GameObject> TestPool = new List<GameObject>();
+
         //When entering the Game Mode, we want to pass Gameplay Management off to the Game Mode Manager by starting a Game
         public void Enter()
         {
             //Load the Level that we want to play on
-            LevelManager.LoadLevel("TestLevel");
+            //LevelModule.LoadLevel("TestLevel");
             //Start the Game Mode
-            GameModeManager.StartGame("DeathMatch");
+            //GameModeModule.StartGame("DeathMatch");
             //Reset the UI so that we can use it to display Gameplay information on the HUD.
-            UIManager.ResetUI();
+            UIModule.ResetUI();
             //Set the UI Info to what will be used for this Game Mode
-            UIManager.SetUI("CairoGame_Gameplay");
+            UIModule.SetUI("CairoGame_Gameplay");
 
-
+            MLModule.CreateNetwork("TestNetwork");
+            MLModule.CreateNetwork("TestNetwork");
+            MLModule.CreateNetwork("TestNetwork");
+            //TestPool.Add(NNModule.CreateSpecimen("MLTest"));
+            //TestPool.Add(NNModule.CreateSpecimen("MLTest"));
+            //TestPool.Add(NNModule.CreateSpecimen("MLTest"));
         }
 
         //In Update we will 
         public void Update()
         {
+            //foreach(GameObject test in TestPool)
+            //{
+            //    for(int i = 0; i < TestPool.Count-1; i++)
+            //    {
+
+            //        NNModule.SetInput(test, i, UnityEngine.Random.Range(0, 1));
+            //        NNModule.SetTarget(test, new float[] { 5.0f, 2.0f });
+            //    }
+            //}
             //GameModeManager.SpawnDefaultPawn();
         }
 
         //When a team is Victorious, we want to end the Game after playing the Victory Timeline
         public void Victory()
         {
-            GameModeManager.EndGame();
+            GameModeModule.EndGame();
         }
     }
     #endregion
