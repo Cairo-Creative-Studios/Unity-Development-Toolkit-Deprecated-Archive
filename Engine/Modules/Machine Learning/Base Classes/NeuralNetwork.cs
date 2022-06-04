@@ -41,6 +41,16 @@ namespace CairoEngine.MachineLearning
             //Apply the Info for this Network
             this.info = info;
 
+            if (info.variableInputs.Count == 0)
+            {
+                Debug.LogWarning("The input List for "+info.ID+" is empty. A Neural Network can't be Created with an empty Input List.");
+            }
+
+            if (info.variableInputs.Count == 0)
+            {
+                Debug.LogWarning("The output List for " + info.ID + " is empty. A Neural Network can't be Created with an empty output List.");
+            }
+
             //Set the Size of the Input and Output Matrices to the Size of the Info's I/O Lists
             inputs = new Matrix((int)Mathf.Clamp(info.variableInputs.Count, 1, Mathf.Infinity), 1);
             outputs = new Matrix((int)Mathf.Clamp(info.variableOutputs.Count, 1, Mathf.Infinity), 1);

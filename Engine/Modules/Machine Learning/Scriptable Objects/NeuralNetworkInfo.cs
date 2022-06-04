@@ -21,11 +21,11 @@ namespace CairoEngine
         /// <summary>
         /// Inputs that are to be controlled through user generated Code.
         /// </summary>
-        public List<string> variableInputs;
+        public List<string> variableInputs = new List<string>();
         /// <summary>
         /// Outputs that are to be controlled through user generated code.
         /// </summary>
-        public List<string> variableOutputs;
+        public List<string> variableOutputs = new List<string>();
         public int maxLife = 100;
     }
 }

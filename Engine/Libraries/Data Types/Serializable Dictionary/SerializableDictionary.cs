@@ -56,7 +56,10 @@ public class SerializableDictionary<Key,Value>
 
     public void Add(Key key, Value value)
     {
-        _dictionary.Add(key, value);
+        if (!_dictionary.ContainsKey(key))
+            _dictionary.Add(key, value);
+        else
+            _dictionary[key] = value;
 
         if (Keys.Contains(key))
             Keys[FindKeyIndex(key)] = key;

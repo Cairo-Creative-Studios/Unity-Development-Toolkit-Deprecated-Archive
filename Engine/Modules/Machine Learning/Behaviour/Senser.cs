@@ -8,7 +8,7 @@ namespace CairoEngine.MachineLearning.Sensers
     /// <summary>
     /// The Behaviour of the Object's Senser
     /// </summary>
-    public class Senser
+    public class Senser : MonoBehaviour
     {
         /// <summary>
         /// The Information of the Senser
@@ -17,7 +17,11 @@ namespace CairoEngine.MachineLearning.Sensers
         /// <summary>
         /// The index/value of the Inputs within the Neural Network
         /// </summary>
-        [ReadOnly] public SerializableDictionary<int,double[]> inputs = new SerializableDictionary<int, double[]>();
+        [ReadOnly] public SerializableDictionary<int,double> inputs = new SerializableDictionary<int, double>();
+        /// <summary>
+        /// The Inputs along with their names
+        /// </summary>
+        [ReadOnly] public SerializableDictionary<string, int> inputNames = new SerializableDictionary<string, int>();
         /// <summary>
         /// The Game Object this Senser was assigned to
         /// </summary>
@@ -28,5 +32,26 @@ namespace CairoEngine.MachineLearning.Sensers
         [ReadOnly] public NeuralNetwork agentNetwork;
 
         [ReadOnly] public GameObject senserObject;
+
+        void Update()
+        {
+            Sense();
+        }
+
+        /// <summary>
+        /// Initialize the Senser
+        /// </summary>
+        public virtual void Init()
+        {
+
+        }
+
+        /// <summary>
+        /// Activates the Senser and updates the Inputs
+        /// </summary>
+        public virtual void Sense()
+        {
+
+        }
     }
 }

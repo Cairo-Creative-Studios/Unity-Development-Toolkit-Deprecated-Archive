@@ -29,10 +29,21 @@ namespace CairoEngine.MachineLearning
         /// <summary>
         /// Properties to pass to the Senser Script
         /// </summary>
-        public List<SerializableObject> properties = new List<SerializableObject>();
+        public Dictionary<string,string> properties = new Dictionary<string, string>();
         /// <summary>
         /// The Inputs used for the Senser
         /// </summary>
         public List<string> inputs = new List<string>();
+
+        /// <summary>
+        /// Generates a new Senser List based on this Type of Senser.
+        /// </summary>
+        /// <returns>The inputs.</returns>
+        public virtual Dictionary<int,List<string>> GetInputs(int curInputs)
+        {
+            Dictionary<int, List<String>> result = new Dictionary<int, List<String>>();
+            result.Add(curInputs, inputs);
+            return result;
+        }
     }
 }

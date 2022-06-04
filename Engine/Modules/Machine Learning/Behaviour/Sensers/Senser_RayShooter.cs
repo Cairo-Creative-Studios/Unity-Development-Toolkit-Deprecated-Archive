@@ -8,6 +8,9 @@ namespace CairoEngine.MachineLearning.Sensers
 {
     public class Senser_RayShooter : Senser
     {
+        public override void Sense()
+        {
 
+        }
     }
 }

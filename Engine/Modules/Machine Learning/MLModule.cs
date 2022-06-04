@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine.MachineLearning;
+using CairoEngine.MachineLearning.Sensers;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace CairoEngine
         private static Dictionary<GameObject, int> networkObjects = new Dictionary<GameObject, int>();
 
         public static bool enableStats = true;
+
+        //Default Properties
 
         /// <summary>
         /// Initialize the Machine Learning Module.
@@ -52,6 +55,7 @@ namespace CairoEngine
                     //If Stats are enabled, Update the Input/Output Dictionaries of the Neural Network Objects.
                     if (network != null && enableStats)
                     {
+                        Debug.Log(network.gameObject);
                         NeuralNetworkBehaviour objectBehaviour = network.gameObject.GetComponent<NeuralNetworkBehaviour>();
 
                         objectBehaviour.generation = network.generation;
@@ -63,17 +67,20 @@ namespace CairoEngine
                         foreach(string key in pool.info.variableInputs)
                         {
                             objectBehaviour.inputs.Add(key, pool.networks[i].GetInput()[0][j]);
-                            j++;
+                            if(j < pool.info.variableInputs.Count-2)
+                                j++;
                         }
                         j = 0;
                         foreach(string key in pool.info.variableOutputs)
                         {
                             objectBehaviour.outputs.Add(key, pool.networks[i].GetOutput()[0][j]);
-                            j++;
+                            if (j < pool.info.variableInputs.Count-2)
+                                j++;
                         }
                     }
 
-                    i++;
+                    if (i < pool.networks.Count)
+                        i++;
                 }
                 pool.Breed();
             }
@@ -85,23 +92,31 @@ namespace CairoEngine
         /// <param name="NetworkID">The name of the Network Info Object to use as the Starting Point of the Network Group</param>
         public static NeuralNetwork CreateNetwork(string NetworkID)
         {
-            //Create the Neural Network
+            //Get the Network Info
             NeuralNetworkInfo info = genePools[NetworkID].info;
+
+            //Optional Object Parameters
+            GameObject networkObject = null;
+            NeuralNetworkBehaviour behaviour = null;
+
+            //If the Network has a Prefab, Instantiate it
+            if (info.prefab != null)
+            {
+                networkObject = InstantiatePrefab(info);
+                behaviour = networkObject.GetComponent<NeuralNetworkBehaviour>();
+                info = behaviour.info;
+            }
+
+            //Create the Neural Network
             GenePool genePool = genePools[NetworkID];
             NeuralNetwork network = new NeuralNetwork(info);
 
             //Add the new Network to the Gene Pool
             genePool.networks.Add(network);
 
-            //If the Network has a Prefab, Instantiate it and set up it's propeties
-            if (info.prefab != null)
-            {
-                GameObject networkObject = Object.Instantiate(info.prefab);
-                network.gameObject = networkObject;
-                NeuralNetworkBehaviour behaviour = networkObject.AddComponent<NeuralNetworkBehaviour>();
-                behaviour.network = network;
-                behaviour.info = info;
-            }
+            //If the Network has a Prefab, pair the Network and Behaviour
+            if (networkObject != null)
+                SetupNetworkObject(info, network, networkObject, behaviour);
 
             //Return the Created Network
             return genePools[NetworkID].networks[genePools[NetworkID].networks.Count-1];
@@ -117,26 +132,111 @@ namespace CairoEngine
         {
             //Create the Neural Network
             NeuralNetworkInfo info = firstParent.info;
-            GenePool genePool = genePools[firstParent.info.ID];
+
+            //Optional Object Parameters
+            GameObject networkObject = null;
+            NeuralNetworkBehaviour behaviour = null;
+
+            //If the Network has a Prefab, Instantiate it
+            if (info.prefab != null)
+            {
+                networkObject = InstantiatePrefab(info);
+                behaviour = networkObject.GetComponent<NeuralNetworkBehaviour>();
+                info = behaviour.info;
+            }
+
+            //Create the Neural Network
+            GenePool genePool = genePools[info.ID];
             NeuralNetwork network = new NeuralNetwork(firstParent, secondParent);
 
             //Add the new Network to the Gene Pool
             genePool.networks.Add(network);
 
-            //If the Network has a Prefab, Instantiate it and set up it's propeties
-            if (info.prefab != null)
-            {
-                GameObject networkObject = Object.Instantiate(info.prefab);
-                network.gameObject = networkObject;
-                NeuralNetworkBehaviour behaviour = networkObject.AddComponent<NeuralNetworkBehaviour>();
-                behaviour.network = network;
-                behaviour.info = info;
-            }
+            //If the Network has a Prefab, pair the Network and Behaviour
+            if (networkObject != null)
+                SetupNetworkObject(info, network, networkObject, behaviour);
 
-            GameObject.Destroy(firstParent.gameObject);
+            //Remove the First Parent so not to Overpopulate the Gene Pool
+            Object.Destroy(firstParent.gameObject);
             genePool.networks.Remove(firstParent);
 
+            //Return the created Network
             return network;
+        }
+
+        /// <summary>
+        /// Instantiates the Prefab for a Neural Network Template
+        /// </summary>
+        /// <returns>The prefab.</returns>
+        /// <param name="info">Info.</param>
+        private static GameObject InstantiatePrefab(NeuralNetworkInfo info)
+        {
+            //Network Object Properties
+            GameObject networkObject = Object.Instantiate(info.prefab);
+            NeuralNetworkBehaviour behaviour = networkObject.AddComponent<NeuralNetworkBehaviour>();
+
+            //If the Object has sensers
+            if (info.sensers.Count > 0)
+            {
+                //Loop through all the Senser Templates to add them to the Object
+                foreach (SenserInfo senserInfo in info.sensers)
+                {
+                    //Add the Senser Behaviour
+                    Senser senserBehaviour = (Senser)networkObject.AddComponent(Type.GetType(senserInfo.MonoBehaviour));
+                    GameObject behaviourObject = Object.Instantiate(senserInfo.prefab);
+
+                    //Set up Senser props
+                    senserBehaviour.info = senserInfo;
+                    senserBehaviour.senserObject = behaviourObject;
+                    senserBehaviour.agentObject = networkObject.gameObject;
+
+                    //Add the Senser Object to the Network object
+                    senserBehaviour.senserObject.transform.parent = networkObject.transform;
+
+                    //Initialize the Senser Behaviour
+                    senserBehaviour.Init();
+
+                    //Recieve Inputs from the Senser Info
+                    Dictionary<int,List<string>> recievedInputs = senserInfo.GetInputs(info.variableInputs.Count-1);
+
+                    //Loop through all the Inputs Recieved from the Senser Template, and add them to the Inputs Lists
+                    for (int i = 0; i < recievedInputs.Count; i++)
+                    {
+                        senserBehaviour.inputs.Add(i, 0.0);
+                        senserBehaviour.inputNames.Add(recievedInputs[info.variableInputs.Count - 1][i], i);
+                        info.variableInputs.AddRange(recievedInputs[info.variableInputs.Count - 1]);
+                    }
+                }
+            }
+
+            behaviour.info = info;
+
+            //Return the created Network Object
+            return networkObject;
+        }
+
+        /// <summary>
+        /// Set up the newly created Neural Network Object
+        /// </summary>
+        /// <param name="info">Info.</param>
+        /// <param name="network">Network.</param>
+        /// <param name="networkObject">Network object.</param>
+        /// <param name="behaviour">Behaviour.</param>
+        private static void SetupNetworkObject(NeuralNetworkInfo info, NeuralNetwork network, GameObject networkObject, NeuralNetworkBehaviour behaviour)
+        {
+            //Set the Neural Network's Game Object to the newly created one
+            network.gameObject = networkObject;
+
+            //Get all the Sensers, loop through them and set their Network to new Neural Network
+            Senser[] sensers = networkObject.GetComponents<Senser>();
+            foreach (Senser senser in sensers)
+            {
+                senser.agentNetwork = network;
+            }
+
+            //Set the Neural Network Behaviours Network and Info Template 
+            behaviour.network = network;
+            behaviour.info = info;
         }
 
         /// <summary>
