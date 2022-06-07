@@ -39,10 +39,10 @@ namespace CairoEngine.MachineLearning
         /// Generates a new Senser List based on this Type of Senser.
         /// </summary>
         /// <returns>The inputs.</returns>
-        public virtual Dictionary<int,List<string>> GetInputs(int curInputs)
+        public virtual List<string> GetInputs(List<string> curInputs)
         {
-            Dictionary<int, List<String>> result = new Dictionary<int, List<String>>();
-            result.Add(curInputs, inputs);
+            List<string> result = new List<string>();
+            result.AddRange(curInputs);
             return result;
         }
     }

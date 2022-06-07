@@ -23,6 +23,10 @@ namespace CairoEngine
         /// </summary>
         public List<string> variableInputs = new List<string>();
         /// <summary>
+        /// A Temporary List of Inputs created at Runtime, generated from the Network and it's Sensers.
+        /// </summary>
+        public List<string> tempInputs = new List<string>();
+        /// <summary>
         /// Outputs that are to be controlled through user generated code.
         /// </summary>
         public List<string> variableOutputs = new List<string>();

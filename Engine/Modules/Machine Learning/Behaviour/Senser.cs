@@ -36,6 +36,7 @@ namespace CairoEngine.MachineLearning.Sensers
         void Update()
         {
             Sense();
+            SetInputs();
         }
 
         /// <summary>
@@ -52,6 +53,28 @@ namespace CairoEngine.MachineLearning.Sensers
         public virtual void Sense()
         {
 
+        }
+
+        /// <summary>
+        /// Sets the Inputs connected to this Senser for the Neural Network
+        /// </summary>
+        private void SetInputs()
+        {
+            //Get the Current Inputs from the Network
+            double[][] curInputs = agentNetwork.GetInput();
+
+            //Loop through the Current Inputs and Update the Inputs belonging to this Senser
+            for(int i = 0; i < curInputs.Length; i++)
+            {
+                //If the Input belongs to this senser, set it to the Senser's Input Value
+                if (inputs.ContainsKey(i))
+                {
+                    curInputs[i][0] = inputs[i];
+                }
+            }
+
+            //Update the Network's Inputs
+            agentNetwork.SetInputs(curInputs);
         }
     }
 }

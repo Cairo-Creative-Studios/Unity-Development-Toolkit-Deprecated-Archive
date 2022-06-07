@@ -17,7 +17,6 @@ namespace CairoEngine
         /// </summary>
         public static List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
 
-
         /// <summary>
         /// The levels that are currently loaded into the game.
         /// </summary>
@@ -27,6 +26,8 @@ namespace CairoEngine
         /// The levels that can be loaded into the Game
         /// </summary>
         private static List<LevelInfo> levelInfos = new List<LevelInfo>();
+
+        private static Level currentLevel;
 
         public static void Init()
         {
@@ -63,8 +64,11 @@ namespace CairoEngine
             }
             level.childInstances.AddRange(gameObjects);
 
+            currentLevel = level;
+
             return level;
         }
+
         /// <summary>
         /// Loads the given level.
         /// </summary>
@@ -99,8 +103,6 @@ namespace CairoEngine
             int index = FindLevelIndex(ID);
             if (index != -1)
                 levels[index].Draw();
-
-
         }
 
         /// <summary>
@@ -120,6 +122,15 @@ namespace CairoEngine
         public static void MoveLevel(string ID, Vector3 moveAmount)
         {
             levels[FindLevelIndex(ID)].transform.position += moveAmount;
+        }
+
+        /// <summary>
+        /// Checks in the passed Object, adding it to the Current Level.
+        /// </summary>
+        /// <param name="checkedObject">Checked object.</param>
+        public static void CheckIn(GameObject checkedObject)
+        {
+            checkedObject.transform.parent = currentLevel.transform;
         }
 
         /// <summary>

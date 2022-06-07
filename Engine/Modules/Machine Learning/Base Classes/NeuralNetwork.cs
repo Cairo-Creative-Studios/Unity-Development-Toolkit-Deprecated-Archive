@@ -41,19 +41,19 @@ namespace CairoEngine.MachineLearning
             //Apply the Info for this Network
             this.info = info;
 
-            if (info.variableInputs.Count == 0)
+            if (info.tempInputs.Count == 0)
             {
                 Debug.LogWarning("The input List for "+info.ID+" is empty. A Neural Network can't be Created with an empty Input List.");
             }
 
-            if (info.variableInputs.Count == 0)
+            if (info.tempInputs.Count == 0)
             {
                 Debug.LogWarning("The output List for " + info.ID + " is empty. A Neural Network can't be Created with an empty output List.");
             }
 
             //Set the Size of the Input and Output Matrices to the Size of the Info's I/O Lists
-            inputs = new Matrix((int)Mathf.Clamp(info.variableInputs.Count, 1, Mathf.Infinity), 1);
-            outputs = new Matrix((int)Mathf.Clamp(info.variableOutputs.Count, 1, Mathf.Infinity), 1);
+            inputs = new Matrix((int)Mathf.Clamp(info.tempInputs.Count, 1, Mathf.Infinity), 1);
+            outputs = new Matrix((int)Mathf.Clamp(info.tempInputs.Count, 1, Mathf.Infinity), 1);
             trainingInputs = inputs;
             trainingOutputs = outputs;
 
@@ -78,8 +78,8 @@ namespace CairoEngine.MachineLearning
             Debug.Log("New Child " + generation);
 
             //Set the Size of the Input and Output Matrices to the Size of the Info's I/O Lists
-            inputs = new Matrix((int)Mathf.Clamp(info.variableInputs.Count, 1, Mathf.Infinity), 1);
-            outputs = new Matrix((int)Mathf.Clamp(info.variableOutputs.Count, 1, Mathf.Infinity), 1);
+            inputs = new Matrix((int)Mathf.Clamp(info.tempInputs.Count, 1, Mathf.Infinity), 1);
+            outputs = new Matrix((int)Mathf.Clamp(info.tempInputs.Count, 1, Mathf.Infinity), 1);
             trainingInputs = inputs;
             trainingOutputs = outputs;
 
@@ -157,12 +157,16 @@ namespace CairoEngine.MachineLearning
         }
 
         /// <summary>
-        /// Sets the Inputs of the Neural Network (Should be done upone Intialization).
+        /// Sets the Inputs of the Neural Network
         /// </summary>
         /// <param name="inputs">Inputs.</param>
-        public void SetInputs(Matrix inputs)
+        public void SetInputs(double[][] inputs)
         {
-
+            //Loop through the passed Multidimensional Double Array and set the Input Matrix Values
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                this.inputs[i, 0] = inputs[i][0];
+            }
         }
     }
 }

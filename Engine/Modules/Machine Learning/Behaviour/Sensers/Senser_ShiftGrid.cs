@@ -12,29 +12,48 @@ namespace CairoEngine.MachineLearning.Sensers
         SenserTemplate_ShiftGrid shiftGridInfo;
         List<GridUnit> gridUnits = new List<GridUnit>();
 
+        public GameObject grid;
+
         int shift = 0;
 
         public override void Init()
         {
             shiftGridInfo = (SenserTemplate_ShiftGrid)info;
 
-            int gridSize = shiftGridInfo.gridsize* shiftGridInfo.gridsize* shiftGridInfo.gridsize;
+            int gridSize = shiftGridInfo.gridsize * shiftGridInfo.gridsize * shiftGridInfo.gridsize;
 
-            //Build Grid Unit Dictionary
-            for (int i = 0; i < gridSize; i++)
+            //If the grid hasn't been Generated before, generate a new one and set Info's Generated Grid Object
+            if (shiftGridInfo.generatedGrid == null)
             {
-                //Instantiate the default Grid Unit Object
-                GameObject gridUnitObject = Object.Instantiate(shiftGridInfo.GridUnitPrefab);
-                //Set the Parent of the Grid Unit Object to the Senser Object
-                gridUnitObject.transform.parent = senserObject.transform;
+                //Build Grid Unit Dictionary
+                for (int i = 0; i < gridSize; i++)
+                {
+                    //Instantiate the default Grid Unit Object
+                    GameObject gridUnitObject = Object.Instantiate(shiftGridInfo.GridUnitPrefab);
+                    //Set the Parent of the Grid Unit Object to the Senser Object
+                    gridUnitObject.transform.parent = senserObject.transform;
 
-                //Set the Position of the Grid Unit relative to the Senser Object's Transform
-                Vector3 gridUnitPosition = new Vector3(Mathf.Round(i / 100)*shiftGridInfo.blockSize, Mathf.Round((i % 100) / 10) * shiftGridInfo.blockSize, Mathf.Round((i % 10) / 10) * shiftGridInfo.blockSize);
-                gridUnitObject.transform.position = gridUnitPosition;
+                    //Set the Position of the Grid Unit relative to the Senser Object's Transform
+                    Vector3 gridUnitPosition = new Vector3(Mathf.Round(i / 100) * shiftGridInfo.blockSize, Mathf.Round((i % 100) / 10) * shiftGridInfo.blockSize, Mathf.Round(i % 10) * shiftGridInfo.blockSize);
+                    //Center the grid position on the Object
+                    gridUnitPosition.x -= (shiftGridInfo.blockSize * shiftGridInfo.gridsize) / 2;
+                    gridUnitPosition.y -= (shiftGridInfo.blockSize * shiftGridInfo.gridsize) / 2;
+                    gridUnitPosition.z -= (shiftGridInfo.blockSize * shiftGridInfo.gridsize) / 2;
+                    //Update the Transform of the Grid Unit
+                    gridUnitObject.transform.position = gridUnitPosition;
 
-                //Add the Grid Unit Behaviour to the Grid Unit Object and add it to the List of Grid Units
-                GridUnit gridUnit = gridUnitObject.AddComponent<GridUnit>();
-                gridUnits.Add(gridUnit);
+                    //Add the Grid Unit Behaviour to the Grid Unit Object and add it to the List of Grid Units
+                    GridUnit gridUnit = gridUnitObject.AddComponent<GridUnit>();
+                    gridUnits.Add(gridUnit);
+                }
+                shiftGridInfo.generatedGrid = senserObject;
+                grid = senserObject;
+            }
+            else
+            {
+                Object.Destroy(senserObject);
+                grid = Object.Instantiate(shiftGridInfo.generatedGrid);
+                grid.transform.parent = agentObject.transform;
             }
         }
 

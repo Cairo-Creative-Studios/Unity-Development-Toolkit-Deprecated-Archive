@@ -26,18 +26,21 @@ namespace CairoEngine.MachineLearning.Sensers
         /// </summary>
         public GameObject GridUnitPrefab;
 
-        public override Dictionary<int, List<String>> GetInputs(int curInputs)
-        {
-            Dictionary<int, List<String>> result = new Dictionary<int, List<String>>();
-            result.Add(curInputs, inputs);
+        [HideInInspector] public GameObject generatedGrid; 
 
-            if (!result[curInputs].Contains("Shift"))
-                result[curInputs].Add("Shift");
+        public override List<string> GetInputs(List<string> curInputs)
+        {
+            List<string> result = new List<string>();
+            result.AddRange(curInputs.GetRange(0, inputs.Count));
+            result.AddRange(inputs.GetRange(0,inputs.Count));
+
+            if (!result.Contains("Shift"))
+                result.Add("Shift");
             int curGridSize = gridsize * gridsize * gridsize;
             for (int i = 0; i < curGridSize; i++)
             {
-                if(!result[curInputs].Contains("" + Mathf.Round(i / 100) + "," + Mathf.Round((i % 100) / 10) + "," + (i % 10)))
-                    result[curInputs].Add("" + Mathf.Round(i / 100) + "," + Mathf.Round((i % 100)/10) + "," + (i % 10));
+                if(!result.Contains("" + Mathf.Round(i / 100) + "," + Mathf.Round((i % 100) / 10) + "," + (i % 10)))
+                    result.Add("" + Mathf.Round(i / 100) + "," + Mathf.Round((i % 100)/10) + "," + (i % 10));
             }
 
             return result;
