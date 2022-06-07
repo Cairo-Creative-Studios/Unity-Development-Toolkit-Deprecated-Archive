@@ -19,6 +19,14 @@ namespace CairoEngine.MachineLearning
         /// </summary>
         public string ID = "TestSenser";
         /// <summary>
+        /// Delays the rate at which the Senser updates, in attempt to improve performance
+        /// </summary>
+        public int updateDelay = 2;
+        /// <summary>
+        /// Offsets the Update Delay (Use when you want to update each senser one after another)
+        /// </summary>
+        public int updateOffset = 0;
+        /// <summary>
         /// The class of the MonoBehaviour to use for this Senser 
         /// </summary>
         [MonoScript(order = 0, type = typeof(Senser))] public string MonoBehaviour = "Senser";

@@ -9,6 +9,11 @@ namespace CairoEngine
     public class NeuralNetworkInfo : ScriptableObject
     {
         public string ID = "DefaultNetwork";
+        /// <summary>
+        /// Allows you to see statistics in the Inspector on values related to the running Neural Network. 
+        /// This slows the game down a lot, so it is suggested that you keep it disabled until you're ready to use it.
+        /// </summary>
+        public bool enableStats = false;
         public GameObject prefab;
         /// <summary>
         /// The amount of Neurons in each Layer of the Network

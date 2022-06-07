@@ -46,7 +46,7 @@ namespace CairoEngine
                     network.lifespan++;
 
                     //If Stats are enabled, Update the Input/Output Dictionaries of the Neural Network Objects.
-                    if (network != null && enableStats)
+                    if (network != null && network.info.enableStats)
                     {
                         //Get the Neural Network Behaviour from the Game Object
                         NeuralNetworkBehaviour objectBehaviour = network.gameObject.GetComponent<NeuralNetworkBehaviour>();
@@ -132,6 +132,8 @@ namespace CairoEngine
             //If the Network has a Prefab, pair the Network and Behaviour
             if (networkObject != null)
                 SetupNetworkObject(info, network, networkObject, behaviour);
+
+            LevelModule.CheckIn(networkObject);
 
             //Return the Created Network
             return genePools[NetworkID].networks[genePools[NetworkID].networks.Count-1];

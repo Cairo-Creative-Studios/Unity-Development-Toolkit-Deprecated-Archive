@@ -110,10 +110,13 @@ namespace CairoEngine
             
             Debug.Log("Spawned Pawn, " + pawnObject.name + " with Pawn Info " + pawnInfo);
 
-            Pawn newPawn = (Pawn)pawnObject.AddComponent(Type.GetType("Pawn"));
+            Pawn newPawn = pawnObject.AddComponent<Pawn>();
             newPawn.controller = controller;
             newPawn.pawnInfo = pawnInfo;
             newPawn.entityInfo = pawnInfo;
+
+            LevelModule.CheckIn(pawnObject);
+
             return ;
         }
 

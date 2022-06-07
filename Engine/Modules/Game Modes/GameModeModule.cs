@@ -113,21 +113,25 @@ namespace CairoEngine
         /// </summary>
         public static void StartGame(string gameModeName)
         {
-            GameModeModule.gameMode = FindGameModeInfo(gameModeName);
+            gameMode = FindGameModeInfo(gameModeName);
             if (gameMode != null)
-                Debug.Log("Requested Game Mode " + gameModeName + " was found and set.");
-            firstGameModeSet = true;
-
-            //Play the Game Mode's Openning Cinematic.
-            if (gameMode.gameStartClip != null)
             {
-                currentCinematic = gameMode.gameStartClip;
+                Debug.Log("Requested Game Mode " + gameModeName + " was found and set.");
+                firstGameModeSet = true;
+
+                //Play the Game Mode's Openning Cinematic.
+                if (gameMode.gameStartClip != null)
+                {
+                    currentCinematic = gameMode.gameStartClip;
+                }
+
+                GameObject test = new GameObject();
+                test.name = "Test";
+
+                EntityModule.SpawnPawn(gameMode.defaultPawnInfo, LevelModule.spawnPoints[0].transform.position);
             }
-
-            GameObject test = new GameObject();
-            test.name = "Test";
-
-            EntityModule.SpawnPawn(gameMode.defaultPawnInfo, LevelModule.spawnPoints[0].transform.position);
+            else
+                Debug.LogWarning("The requested Game Mode: " + gameModeName + " does not exist.");
         }
 
         public static void SpawnDefaultPawn()
@@ -151,12 +155,6 @@ namespace CairoEngine
         {
 
         }
-
-
-
-
-
-
 
         /// <summary>
         /// Ends the Current Game.
@@ -183,11 +181,11 @@ namespace CairoEngine
         /// <param name="name">Name.</param>
         private static GameModeInfo FindGameModeInfo(string name)
         {
-            foreach (GameModeInfo gameMode in gameModeInfos)
+            foreach (GameModeInfo gameModeInfo in gameModeInfos)
             {
-                if (gameMode.name == name)
+                if (gameModeInfo.ID == name)
                 {
-                    return gameMode;
+                    return gameModeInfo;
                 }
             }
             return null;

@@ -8,6 +8,8 @@ namespace CairoEngine
     [CreateAssetMenu(menuName = "CairoGame/Game Mode")]
     public class GameModeInfo : ScriptableObject
     {
+        public string ID = "Default";
+
         [Header("Customization")]
         [Tooltip("The score to reach to win the Match")]
         public int scoreToWin = 25;

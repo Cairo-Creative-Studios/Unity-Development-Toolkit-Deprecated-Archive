@@ -28,7 +28,7 @@ public class Runtime : MonoBehaviour
             //Load the Level that we want to play on
             //LevelModule.LoadLevel("TestLevel");
             //Start the Game Mode
-            //GameModeModule.StartGame("DeathMatch");
+            GameModeModule.StartGame("DeathMatch");
             //Reset the UI so that we can use it to display Gameplay information on the HUD.
             UIModule.ResetUI();
             //Set the UI Info to what will be used for this Game Mode

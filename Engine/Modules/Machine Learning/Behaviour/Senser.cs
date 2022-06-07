@@ -33,10 +33,16 @@ namespace CairoEngine.MachineLearning.Sensers
 
         [ReadOnly] public GameObject senserObject;
 
+        private int life = 0;
+
         void Update()
         {
-            Sense();
-            SetInputs();
+            life++;
+            if((life%info.updateDelay) == 0)
+            {
+                Sense();
+                SetInputs();
+            }
         }
 
         /// <summary>
