@@ -22,12 +22,12 @@ namespace CairoEngine
         /// <summary>
         /// The info files of all the Pawns that can be loaded into the game.
         /// </summary>
-        private static List<PawnInfo> pawnInfos = new List<PawnInfo>();
+        private static List<PawnTemplate> pawnInfos = new List<PawnTemplate>();
 
 
         public static void Init()
         {
-            pawnInfos.AddRange(Resources.LoadAll<PawnInfo>(""));
+            pawnInfos.AddRange(Resources.LoadAll<PawnTemplate>(""));
         }
 
         public static void Update()
@@ -76,7 +76,7 @@ namespace CairoEngine
         /// <param name="rotation">Rotation.</param>
         public static Pawn SpawnPawn(string ID, string type, Vector3 position, Vector3 rotation = default(Vector3), object controller = null)
         {
-            PawnInfo pawnInfo = GetPawnInfo(ID);
+            PawnTemplate pawnInfo = GetPawnInfo(ID);
 
             if (pawnInfo != null)
             {
@@ -85,7 +85,7 @@ namespace CairoEngine
                 newPawnObject.transform.eulerAngles = rotation;
                 Pawn newPawn = (Pawn)newPawnObject.AddComponent(Type.GetType(type));
                 newPawn.controller = controller;
-                newPawn.pawnInfo = pawnInfo;
+                newPawn.pawnTemplate = pawnInfo;
                 newPawn.entityInfo = pawnInfo;
 
                 return newPawn;
@@ -101,9 +101,9 @@ namespace CairoEngine
         /// <param name="type">The name of the Pawn class to give to the Spawned Pawn</param>
         /// <param name="position">Position.</param>
         /// <param name="rotation">Rotation.</param>
-        public static void SpawnPawn(PawnInfo pawnInfo,Vector3 position, Vector3 rotation = default(Vector3), object controller = null)
+        public static void SpawnPawn(PawnTemplate pawnInfo,Vector3 position, Vector3 rotation = default(Vector3), object controller = null)
         {
-           GameObject pawnObject = UnityEngine.Object.Instantiate(pawnInfo.prefab);
+           GameObject pawnObject = Engine.CreatePrefabInstance(pawnInfo.prefab);
             pawnObject.name = "Foo";
             pawnObject.transform.position = position;
             pawnObject.transform.eulerAngles = rotation;
@@ -112,10 +112,8 @@ namespace CairoEngine
 
             Pawn newPawn = pawnObject.AddComponent<Pawn>();
             newPawn.controller = controller;
-            newPawn.pawnInfo = pawnInfo;
+            newPawn.pawnTemplate = pawnInfo;
             newPawn.entityInfo = pawnInfo;
-
-            LevelModule.CheckIn(pawnObject);
 
             return ;
         }
@@ -136,7 +134,7 @@ namespace CairoEngine
         /// <param name="ID">Identifier.</param>
         private static GameObject GetPawnPrefab(string ID)
         {
-            foreach (PawnInfo curPawn in pawnInfos)
+            foreach (PawnTemplate curPawn in pawnInfos)
             {
                 if (curPawn.ID == ID)
                 {
@@ -146,9 +144,9 @@ namespace CairoEngine
             return null;
         }
 
-        private static PawnInfo GetPawnInfo(string ID)
+        private static PawnTemplate GetPawnInfo(string ID)
         {
-            foreach (PawnInfo pawnInfo in pawnInfos)
+            foreach (PawnTemplate pawnInfo in pawnInfos)
             {
                 if (pawnInfo.ID == ID)
                 {

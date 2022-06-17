@@ -24,7 +24,7 @@ namespace CairoEngine
             foreach(GameObject gameObject in behaviours.Keys)
             {
                 foreach (BehaviourType behaviourType in behaviours[gameObject])
-                    behaviourType.Update();
+                    behaviourType.BehaviourUpdate();
             }
         }
 
@@ -33,10 +33,10 @@ namespace CairoEngine
         /// </summary>
         /// <param name="gameObject">Game object.</param>
         /// <param name="behaviourTypeInfo">Behaviour type info.</param>
-        public static void AddBehaviour(GameObject gameObject, BehaviourTypeInfo  behaviourTypeInfo)
+        public static void AddBehaviour(GameObject gameObject, BehaviourTypeTemplate  behaviourTypeInfo)
         {
             BehaviourType behaviourType = (BehaviourType)gameObject.AddComponent(Type.GetType(behaviourTypeInfo.behaviourClass));
-            behaviourType.info = behaviourTypeInfo;
+            behaviourType.template = behaviourTypeInfo;
             behaviours[gameObject].Add(behaviourType);
         }
 
@@ -71,7 +71,7 @@ namespace CairoEngine
                     bool found = false;
                     foreach(BehaviourType behaviourType in behaviours[gameObject])
                     {
-                        if(behaviourType.info.behaviourClass == behaviour)
+                        if(behaviourType.template.behaviourClass == behaviour)
                         {
                             found = true;
 

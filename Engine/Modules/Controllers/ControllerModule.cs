@@ -10,7 +10,7 @@ namespace CairoEngine
     public class ControllerModule
     {
         /// <summary>
-        /// The controllers that the Engine is using.
+        /// The currently active Controllers in the game
         /// </summary>
         private static List<Controller> controllers = new List<Controller>();
 
@@ -49,8 +49,19 @@ namespace CairoEngine
             PlayerController playerController = gameObject.AddComponent<PlayerController>();
             gameObject.transform.parent = Engine.singleton.transform;
             controllers.Add(playerController);
+            playerController.checkedIn = true;
 
             return playerController;
+        }
+
+        /// <summary>
+        /// Checks in a Controller if it hasn't already been added in the Controller Module
+        /// </summary>
+        /// <param name="controller">The Controller to add</param>
+        public static void CheckIn(Controller controller)
+        {
+            controllers.Add(controller);
+            controller.checkedIn = true;
         }
 
         /// <summary>

@@ -9,19 +9,19 @@ namespace CairoEngine
     [InitializeOnLoad]
     public class Editor
     {
-        public static List<LevelInfo> levelInfos = new List<LevelInfo>();
-        public static List<PawnInfo> pawnInfos = new List<PawnInfo>();
-        public static List<GameModeInfo> gameModeInfos = new List<GameModeInfo>();
-        public static List<InventoryItemInfo> itemInfos = new List<InventoryItemInfo>();
+        public static List<LevelTemplate> levelInfos = new List<LevelTemplate>();
+        public static List<PawnTemplate> pawnInfos = new List<PawnTemplate>();
+        public static List<GameModeTemplate> gameModeInfos = new List<GameModeTemplate>();
+        public static List<InventoryItemTemplate> itemInfos = new List<InventoryItemTemplate>();
 
         [InitializeOnLoadMethod]
         public static async Task Init()
         {
             //Load Data files
-            levelInfos.AddRange(Resources.LoadAll<LevelInfo>(""));
-            pawnInfos.AddRange(Resources.LoadAll<PawnInfo>(""));
-            gameModeInfos.AddRange(Resources.LoadAll<GameModeInfo>(""));
-            itemInfos.AddRange(Resources.LoadAll<InventoryItemInfo>(""));
+            levelInfos.AddRange(Resources.LoadAll<LevelTemplate>(""));
+            pawnInfos.AddRange(Resources.LoadAll<PawnTemplate>(""));
+            gameModeInfos.AddRange(Resources.LoadAll<GameModeTemplate>(""));
+            itemInfos.AddRange(Resources.LoadAll<InventoryItemTemplate>(""));
 
             while (true)
             {
@@ -42,14 +42,14 @@ namespace CairoEngine
 
             AssetDatabase.CreateFolder("Assets/Resources", "Pawn");
             //Create the Pawn Info Asset.
-            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<PawnInfo>(), "Assets/Resources/" + folderName + "/" + folderName + " Info.asset");
-            PawnInfo pawnInfo = Resources.Load<PawnInfo>(folderName + " Info");
+            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<PawnTemplate>(), "Assets/Resources/" + folderName + "/" + folderName + " Info.asset");
+            PawnTemplate pawnInfo = Resources.Load<PawnTemplate>(folderName + " Info");
             //Create the Pawn's Game Object.
             GameObject pawnObject = new GameObject();
             pawnObject.name = folderName;
             //Add the Pawn Component to the new Game Object and set default values.
             Pawn pawn = pawnObject.AddComponent<Pawn>();
-            pawn.pawnInfo = pawnInfo;
+            pawn.pawnTemplate = pawnInfo;
             pawn.entityInfo = pawnInfo;
             //Create the prefab for the Game OBject and give it to the Pawn Info.
 

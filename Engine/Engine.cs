@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 namespace CairoEngine
 {
-
     /// <summary>
     /// The Engine class acts as a hub for all Components, Modules, and Objects. 
     /// It should be accessed for control over all of the Game's Elements.
@@ -52,6 +51,7 @@ namespace CairoEngine
             runtime = runtimeGameObject.AddComponent<Runtime>();
 
             //Initialize Managers
+            BehaviourModule.Init();
             CameraModule.Init();
             ControllerModule.Init();
             EntityModule.Init();
@@ -69,6 +69,7 @@ namespace CairoEngine
         void Update()
         {
             //Update Managers
+            BehaviourModule.Update();
             CameraModule.Update();
             ControllerModule.Update();
             EntityModule.Update();
@@ -106,8 +107,18 @@ namespace CairoEngine
 
             return desiredTypes.ToArray();
         }
+
+        /// <summary>
+        /// Creates an instance of a Prefab, running initialization code on it through the Engine's Modules afterward.
+        /// </summary>
+        /// <param name="prefab">The Prefab to create a new GameObject from</param>
+        public static GameObject CreatePrefabInstance(GameObject prefab)
+        {
+            GameObject createdInstance = Object.Instantiate(prefab);
+            UIModule.CheckIn(createdInstance, prefab);
+            LevelModule.CheckIn(createdInstance);
+            return createdInstance;
+        }
         #endregion
-
-
     }
 }

@@ -14,12 +14,12 @@ namespace CairoEngine
         /// <summary>
         /// The Game Modes present in the Game.
         /// </summary>
-        private static List<GameModeInfo> gameModeInfos = new List<GameModeInfo>();
+        private static List<GameModeTemplate> gameModeInfos = new List<GameModeTemplate>();
 
         /// <summary>
         /// The Game Mode information to use for the Current Game Mode
         /// </summary>
-        public static GameModeInfo gameMode;
+        public static GameModeTemplate gameMode;
 
         /// <summary>
         /// Whether the creator of the Game has initialized the first Game Mode.
@@ -46,7 +46,7 @@ namespace CairoEngine
 
         public static void Init()
         {
-            gameModeInfos.AddRange(Resources.LoadAll<GameModeInfo>(""));
+            gameModeInfos.AddRange(Resources.LoadAll<GameModeTemplate>(""));
         }
 
         /// <summary>
@@ -57,13 +57,13 @@ namespace CairoEngine
             //Initialzie the Game Mode Module with the Template Game Mode Info
             if (!firstGameModeSet)
                 if (gameMode == null)
-                    gameMode = ScriptableObject.CreateInstance<GameModeInfo>();
+                    gameMode = ScriptableObject.CreateInstance<GameModeTemplate>();
             
 
             if (currentCinematic == null)
             {
                 if (gameMode == null)
-                    gameMode = ScriptableObject.CreateInstance<GameModeInfo>();
+                    gameMode = ScriptableObject.CreateInstance<GameModeTemplate>();
 
                 //Add to Game Duration Time
                 time += Time.deltaTime;
@@ -125,13 +125,15 @@ namespace CairoEngine
                     currentCinematic = gameMode.gameStartClip;
                 }
 
-                GameObject test = new GameObject();
-                test.name = "Test";
-
                 EntityModule.SpawnPawn(gameMode.defaultPawnInfo, LevelModule.spawnPoints[0].transform.position);
             }
             else
                 Debug.LogWarning("The requested Game Mode: " + gameModeName + " does not exist.");
+        }
+
+        private static void HandleStartSpawn()
+        {
+
         }
 
         public static void SpawnDefaultPawn()
@@ -179,9 +181,9 @@ namespace CairoEngine
         /// Finds the Game Mode by ID
         /// </summary>
         /// <param name="name">Name.</param>
-        private static GameModeInfo FindGameModeInfo(string name)
+        private static GameModeTemplate FindGameModeInfo(string name)
         {
-            foreach (GameModeInfo gameModeInfo in gameModeInfos)
+            foreach (GameModeTemplate gameModeInfo in gameModeInfos)
             {
                 if (gameModeInfo.ID == name)
                 {

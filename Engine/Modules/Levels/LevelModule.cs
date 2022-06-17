@@ -25,13 +25,13 @@ namespace CairoEngine
         /// <summary>
         /// The levels that can be loaded into the Game
         /// </summary>
-        private static List<LevelInfo> levelInfos = new List<LevelInfo>();
+        private static List<LevelTemplate> levelInfos = new List<LevelTemplate>();
 
         private static Level currentLevel;
 
         public static void Init()
         {
-            levelInfos.AddRange(Resources.LoadAll<LevelInfo>(""));
+            levelInfos.AddRange(Resources.LoadAll<LevelTemplate>(""));
             CreateLevelForScene(SceneManager.GetActiveScene());
         }
 
@@ -51,7 +51,7 @@ namespace CairoEngine
                 name = "Level_" + scene.name
             };
             Level level = levelObject.AddComponent<Level>();
-            level.info = GetLevelInfoForScene(scene.name);
+            level.template = GetLevelInfoForScene(scene.name);
 
             GameObject[] gameObjects = scene.GetRootGameObjects();
             foreach (GameObject rootObject in gameObjects)
@@ -77,7 +77,7 @@ namespace CairoEngine
         /// </param>
         public static void LoadLevel(string ID)
         {
-            foreach (LevelInfo levelInfo in levelInfos)
+            foreach (LevelTemplate levelInfo in levelInfos)
             {
                 if (levelInfo.ID == ID)
                 {
@@ -86,7 +86,7 @@ namespace CairoEngine
                         name = "Level_" + levelInfo.ID
                     };
                     Level level = levelObject.AddComponent<Level>();
-                    level.info = levelInfo;
+                    level.template = levelInfo;
                     levels.Add(level);
                     return;
                 }
@@ -144,7 +144,7 @@ namespace CairoEngine
             foreach (Level level in levels)
             {
                 index++;
-                if (level.info.ID == ID)
+                if (level.template.ID == ID)
                 {
                     break;
                 }
@@ -157,9 +157,9 @@ namespace CairoEngine
         /// </summary>
         /// <returns>The level info for scene.</returns>
         /// <param name="sceneName">Scene name.</param>
-        private static LevelInfo GetLevelInfoForScene(string sceneName)
+        private static LevelTemplate GetLevelInfoForScene(string sceneName)
         {
-            foreach (LevelInfo levelInfo in levelInfos)
+            foreach (LevelTemplate levelInfo in levelInfos)
             {
                 if (levelInfo.sceneName == sceneName)
                 {
@@ -167,7 +167,7 @@ namespace CairoEngine
                 }
             }
 
-            LevelInfo newLevelInfo = ScriptableObject.CreateInstance<LevelInfo>();
+            LevelTemplate newLevelInfo = ScriptableObject.CreateInstance<LevelTemplate>();
             newLevelInfo.sceneName = sceneName;
             newLevelInfo.name = sceneName;
 
