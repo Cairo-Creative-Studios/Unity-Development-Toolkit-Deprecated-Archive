@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine.MachineLearning;
@@ -6,9 +8,8 @@ using CairoEngine.MachineLearning;
 namespace CairoEngine
 {
     [CreateAssetMenu(menuName = "Cairo Game/Machine Learning/Neural Network")]
-    public class NeuralNetworkTemplate : ScriptableObject
+    public class NeuralNetworkTemplate : Resource
     {
-        public string ID = "DefaultNetwork";
         /// <summary>
         /// Allows you to see statistics in the Inspector on values related to the running Neural Network. 
         /// This slows the game down a lot, so it is suggested that you keep it disabled until you're ready to use it.

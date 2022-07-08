@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -37,18 +39,18 @@ namespace CairoEngine
         /// </summary>
         /// <param name="thisGameObject">The Game Object to apply the State Machine to.</param>
         /// <param name="behaviour">The Monobehaviour to add the State Machine to.</param>
-        public static void EnableStateMachine(GameObject thisGameObject, object behaviour)
+        public static void EnableStateMachine<T>(GameObject thisGameObject, T behaviour)
         {
-            MonoBehaviour behaviourAsMono = (MonoBehaviour)behaviour;
+            T behaviourAsMono = (T)behaviour;
 
-            Type[] stateTypesInBehaviour = Engine.GetNestedTypesOfBase(behaviour.GetType(), "State");
-            Dictionary<string, State> states = new Dictionary<string, State>();
+            Type[] stateTypesInBehaviour = Engine.GetNestedTypesOfBase(behaviourAsMono.GetType(), "State`1");
+            Dictionary<string, object> states = new Dictionary<string, object>();
             string firstTypeName = "";
 
             foreach (Type type in stateTypesInBehaviour)
             {
-                states.Add(type.Name, (State)Activator.CreateInstance(type));
-
+                states.Add(type.Name, Activator.CreateInstance(type));
+               
                 if (firstTypeName == "")
                     firstTypeName = type.Name;
             }
@@ -56,9 +58,10 @@ namespace CairoEngine
             if (!fsmObjects.ContainsKey(thisGameObject))
                 fsmObjects.Add(thisGameObject, new List<StateContainer>());
 
-            fsmObjects[thisGameObject].Add(new StateContainer(behaviour.GetType().Name, states, firstTypeName));
+            fsmObjects[thisGameObject].Add(new StateContainer(behaviourAsMono.GetType().Name, states, firstTypeName));
 
             CallStateMethod(thisGameObject, "Enter");
+            SetField(thisGameObject, "parent", behaviourAsMono);
         }
 
         /// <summary>
@@ -86,8 +89,19 @@ namespace CairoEngine
                         CallStateMethod(stateGameObject, "Enter");
                     }
                 }
-
             }
+        }
+
+        public static string GetState(GameObject stateGameObject, string behaviourName = "")
+        {
+            if (fsmObjects.ContainsKey(stateGameObject))
+            {
+                if(behaviourName == "")
+                {
+                    return fsmObjects[stateGameObject][0].curState;
+                }
+            }
+            return "";
         }
 
         /// <summary>
@@ -110,7 +124,26 @@ namespace CairoEngine
 
                         if (method != null)
                             method.Invoke(stateContainers.states[stateName], parameters);
+                    }
+                }
+            }
+        }
 
+
+        public static void SetField(GameObject stateGameObject, string fieldName, object value)
+        {
+            foreach (StateContainer stateContainers in fsmObjects[stateGameObject])
+            {
+                Type behaviourType = Type.GetType(stateContainers.behaviourName);
+
+                foreach (string stateName in stateContainers.states.Keys)
+                {
+                    if (stateName == stateContainers.curState)
+                    {
+                        FieldInfo field = behaviourType.GetNestedType(stateName).GetField(fieldName);
+
+                        if (field != null)
+                            field.SetValue(stateContainers.states[stateName], value);
                     }
                 }
             }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -60,7 +62,6 @@ namespace CairoEngine
                         bind.element.transform.scale = new Vector3(bind.element.transform.scale.x,(float)bind.field.GetValue(bind.instance),bind.element.transform.scale.z);
                         break;
                     case PropertyType.Height:
-
                         bind.element.transform.scale = new Vector3((float)bind.field.GetValue(bind.instance), bind.element.transform.scale.y, bind.element.transform.scale.z);
                         break;
                     case PropertyType.Text:
@@ -162,17 +163,20 @@ namespace CairoEngine
         /// <param name="checkedObject">Checked object.</param>
         public static void CheckIn(GameObject checkedObject, GameObject prefab)
         {
-            //Loop through all the Game Object Binds in the Template
-            foreach(GameObjectBind bind in currentTemplate.gameObjectBinds)
+            if(currentTemplate != null)
             {
-                //If the Game Object Bind is the same as the one we just checked in, add the appropriate Binds for the Elements in the UI
-                if(bind.boundObject == prefab)
+                //Loop through all the Game Object Binds in the Template
+                foreach (GameObjectBind bind in currentTemplate.gameObjectBinds)
                 {
-                    //Get the Component that the Game Object Bind is for
-                    var component = checkedObject.GetComponent(bind.boundBehaviour);
-                    //Bind the Element to the Game Object's Field
-                    Bind(component, bind.fieldName, bind.element, (PropertyType)bind.property);
-                    break;
+                    //If the Game Object Bind is the same as the one we just checked in, add the appropriate Binds for the Elements in the UI
+                    if (bind.boundObject == prefab)
+                    {
+                        //Get the Component that the Game Object Bind is for
+                        var component = checkedObject.GetComponent(bind.boundBehaviour);
+                        //Bind the Element to the Game Object's Field
+                        Bind(component, bind.fieldName, bind.element, (PropertyType)bind.property);
+                        break;
+                    }
                 }
             }
         }
@@ -192,7 +196,7 @@ namespace CairoEngine
                 this.instance = instance;
                 field = instance.GetType().GetField(fieldName);
                 this.property = property;
-                this.element = element;
+                this.element = element; 
             }
 
             public object this[string fieldName]

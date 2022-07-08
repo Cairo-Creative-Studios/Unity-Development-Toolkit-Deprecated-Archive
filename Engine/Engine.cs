@@ -1,8 +1,11 @@
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using UnityEngine.SceneManagement;
+using B83.Unity.Attributes;
 
 namespace CairoEngine
 {
@@ -14,6 +17,12 @@ namespace CairoEngine
     {
         public static Engine singleton;
 
+        public static List<string> flags = new List<string>();
+
+        public SDictionary<string, GameObject> enginePrefabs = new SDictionary<string, GameObject>();
+
+        [MonoScript] public string runtimeClass = "Runtime";
+        public static RuntimeTemplate runtimeTemplate;
         /// <summary>
         /// The Runtime controls the overall flow of the Game by interacting with the Engine. 
         /// </summary>
@@ -25,6 +34,9 @@ namespace CairoEngine
         [RuntimeInitializeOnLoadMethod]
         public static void Inialize()
         {
+            RuntimeTemplate[] runtimeTemplates = Resources.LoadAll<RuntimeTemplate>("");
+            runtimeTemplate = runtimeTemplates[0];
+
             Scene previousScene = SceneManager.GetActiveScene();
             Scene engineScene = SceneManager.CreateScene("Engine");
             SceneManager.SetActiveScene(engineScene);
@@ -42,15 +54,7 @@ namespace CairoEngine
             //Set the Singleton
             singleton = this;
 
-            //Create the Game Runtime
-            GameObject runtimeGameObject = new GameObject
-            {
-                name = "Runtime"
-            };
-            runtimeGameObject.transform.parent = singleton.transform;
-            runtime = runtimeGameObject.AddComponent<Runtime>();
-
-            //Initialize Managers
+            //Initialize Modules
             BehaviourModule.Init();
             CameraModule.Init();
             ControllerModule.Init();
@@ -61,14 +65,26 @@ namespace CairoEngine
             MLModule.Init();
             ObjectModule.Init();
             PlayerModule.Init();
-            StateMachineModule.Init();
             BehaviourModule.Init();
             UIModule.Init();
+            StateMachineModule.Init();
+
+            //Create the Game Runtime
+            GameObject runtimeGameObject = new GameObject
+            {
+                name = "Runtime"
+            };
+            runtimeGameObject.transform.parent = Engine.singleton.transform;
+
+            var importedRuntime = runtimeGameObject.AddComponent(Type.GetType(runtimeTemplate.runtimeClass));
+            Engine.singleton.runtime = (Runtime)importedRuntime;
+
+            StateMachineModule.EnableStateMachine(runtimeGameObject, importedRuntime);
         }
 
         void Update()
         {
-            //Update Managers
+            //Update Modules
             BehaviourModule.Update();
             CameraModule.Update();
             ControllerModule.Update();
@@ -82,6 +98,12 @@ namespace CairoEngine
             StateMachineModule.Update();
             BehaviourModule.Update();
             UIModule.Update();
+        }
+
+        void FixedUpdate()
+        {
+            //FixedUpdate Modules
+            BehaviourModule.FixedUpdate();
         }
         #endregion
 
@@ -99,10 +121,12 @@ namespace CairoEngine
 
             foreach (Type curType in types)
             {
-                if (curType.BaseType.Name == "State")
+                if (curType.BaseType.Name == baseTypeName)
                 {
                     desiredTypes.Add(curType);
                 }
+
+                Debug.Log(curType);
             }
 
             return desiredTypes.ToArray();

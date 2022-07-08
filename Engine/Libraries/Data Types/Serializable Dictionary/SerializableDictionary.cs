@@ -1,169 +1,183 @@
-﻿using System;
+﻿
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 
+
 [Serializable]
-public class SerializableDictionary<Key,Value>
+public class SDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializationCallbackReceiver
 {
-    private Dictionary<Key, Value> _dictionary = new Dictionary<Key, Value>();
-    [HideInInspector] public List<Key> Keys = new List<Key>();
-    [HideInInspector] public List<Value> Values = new List<Value>();
-    [HideInInspector] public Key[] KeyArray;
-    [HideInInspector] public Value[] ValueArray;
-    public List<DictionaryItem> dictionary = new List<DictionaryItem>();
+    private readonly Dictionary<TKey, TValue> dictionary = new Dictionary<TKey, TValue>();
 
-    public Value this[Key key]
+    [SerializeField]
+    private List<DictionaryItem> items = new List<DictionaryItem>();
+
+    [SerializeField]
+    private bool invalidFlag;
+
+    public TValue this[TKey key]
     {
-        get
+        get 
         {
-            return _dictionary[key];
+            if (dictionary.ContainsKey(key))
+                return dictionary[key];
+            else
+            {
+                Debug.LogWarning("Key "+key+" doesn't exist!");
+                return default(TValue);
+            }
         }
-        set
+
+        set 
         {
-            if (Keys.Contains(key))
-                Keys[FindKeyIndex(key)] = key;
-            else
-                Keys.Add(key);
-            if (Values.Contains(_dictionary[key]))
-                Values[FindValueIndex(_dictionary[key])] = value;
-            else
-                Values.Add(value);
-            CreateArrays();
-            _dictionary[key] = value;
+            if (!dictionary.ContainsKey(key))
+                dictionary.Add(key, value);
+            else 
+                dictionary[key] = value; 
         }
     }
 
-    public SerializableDictionary()
+    public ICollection<TKey> Keys
     {
+        get { return dictionary.Keys; }
     }
 
-    public SerializableDictionary(List<DictionaryItem> dictionary)
+    public ICollection<TValue> Values
     {
-        foreach(DictionaryItem item in dictionary)
-        {
-            _dictionary.Add(item.key, item.value);
-            Keys.Add(item.key);
-            Values.Add(item.value);
-            CreateArrays();
-        }
+        get { return dictionary.Values; }
+    }
+
+    public void Add(TKey key, TValue value)
+    {
+        dictionary.Add(key, value);
+    }
+
+    public bool ContainsKey(TKey key)
+    {
+        return dictionary.ContainsKey(key);
+    }
+
+    public bool Remove(TKey key)
+    {
+        return dictionary.Remove(key);
+    }
+
+    public bool TryGetValue(TKey key, out TValue value)
+    {
+        return dictionary.TryGetValue(key, out value);
     }
 
     public void Clear()
     {
-        _dictionary.Clear();
-    }
-
-    public void Add(Key key, Value value)
-    {
-        if (!_dictionary.ContainsKey(key))
-            _dictionary.Add(key, value);
-        else
-            _dictionary[key] = value;
-
-        if (Keys.Contains(key))
-            Keys[FindKeyIndex(key)] = key;
-        else
-            Keys.Add(key);
-        if (Values.Contains(_dictionary[key]))
-            Values[FindValueIndex(_dictionary[key])] = value;
-        else
-            Values.Add(value);
-        CreateArrays();
-    }
-
-    public bool TryAdd(Key key, Value value)
-    {
-        bool result = _dictionary.TryAdd(key, value);
-
-        if (result)
-        {
-            if (Keys.Contains(key))
-                Keys[FindKeyIndex(key)] = key;
-            else
-                Keys.Add(key);
-            if (Values.Contains(_dictionary[key]))
-                Values[FindValueIndex(_dictionary[key])] = value;
-            else
-                Values.Add(value);
-            CreateArrays();
-        }
-
-        return _dictionary.TryAdd(key, value);
-    }
-
-    public void Remove(Key key)
-    {
-        if(_dictionary.ContainsKey(key))
-        {
-            Keys.Remove(key);
-            Values.Remove(_dictionary[key]);
-            _dictionary.Remove(key);
-            CreateArrays();
-        }
-    }
-
-    public bool ContainsKey(Key key)
-    {
-        return _dictionary.ContainsKey(key);
-    }
-
-    public bool ContainsValue(Value value)
-    {
-        return _dictionary.ContainsValue(value);
-    }
-
-    public int EnsureCapacity(int capacity)
-    {
-        return _dictionary.EnsureCapacity(capacity);
-    }
-
-    public override int GetHashCode()
-    {
-        return _dictionary.GetHashCode();
-    }
-
-    private void CreateArrays()
-    {
-        KeyArray = Keys.ToArray();
-        ValueArray = Values.ToArray();
-
         dictionary.Clear();
-        foreach(Key key in _dictionary.Keys)
-        {
-            dictionary.Add(new DictionaryItem(key, _dictionary[key]));
-        }
-    }
-    
-
-    private int FindKeyIndex(Key key)
-    {
-        for (int i = 0; i < Keys.Count; i++)
-        {
-            if (Keys[i].Equals(key))
-                return i;
-        }
-        return -1;
     }
 
-    private int FindValueIndex(Value value)
+    public int Count
     {
-        for(int i = 0; i < Values.Count; i++)
+        get { return dictionary.Count; }
+    }
+
+    bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
+    {
+        get { return (dictionary as ICollection<KeyValuePair<TKey, TValue>>).IsReadOnly; }
+    }
+
+    void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+    {
+        (dictionary as ICollection<KeyValuePair<TKey, TValue>>).Add(item);
+    }
+
+    bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
+    {
+        return (dictionary as ICollection<KeyValuePair<TKey, TValue>>).Contains(item);
+    }
+
+    void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+    {
+        (dictionary as ICollection<KeyValuePair<TKey, TValue>>).CopyTo(array, arrayIndex);
+    }
+
+    bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+    {
+        return (dictionary as ICollection<KeyValuePair<TKey, TValue>>).Remove(item);
+    }
+
+    IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+    {
+        return (dictionary as IEnumerable<KeyValuePair<TKey, TValue>>).GetEnumerator();
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return dictionary.GetEnumerator();
+    }
+
+    public void OnBeforeSerialize()
+    {
+        if (invalidFlag)
         {
-            if (Values[i].Equals(value))
-                return i;
+            return;
         }
-        return -1;
+        else
+        {
+            items.Clear();
+        }
+
+        foreach (var pair in dictionary)
+        {
+            items.Add(new DictionaryItem(pair.Key, pair.Value));
+        }
+    }
+
+    public void OnAfterDeserialize()
+    {
+        dictionary.Clear();
+
+        invalidFlag = false;
+
+        for (var i = 0; i < items.Count; ++i)
+        {
+            if (!dictionary.ContainsKey(items[i].key))
+            {
+                dictionary.Add(items[i].key, items[i].value);
+            }
+            else
+            {
+                invalidFlag = true;
+                continue;
+            }
+        }
+
+        if (!invalidFlag)
+        {
+            items.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Clones the other Dictionary into this one.
+    /// </summary>
+    /// <param name="from">From.</param>
+    public void Clone(SDictionary<TKey, TValue> from)
+    {
+        foreach(TKey key in from)
+        {
+            Add(key, from[key]);
+        }
     }
 
 
     [Serializable]
-    public class DictionaryItem
+    private class DictionaryItem
     {
-        public Key key;
-        public Value value;
+        public TKey key;
+        public TValue value;
 
-        public DictionaryItem(Key key, Value value)
+        public DictionaryItem(TKey key, TValue value)
         {
             this.key = key;
             this.value = value;

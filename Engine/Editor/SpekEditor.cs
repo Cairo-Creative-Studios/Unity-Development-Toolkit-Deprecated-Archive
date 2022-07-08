@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace CairoEngine
 {
@@ -76,7 +77,7 @@ namespace CairoEngine
             GameObject obj = new GameObject();
             obj.name = "Kill Zone";
             obj.AddComponent<BoxCollider>();
-            UnityEngine.Rendering.Volume volume = obj.AddComponent<UnityEngine.Rendering.Volume>();
+            Volume volume = obj.AddComponent<Volume>();
             volume.isGlobal = false;
             obj.transform.position = SceneView.lastActiveSceneView.camera.transform.position;
         }

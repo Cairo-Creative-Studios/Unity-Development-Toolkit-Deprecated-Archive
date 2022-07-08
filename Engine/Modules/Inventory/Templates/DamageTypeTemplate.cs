@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +8,7 @@ using UnityEngine;
 namespace CairoEngine
 {
     [CreateAssetMenu(menuName = "Cairo Game/Stats/Damage Type")]
-    public class DamageTypeTemplate : ScriptableObject
+    public class DamageTypeTemplate : Resource
     {
         /// <summary>
         /// The Name of this Damage, to identify what kind of Damage is to be dealt to Entities (Damage is calculated differently per-entity based on certain conditions).

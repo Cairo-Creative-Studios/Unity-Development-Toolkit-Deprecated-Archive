@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +10,8 @@ namespace CairoEngine
     public class StateContainer
     {
         public string behaviourName = "";
-        public Dictionary<string, State> states = new Dictionary<string, State>();
-        public List<State> stateInstances = new List<State>();
+        public Dictionary<string, object> states = new Dictionary<string, object>();
+        public List<object> stateInstances = new List<object>();
         public string curState = "";
         public string prevState = "";
 
@@ -19,7 +21,7 @@ namespace CairoEngine
         /// <param name="behaviourName">The name of this MonoBehaviour.</param>
         /// <param name="states">List of States in the MonoBehavior class as StateInfo.</param>
         /// <param name="defaultState">The Default State (Set in Engine as the first Class in the script, unless otherwise specified).</param>
-        public StateContainer(string behaviourName, Dictionary<string, State> states, string defaultState)
+        public StateContainer(string behaviourName, Dictionary<string, object> states, string defaultState)
         {
             this.behaviourName = behaviourName;
             this.states = states;

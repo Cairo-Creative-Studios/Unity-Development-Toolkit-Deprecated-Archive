@@ -1,6 +1,9 @@
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using B83.Unity.Attributes;
 
 namespace CairoEngine
 {
@@ -10,12 +13,8 @@ namespace CairoEngine
     /// <summary>
     /// Base Entity info. This Scriptable Object class is a Template for classes that extend from the Entity Class.
     /// </summary>
-    public class EntityTemplate : ScriptableObject
+    public class EntityTemplate : ObjectTemplate
     {
-        /// <summary>
-        /// The ID of this Entity, used for Picking
-        /// </summary>
-        public string ID = "";
         /// <summary>
         /// When enabled, The Scriptable Object will Generate a new GameObject.
         /// </summary>
@@ -23,11 +22,7 @@ namespace CairoEngine
         /// <summary>
         /// The Name of the Class for this Entity, used for Generating the Prefab
         /// </summary>
-        public string entityClassName = "";
-        /// <summary>
-        /// The Entity Prefab (The Game Object that should be instantiated when the Entity is Spawned)
-        /// </summary>
-        public GameObject prefab;
+        [MonoScript(type = typeof(Entity))] public string Class = "CairoEngine.Entity";
         /// <summary>
         /// The amount of Health the Entity should start with
         /// </summary>

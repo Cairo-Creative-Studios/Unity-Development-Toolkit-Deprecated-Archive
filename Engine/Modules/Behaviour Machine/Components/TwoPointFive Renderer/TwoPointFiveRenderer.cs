@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine;
@@ -11,9 +13,8 @@ namespace CairoEngine.Behaviour
         private List<TwoPointFive.Joint> joints = new List<TwoPointFive.Joint>();
         private TwoPointFive.Renderer renderObject;
 
-        public override void BehaviourUpdate()
+        public void Update()
         {
-            base.BehaviourUpdate();
         }
     }
 }

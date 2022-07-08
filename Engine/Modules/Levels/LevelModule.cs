@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -125,12 +127,36 @@ namespace CairoEngine
         }
 
         /// <summary>
+        /// Gets the Transform of the Current Level
+        /// </summary>
+        /// <returns>The transform.</returns>
+        public static Transform GetTransform()
+        {
+            return currentLevel.transform;
+        }
+
+        /// <summary>
+        /// Gets the Transform of the specified Level
+        /// </summary>
+        /// <returns>The transform.</returns>
+        /// <param name="ID">Identifier.</param>
+        public static Transform GetTransform(string ID)
+        {
+            return GetLevel(ID).transform;
+        }
+
+        /// <summary>
         /// Checks in the passed Object, adding it to the Current Level.
         /// </summary>
         /// <param name="checkedObject">Checked object.</param>
         public static void CheckIn(GameObject checkedObject)
         {
             checkedObject.transform.parent = currentLevel.transform;
+        }
+
+        public static Transform GetSpawn()
+        {
+            return spawnPoints[0].transform;
         }
 
         /// <summary>
@@ -150,6 +176,16 @@ namespace CairoEngine
                 }
             }
             return index;
+        }
+
+        /// <summary>
+        /// Gets a Level that has been Loaded with the specified ID
+        /// </summary>
+        /// <returns>The level.</returns>
+        /// <param name="ID">Identifier.</param>
+        private static Level GetLevel(string ID)
+        {
+            return levels[FindLevelIndex(ID)];
         }
 
         /// <summary>

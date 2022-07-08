@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
@@ -6,10 +8,8 @@ using UnityEngine.Timeline;
 namespace CairoEngine
 {
     [CreateAssetMenu(menuName = "Cairo Game/Gameplay/Game Mode")]
-    public class GameModeTemplate : ScriptableObject
+    public class GameModeTemplate : Resource
     {
-        public string ID = "Default";
-
         [Header("Scoring")]
         [Tooltip("The score to reach to win the Match")]
         public int scoreToWin = 25;

@@ -1,3 +1,5 @@
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +9,16 @@ namespace CairoEngine
     /// <summary>
     /// The Entity class is a Template for classes that use similar Entity-like behaviour, but should not be used on it's own.
     /// </summary>
-    public class Entity : Object
+    public class Entity : MonoBehaviour
     {
         /// <summary>
         /// The Controller of this Entity
         /// </summary>
-        public object controller;
+        public Controller controller;
         /// <summary>
         /// The Inputs recieved from the Controller of the Entity.
         /// </summary>
-        public Dictionary<string, float> inputs = new Dictionary<string, float>();
+        public SDictionary<string, float> inputs = new SDictionary<string, float>();
         /// <summary>
         /// The Data of this Entity
         /// </summary>
@@ -64,11 +66,5 @@ namespace CairoEngine
         {
             inventory.Remove(item);
         }
-
-        void Update()
-        {
-            Debug.Log("I exist!");
-        }
     }
-
 }

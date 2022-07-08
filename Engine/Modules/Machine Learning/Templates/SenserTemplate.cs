@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine;
@@ -12,12 +14,8 @@ namespace CairoEngine.MachineLearning
     /// A base Senser class to use for 
     /// </summary>
     [CreateAssetMenu(menuName = "Cairo Game/Machine Learning/Senser")]
-    public class SenserTemplate : ScriptableObject
+    public class SenserTemplate : Resource
     {
-        /// <summary>
-        /// The ID of this Senser
-        /// </summary>
-        public string ID = "TestSenser";
         /// <summary>
         /// Delays the rate at which the Senser updates, in attempt to improve performance
         /// </summary>
