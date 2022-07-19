@@ -1,3 +1,4 @@
+![alt text](https://img.itch.zone/aW1nLzkwOTY0NzMucG5n/original/8zUiPZ.png)
 # Cairo Engine
 A toolset for Unity that serves to simplify Game Development. It's heavily inspired by Playmaker, and aims to create an even easier approach to game development than even Playmaker offers, while striving to be as affordable as possible, and hopefully open up the doors for what can be made by smaller teams.
 
