@@ -11,7 +11,7 @@ using RVP;
 namespace CairoEngine.Behaviour
 {
     [Serializable]
-    public class CarControllerBehaviour : BehaviourType
+    public class CarControllerBehaviour : BehaviourType<BehaviourTemplate_CarController>
     {
         public VehicleParent vehicle;
 

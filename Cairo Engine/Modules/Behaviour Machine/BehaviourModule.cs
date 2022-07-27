@@ -24,7 +24,7 @@ namespace CairoEngine
         /// <summary>
         /// All the Game Objects with their Behaviours managed by the Behaviour Module
         /// </summary>
-        public static Dictionary<GameObject, List<BehaviourType>> behaviours = new Dictionary<GameObject, List<BehaviourType>>();
+        public static Dictionary<GameObject, List<BehaviourType<object>>> behaviours = new Dictionary<GameObject, List<BehaviourType<object>>>();
     
         public static void Init()
         {
@@ -57,11 +57,11 @@ namespace CairoEngine
         /// </summary>
         /// <param name="gameObject">Game object.</param>
         /// <param name="BehaviourName">The name of the Behaviour Template</param>
-        public static void AddBehaviour(GameObject gameObject, string BehaviourName)
+        public static void AddBehaviour(GameObject gameObject, Type Template)
         {
             //Get the Behavour Template and Behaviour
-            BehaviourTypeTemplate template = GetTemplate(BehaviourName);
-            BehaviourType behaviourType = (BehaviourType)Activator.CreateInstance(Type.GetType(template.behaviourClass));
+            BehaviourTypeTemplate template = (BehaviourTypeTemplate)(object)Template;
+            BehaviourType<object> behaviourType = (BehaviourType<object>)Activator.CreateInstance(Type.GetType(template.behaviourClass));
             behaviourType.template = template;
 
             //Root Object
@@ -71,7 +71,7 @@ namespace CairoEngine
             if (!behaviours.ContainsKey(gameObject))
             {
                 //Create one if it doesn't exist, so the Behaviour Module can interface with it, and add it to the Behaviours List
-                behaviours.Add(gameObject, new List<BehaviourType>());
+                behaviours.Add(gameObject, new List<BehaviourType<object>>());
 
                 root = gameObject.GetComponent<Object>();
 
@@ -110,9 +110,8 @@ namespace CairoEngine
                 behaviourType.inputs.Add(inputName, 0.0f);
             }
 
-
             //Call the Init Message on the Behaviour 
-            Message(gameObject, "Init", null, BehaviourName);
+            Message(gameObject, "Init", null);
         }
 
         /// <summary>
@@ -128,16 +127,16 @@ namespace CairoEngine
             {
                 if (behaviour == "")
                 {
-                    foreach (BehaviourType behaviourType in behaviours[gameObject])
+                    foreach (BehaviourType<object> behaviourType in behaviours[gameObject])
                     {
                         behaviourType.CallMethod(message, parameters);
                     }
                 }
                 else
                 {
-                    foreach(BehaviourType behaviourType in behaviours[gameObject])
+                    foreach(BehaviourType<object> behaviourType in behaviours[gameObject])
                     {
-                        if(behaviourType.template.ID == behaviour)
+                        if(((BehaviourTypeTemplate)(object)behaviourType.template).ID == behaviour)
                         {
                             behaviourType.CallMethod(message, parameters);
                         }

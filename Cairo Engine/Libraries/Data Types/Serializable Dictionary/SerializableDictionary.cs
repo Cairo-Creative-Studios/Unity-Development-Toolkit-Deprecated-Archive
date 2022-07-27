@@ -141,7 +141,7 @@ public class SDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializati
 
         for (var i = 0; i < items.Count; ++i)
         {
-            if (!dictionary.ContainsKey(items[i].key))
+            if (!(dictionary.ContainsKey(items[i].key)))
             {
                 dictionary.Add(items[i].key, items[i].value);
             }
@@ -170,9 +170,7 @@ public class SDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializati
         }
     }
 
-
-    [Serializable]
-    private class DictionaryItem
+    public class DictionaryItem
     {
         public TKey key;
         public TValue value;

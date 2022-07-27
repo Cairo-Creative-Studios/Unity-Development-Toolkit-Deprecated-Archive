@@ -71,7 +71,7 @@ namespace CairoEngine
         /// <param name="entity">Entity.</param>
         private Seat GetEntitysSeat(Entity entity)
         {
-            foreach(Seat seat in seats)
+            foreach(Seat seat in seats.Keys)
             {
                 if(seats[seat] == entity)
                 {

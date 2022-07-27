@@ -29,7 +29,9 @@ namespace CairoEngine
         /// The Behaviours that have been added to the Object.
         /// </summary>
         [Tooltip("The Cairo Behaviours attached to the Object")]
-        public List<BehaviourType> behaviours = new List<BehaviourType>();
+        public List<BehaviourType<object>> behaviours = new List<BehaviourType<object>>();
+        [Tooltip("Properties that are Created/Utilized by the Object's Behaviours")]
+        public SDictionary<string, object> properties = new SDictionary<string, object>();
         /// <summary>
         /// The ID of the Pool this Object belongs to
         /// </summary>
@@ -74,7 +76,7 @@ namespace CairoEngine
         /// </summary>
         public void Enable()
         {
-            foreach(BehaviourType behaviourType in behaviours)
+            foreach(BehaviourType<object> behaviourType in behaviours)
             {
                 behaviourType.Enable();
             }
@@ -85,7 +87,7 @@ namespace CairoEngine
         /// </summary>
         public void Disable()
         {
-            foreach (BehaviourType behaviourType in behaviours)
+            foreach (BehaviourType<object> behaviourType in behaviours)
             {
                 behaviourType.Disable();
             }
@@ -112,11 +114,11 @@ namespace CairoEngine
         /// </summary>
         /// <returns>The behaviour.</returns>
         /// <param name="ID">Identifier.</param>
-        private BehaviourType GetBehaviour(string ID)
+        private BehaviourType<object> GetBehaviour(string ID)
         {
-            foreach(BehaviourType behaviourType in behaviours)
+            foreach(BehaviourType<object> behaviourType in behaviours)
             {
-                if(behaviourType.template.ID == ID)
+                if(((BehaviourTypeTemplate)(object)behaviourType.template).ID == ID)
                 {
                     return behaviourType;
                 }

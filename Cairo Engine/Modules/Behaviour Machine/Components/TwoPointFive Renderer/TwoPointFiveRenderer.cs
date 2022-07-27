@@ -8,7 +8,7 @@ using CairoEngine.Behaviour.TwoPointFive;
 
 namespace CairoEngine.Behaviour
 {
-    public class TwoPointFiveRenderer : BehaviourType
+    public class TwoPointFiveRenderer : BehaviourType<BehaviourTypeTemplate>
     {
         private List<TwoPointFive.Joint> joints = new List<TwoPointFive.Joint>();
         private TwoPointFive.Renderer renderObject;

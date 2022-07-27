@@ -180,8 +180,7 @@ namespace CairoEngine
                 {
                     foreach (BehaviourTypeTemplate behaviour in template.behaviours)
                     {
-                        Debug.Log("Added " + behaviour.ID);
-                        BehaviourModule.AddBehaviour(spawnedObject, behaviour.ID);
+                        BehaviourModule.AddBehaviour(spawnedObject, behaviour.GetType());
                     }
                 }
             }

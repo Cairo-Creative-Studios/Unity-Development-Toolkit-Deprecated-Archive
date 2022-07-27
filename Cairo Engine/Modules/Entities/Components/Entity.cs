@@ -58,7 +58,7 @@ namespace CairoEngine
             if (health < 0.0f)
             {
                 killingDamageInstegator = damageInstegator;
-                StateMachineModule.SetState(gameObject, "Dead");
+                //StateMachineModule.SetState(gameObject, "Dead");
             }
         }
 

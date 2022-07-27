@@ -91,7 +91,7 @@ namespace CairoEngine.Scripting
             root.Run();
 
             //If the Variable isn't in scope, remove it from the Variables Dictionary
-            foreach(string variable in variables)
+            foreach(string variable in variables.Keys)
             {
                 if (!activeVariables.Contains(variable))
                     variables.Remove(variable);

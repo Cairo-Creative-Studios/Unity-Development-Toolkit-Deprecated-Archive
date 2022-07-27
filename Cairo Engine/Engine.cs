@@ -7,6 +7,7 @@ using System.Reflection;
 using UnityEngine.SceneManagement;
 using B83.Unity.Attributes;
 using CairoEngine.Reflection;
+using CairoEngine.StateMachine;
 
 namespace CairoEngine
 {
@@ -71,7 +72,6 @@ namespace CairoEngine
             PlayerModule.Init();
             BehaviourModule.Init();
             UIModule.Init();
-            StateMachineModule.Init();
 
             //Create the Game Runtime
             GameObject runtimeGameObject = new GameObject
@@ -83,7 +83,7 @@ namespace CairoEngine
             var importedRuntime = runtimeGameObject.AddComponent(Type.GetType(runtimeTemplate.runtimeClass));
             Engine.singleton.runtime = (Runtime)importedRuntime;
 
-            StateMachineModule.EnableStateMachine(runtimeGameObject, importedRuntime);
+            SMModule.CreateStateMachine(importedRuntime);
         }
 
         void Update()
@@ -98,9 +98,9 @@ namespace CairoEngine
             MLModule.Update();
             ObjectModule.Update();
             PlayerModule.Update();
-            StateMachineModule.Update();
             BehaviourModule.Update();
             UIModule.Update();
+            SMModule.Update();
         }
 
         void FixedUpdate()

@@ -48,7 +48,7 @@ public static class String_Ops
     {
         char[] characters = checkedString.ToCharArray();
 
-        int token = 0;
+        int token = 1;
 
         foreach (char character in characters)
         {
@@ -84,22 +84,44 @@ public static class String_Ops
     /// <param name="itemDelimiter">Item delimiter.</param>
     public static string SetToken(this string listString, int index, string value, char itemDelimiter = ',')
     {
-        string[] ogTokenArray = listString.TokenArray();
         string returnedString = "";
 
-        //Create a new List by replacing the old Token with the new Value
-        int i = 0;
-        foreach(string token in ogTokenArray)
+        for(int i = 0; i < listString.TokenCount(itemDelimiter);i++)
         {
             if (i == index)
                 returnedString = returnedString + value;
             else
-                returnedString = listString.TokenAt(index, itemDelimiter);
+                returnedString = returnedString + listString.TokenAt(i, itemDelimiter);
 
-            if (i != ogTokenArray.Length - 1)
-                returnedString = returnedString + ",";
+            if (i != listString.TokenCount(itemDelimiter) - 1)
+                returnedString = returnedString + itemDelimiter;
 
             i++;
+        }
+
+        return returnedString;
+    }
+
+    /// <summary>
+    /// Pops the Token at the given Index out of the List String
+    /// </summary>
+    /// <returns>The at index.</returns>
+    /// <param name="listString">List string.</param>
+    /// <param name="index">Index.</param>
+    /// <param name="itemDelimiter">Item delimiter.</param>
+    public static string PopAtIndex(this string listString, int index, char itemDelimiter = ',')
+    {
+        string returnedString = "";
+
+        for(int i = 0; i < listString.TokenCount(itemDelimiter); i++)
+        {
+            if (i != index)
+            {
+                returnedString = returnedString + listString.TokenAt(i, itemDelimiter);
+
+                if (i != listString.TokenCount(itemDelimiter)-1)
+                    returnedString = returnedString + itemDelimiter;
+            }
         }
 
         return returnedString;
@@ -139,6 +161,46 @@ public static class String_Ops
             result.Add(parsedString.TokenAt(i, itemDelimiter));
         }
 
+        return result;
+    }
+
+    public static string ConvertToString(this object[] ConvertedArray, char itemDelimiter = ',')
+    {
+        string result = "";
+
+        foreach (object item in ConvertedArray)
+        {
+            if (result == "")
+                result = item.ToString();
+            else
+                result = result + itemDelimiter + item.ToString();
+        }
+
+        return result;
+    }
+
+    public static string ConvertToString(this int[] ConvertedArray, char itemDelimiter = ',')
+    {
+        string result = "";
+
+        foreach (object item in ConvertedArray)
+        {
+            if (result == "")
+                result = item.ToString();
+            else
+                result = result + itemDelimiter + item.ToString();
+        }
+
+        return result;
+    }
+
+    public static string MultiplyString(this string String, int count)
+    {
+        string result = "";
+        for (int i = 0; i < count; i++)
+        {
+            result = result + String;
+        }
         return result;
     }
 }

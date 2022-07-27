@@ -122,7 +122,7 @@ namespace CairoEngine
                 newPawn.entityInfo = pawnTemplate;
 
                 //Enable the State Machine on the Pawn
-                StateMachineModule.EnableStateMachine(pawnObject, newPawn);
+                SMModule.CreateStateMachine(newPawn);
 
                 //Log Spawn Success
                 Debug.Log("Spawned Pawn, " + pawnObject.name + " with Pawn Info " + pawnTemplate);
@@ -157,7 +157,7 @@ namespace CairoEngine
             newPawn.entityInfo = pawnTemplate;
 
             //Enable the State Machine on the Pawn
-            StateMachineModule.EnableStateMachine(pawnObject, newPawn);
+            SMModule.CreateStateMachine(newPawn);
 
             //Log Spawn success
             Debug.Log("Spawned Pawn, " + pawnObject.name + " with Pawn Info " + pawnTemplate);

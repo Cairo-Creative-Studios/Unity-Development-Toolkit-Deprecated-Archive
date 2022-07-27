@@ -15,6 +15,6 @@ namespace NMatrix.Decompositions
         /// <returns>
         /// Returns a decomposition of the matrix.
         /// </returns>
-        public T Decompose(Matrix matrix);
+        T Decompose(Matrix matrix);
     }
 }

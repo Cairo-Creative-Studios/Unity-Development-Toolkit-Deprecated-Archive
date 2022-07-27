@@ -24,7 +24,7 @@ namespace CairoEngine.Scripting
         /// </summary>
         public void Update()
         {
-            foreach(UnityEngine.Object trackedObject in objects)
+            foreach(UnityEngine.Object trackedObject in objects.Keys)
             {
                 foreach(string property in objects[trackedObject].Keys)
                 {

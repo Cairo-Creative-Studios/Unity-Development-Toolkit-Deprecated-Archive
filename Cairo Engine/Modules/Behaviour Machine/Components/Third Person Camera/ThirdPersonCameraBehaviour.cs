@@ -8,9 +8,8 @@ using Cinemachine;
 namespace CairoEngine.Behaviour
 {
     [Serializable]
-    public class ThirdPersonCameraBehaviour : BehaviourType
+    public class ThirdPersonCameraBehaviour : BehaviourType<BehaviourTemplate_ThirdPersonCamera>
     {
-        BehaviourTemplate_ThirdPersonCamera behaviourTemplate;
         CinemachineFreeLook freeLook;
         GameObject freeLookObject;
 
@@ -49,6 +48,8 @@ namespace CairoEngine.Behaviour
         {
             freeLook.m_XAxis.m_InputAxisValue = inputs["XAxis"];
             freeLook.m_YAxis.m_InputAxisValue = inputs["YAxis"];
+
+            CinemachineBrain.SoloCamera = freeLook;
 
             GetEntity().cameraEuler.y = freeLook.m_XAxis.Value;
         }

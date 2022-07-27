@@ -10,7 +10,7 @@ namespace CairoEngine.Behaviour
     /// The Behaviour Type class
     /// </summary>
     [Serializable]
-    public class BehaviourType
+    public class BehaviourType<T>
     {
         /// <summary>
         /// Whether the Behaviour is enabled or not
@@ -20,7 +20,7 @@ namespace CairoEngine.Behaviour
         /// <summary>
         /// The Behaviour's Template
         /// </summary>
-        public BehaviourTypeTemplate template;
+        public T template;
 
         /// <summary>
         /// The Game Object this Behaviour is Controlling
@@ -128,7 +128,7 @@ namespace CairoEngine.Behaviour
             Enabled = true;
 
             //Send a Message to the Behaviour to Enable it
-            BehaviourModule.Message(gameObject, "OnEnable", null, template.ID);
+            BehaviourModule.Message(gameObject, "OnEnable", null, ((BehaviourTypeTemplate)(object)template).ID);
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace CairoEngine.Behaviour
             Enabled = false;
 
             //Send a Message to the Behaviour to Disable it
-            BehaviourModule.Message(gameObject, "OnDisable", null, template.ID);
+            BehaviourModule.Message(gameObject, "OnDisable", null, ((BehaviourTypeTemplate)(object)template).ID);
         }
 
         /// <summary>
@@ -199,7 +199,11 @@ namespace CairoEngine.Behaviour
         private float GetInput(string input)
         {
             return inputs[input];
+        }
 
+        public override string ToString()
+        {
+            return GetType().Name;
         }
     }
 }
