@@ -80,7 +80,7 @@ namespace CairoEngine
             //Destroy all the Camera Overlays
             foreach(GameObject overlay in overlays)
             {
-                Object.Destroy(overlay);
+                GameObject.Destroy(overlay);
             }
             //Clear the UXML Root
             root = new VisualElement();

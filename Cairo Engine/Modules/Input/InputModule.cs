@@ -9,12 +9,20 @@ namespace CairoEngine
         /// <summary>
         /// All the Input Maps preloaded for the Project
         /// </summary>
-        private List<InputMap> inputMaps = new List<InputMap>();
+        private static List<InputMap> inputMaps = new List<InputMap>();
 
-        public void Init()
+        public static void Init()
         {
             //Preload all Input Maps in the Project
             inputMaps.AddRange(Resources.LoadAll<InputMap>(""));
+
+            foreach(InputMap inputMap in inputMaps)
+            {
+                foreach (Input inputValue in inputMap.inputs.Values)
+                {
+                    inputValue.inputAction.Enable();
+                }
+            }
         }
 
         /// <summary>
@@ -23,14 +31,34 @@ namespace CairoEngine
         /// <returns>The input value.</returns>
         /// <param name="map">Map.</param>
         /// <param name="input">Input.</param>
-        public object GetInputValue(string map, string input)
+        public static T GetInputValue<T>(string map, string input)
         {
             InputMap inputMap = GetInputMap(map);
 
             if (inputMap != null)
-                return inputMap.inputs[input];
+            {
+                if (inputMap.inputs.ContainsKey(input))
+                {
+                    switch (typeof(T).Name)
+                    {
+                        case "Boolean":
+                            return (T)(object)inputMap.inputs[input].inputAction.IsPressed();
 
-            return null;
+                        case "String":
+                            if (inputMap.inputs[input].inputAction.IsPressed())
+                                return (T)(object)inputMap.inputs[input].inputAction.ReadValueAsObject().ToString();
+                            else
+                                return (T)(object)default(T).ToString();
+                    }
+
+                    if (inputMap.inputs[input].inputAction.IsPressed())
+                    {
+                        return (T)inputMap.inputs[input].inputAction.ReadValueAsObject();
+                    }
+                }
+            }
+
+            return default(T);
         }
 
         /// <summary>
@@ -38,7 +66,7 @@ namespace CairoEngine
         /// </summary>
         /// <returns>The input map.</returns>
         /// <param name="ID">Identifier.</param>
-        private InputMap GetInputMap(string ID)
+        private static InputMap GetInputMap(string ID)
         {
             foreach(InputMap inputMap in inputMaps)
             {

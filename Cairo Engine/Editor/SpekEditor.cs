@@ -11,18 +11,14 @@ namespace CairoEngine
     public class Editor
     {
         public static List<LevelTemplate> levelInfos = new List<LevelTemplate>();
-        public static List<PawnTemplate> pawnInfos = new List<PawnTemplate>();
         public static List<GameModeTemplate> gameModeInfos = new List<GameModeTemplate>();
-        public static List<InventoryItemTemplate> itemInfos = new List<InventoryItemTemplate>();
 
         [InitializeOnLoadMethod]
         public static async Task Init()
         {
             //Load Data files
             levelInfos.AddRange(Resources.LoadAll<LevelTemplate>(""));
-            pawnInfos.AddRange(Resources.LoadAll<PawnTemplate>(""));
             gameModeInfos.AddRange(Resources.LoadAll<GameModeTemplate>(""));
-            itemInfos.AddRange(Resources.LoadAll<InventoryItemTemplate>(""));
 
             while (true)
             {
@@ -36,31 +32,7 @@ namespace CairoEngine
         }
 
         #region Menu Items
-        [MenuItem("Cairo/Data/New Pawn")]
-        private static void CreateLevelData()
-        {
-            string folderName = "Pawn";
 
-            AssetDatabase.CreateFolder("Assets/Resources", "Pawn");
-            //Create the Pawn Info Asset.
-            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<PawnTemplate>(), "Assets/Resources/" + folderName + "/" + folderName + " Info.asset");
-            PawnTemplate pawnInfo = Resources.Load<PawnTemplate>(folderName + " Info");
-            //Create the Pawn's Game Object.
-            GameObject pawnObject = new GameObject();
-            pawnObject.name = folderName;
-            //Add the Pawn Component to the new Game Object and set default values.
-            Pawn pawn = pawnObject.AddComponent<Pawn>();
-            pawn.pawnTemplate = pawnInfo;
-            pawn.entityInfo = pawnInfo;
-            //Create the prefab for the Game OBject and give it to the Pawn Info.
-
-            GameObject pawnPrefab = PrefabUtility.SaveAsPrefabAsset(pawnObject, AssetDatabase.GetAssetPath(pawnInfo));
-
-            AssetDatabase.CreateAsset(pawnObject, "Assets/Resources/" + folderName + "/Pawn.asset");
-            //pawnInfo.prefab = pawnPrefab;
-            //Destroy the Game Object from the Hierarchy.
-            UnityEngine.Object.Destroy(pawnObject);
-        }
 
         [MenuItem("Cairo/Level Tools/Create Spawn Point")]
         private static void CreateSpawnPoint()

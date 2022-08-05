@@ -24,15 +24,15 @@ namespace CairoEngine
         [Tooltip("The default teams in the Game Mode. If the Game Mode controls Teams, these will be used. Use the Asset Menu/CairoGame menu to create a new Team Template.")]
         public List<TeamTemplate> defaultTeams = new List<TeamTemplate>();
         [Tooltip("The Default inventory for the Game Mode. Key = Entity Type, Value = List of Inventory Items")]
-        public Dictionary<string, List<InventoryItemTemplate>> defaultInventory = new Dictionary<string, List<InventoryItemTemplate>>();
+        public Dictionary<string, List<BehaviourTemplate_InventoryItem>> defaultInventory = new Dictionary<string, List<BehaviourTemplate_InventoryItem>>();
 
         [Header("Default Objects")]
         [Tooltip("What Player Controller to use for joining Players if not told otherwise.")]
         public GameObject defaultPlayerControllerPrefab;
         [Tooltip("What AI Controller to use for added AI bots if not told otherwise.")]
         public GameObject defaultAIControllerPrefab;
-        [Tooltip("What Pawn Info to use for a Player/AI's Spawned Entity if not told otherwise.")]
-        public PawnTemplate defaultPawnInfo;
+        [Tooltip("The Object that should be Spawned by default for each Player")]
+        public CObjectTemplate defaultPlayerObjectTemplate;
 
         [Header("Cinematics")]
         [Tooltip("The animation to play at the Beginning of the Game Mode")]

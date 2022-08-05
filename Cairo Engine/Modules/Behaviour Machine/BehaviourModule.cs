@@ -18,24 +18,32 @@ namespace CairoEngine
         /// <summary>
         /// All the loaded Behaviour Templates
         /// </summary>
-        private static List<BehaviourTypeTemplate> behaviourTemplates = new List<BehaviourTypeTemplate>();
+        private static List<BehaviourTemplate> behaviourTemplates = new List<BehaviourTemplate>();
         private static GameObject behaviourObjectPool;
 
         /// <summary>
         /// All the Game Objects with their Behaviours managed by the Behaviour Module
         /// </summary>
-        public static Dictionary<GameObject, List<BehaviourType<object>>> behaviours = new Dictionary<GameObject, List<BehaviourType<object>>>();
-    
+        public static Dictionary<GameObject, List<object>> behaviours = new Dictionary<GameObject, List<object>>();
+        /// <summary>
+        /// The Default Audio Library
+        /// </summary>
+        public static Dictionary<string, Dictionary<string, List<AudioClip>>> defaultAudio = new Dictionary<string, Dictionary<string, List<AudioClip>>>();
+
         public static void Init()
         {
-            behaviourTemplates.AddRange(Resources.LoadAll<BehaviourTypeTemplate>(""));
-            behaviourObjectPool = new GameObject();
-            Object.DontDestroyOnLoad(behaviourObjectPool);
+            behaviourTemplates.AddRange(Resources.LoadAll<BehaviourTemplate>(""));
+
+            //behaviourObjectPool = new GameObject();
+            //GameObject.DontDestroyOnLoad(behaviourObjectPool);
         }
 
         public static void Update()
         {
-            foreach(GameObject gameObject in behaviours.Keys)
+            List<GameObject> behaviourCopy = new List<GameObject>();
+            behaviourCopy.AddRange(behaviours.Keys);
+
+            foreach (GameObject gameObject in behaviourCopy)
             {
                 //Update the Core of the Behaviour
                 Message(gameObject, "CoreUpdate");
@@ -46,7 +54,10 @@ namespace CairoEngine
 
         public static void FixedUpdate()
         {
-            foreach (GameObject gameObject in behaviours.Keys)
+            List<GameObject> behaviourCopy = new List<GameObject>();
+            behaviourCopy.AddRange(behaviours.Keys);
+
+            foreach (GameObject gameObject in behaviourCopy)
             {
                 Message(gameObject, "FixedUpdate");
             }
@@ -57,48 +68,46 @@ namespace CairoEngine
         /// </summary>
         /// <param name="gameObject">Game object.</param>
         /// <param name="BehaviourName">The name of the Behaviour Template</param>
-        public static void AddBehaviour(GameObject gameObject, Type Template)
+        public static void AddBehaviour(GameObject gameObject, object Template)
         {
             //Get the Behavour Template and Behaviour
-            BehaviourTypeTemplate template = (BehaviourTypeTemplate)(object)Template;
-            BehaviourType<object> behaviourType = (BehaviourType<object>)Activator.CreateInstance(Type.GetType(template.behaviourClass));
-            behaviourType.template = template;
+            BehaviourTemplate template = (BehaviourTemplate)Template;
+            object behaviourType = (object)Activator.CreateInstance(Type.GetType(template.behaviourClass));
+            behaviourType.SetField("template",template);
 
             //Root Object
-            Object root;
+            CObject root;
 
             //Get the Root Object Behaviour attached to the Game Object 
             if (!behaviours.ContainsKey(gameObject))
             {
                 //Create one if it doesn't exist, so the Behaviour Module can interface with it, and add it to the Behaviours List
-                behaviours.Add(gameObject, new List<BehaviourType<object>>());
-
-                root = gameObject.GetComponent<Object>();
-
-                if (root==null)
-                    root = gameObject.AddComponent<Object>();
-
-                behaviourType.root = root;
+                behaviours.Add(gameObject, new List<object>());
             }
-            else
-                root = gameObject.GetComponent<Object>();
+
+            root = gameObject.GetComponent<CObject>();
+
+            if (root == null)
+                root = gameObject.AddComponent<CObject>();
+
+            behaviourType.SetField("root", root);
 
             //Add the Behaviour to the Object's Behaviour List
             root.behaviours.Add(behaviourType);
 
             //Set Behaviour Properties
-            behaviourType.gameObject = gameObject;
-            behaviourType.transform = gameObject.transform;
+            behaviourType.SetField("gameObject", gameObject);
+            behaviourType.SetField("transform", gameObject.transform);
 
             //Get the Root Transform and Animator using the Paths in the Template, to child objects instanced with the Prefab
             if (root.template.rootPath != "")
-                behaviourType.rootTransform = root.transform.Find(root.template.rootPath);
+                behaviourType.SetField("rootTransform", root.transform.Find(root.template.rootPath));
             else
-                behaviourType.rootTransform = root.transform;
+                behaviourType.SetField("rootTransform", root.transform);
             if (root.template.animatorPath != "")
-                behaviourType.animator = root.transform.Find(root.template.animatorPath).gameObject.GetComponent<Animator>();
+                behaviourType.SetField("animator", root.transform.Find(root.template.animatorPath).gameObject.GetComponent<Animator>());
             else
-                behaviourType.animator = root.GetComponent<Animator>();
+                behaviourType.SetField("animator", root.GetComponent<Animator>());
 
             //Add the Behaviour to Object in the Module's Behaviour Collection
             behaviours[gameObject].Add(behaviourType);
@@ -106,12 +115,14 @@ namespace CairoEngine
             //Add all the Inputs to the Behaviour from the Input Map
             foreach (string inputName in template.inputMap.Keys)
             {
-                behaviourType.inputMap.Add(template.inputMap[inputName], inputName);
-                behaviourType.inputs.Add(inputName, 0.0f);
+                behaviourType.CallMethod("AddInput", new object[] { template.inputMap[inputName], inputName });
+
             }
 
+            behaviourType.CallMethod("Init");
+
             //Call the Init Message on the Behaviour 
-            Message(gameObject, "Init", null);
+            //Message(gameObject, "Init", null);
         }
 
         /// <summary>
@@ -127,16 +138,16 @@ namespace CairoEngine
             {
                 if (behaviour == "")
                 {
-                    foreach (BehaviourType<object> behaviourType in behaviours[gameObject])
+                    foreach (object behaviourType in behaviours[gameObject])
                     {
                         behaviourType.CallMethod(message, parameters);
                     }
                 }
                 else
                 {
-                    foreach(BehaviourType<object> behaviourType in behaviours[gameObject])
+                    foreach(object behaviourType in behaviours[gameObject])
                     {
-                        if(((BehaviourTypeTemplate)(object)behaviourType.template).ID == behaviour)
+                        if(((BehaviourTemplate)behaviourType.GetField("template")).ID == behaviour)
                         {
                             behaviourType.CallMethod(message, parameters);
                         }
@@ -148,6 +159,25 @@ namespace CairoEngine
         }
 
         /// <summary>
+        /// Sends a Message to a Behaviour in the Specified Cairo Object
+        /// </summary>
+        /// <returns>The message.</returns>
+        /// <param name="cobject">Cobject.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public static object Message<T>(CObject cobject, string message, object[] parameters)
+        {
+            GameObject selectedObject = cobject.gameObject;
+
+            foreach(object behaviour in behaviours[selectedObject])
+            {
+                if (behaviour.GetType() == typeof(T))
+                    return behaviour.CallMethod(message, parameters);
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Adds a Behaviour Specific Object to the Behaviour Object Pool 
         /// </summary>
         /// <param name="gameObject">Game object.</param>
@@ -156,14 +186,34 @@ namespace CairoEngine
             gameObject.transform.parent = behaviourObjectPool.transform;
         }
 
+        public static void RemoveBehaviourObject(GameObject gameObject)
+        {
+            if (behaviours.ContainsKey(gameObject))
+            {
+                behaviours.Remove(gameObject);
+            }
+        }
+
+
+        /// <summary>
+        /// Attempts to get Audio from the Defaults Library
+        /// </summary>
+        public static List<AudioClip> GetAudio(string audioPool, string clipName)
+        {
+            if (defaultAudio.ContainsKey(audioPool))
+                if (defaultAudio[audioPool].ContainsKey(clipName))
+                    return defaultAudio[audioPool][clipName];
+            return null;
+        }
+
         /// <summary>
         /// Gets the specified template.
         /// </summary>
         /// <returns>The template.</returns>
         /// <param name="ID">Identifier.</param>
-        private static BehaviourTypeTemplate GetTemplate(string ID)
+        private static BehaviourTemplate GetTemplate(string ID)
         {
-            foreach(BehaviourTypeTemplate template in behaviourTemplates)
+            foreach(BehaviourTemplate template in behaviourTemplates)
             {
                 if (template.ID == ID)
                     return template;

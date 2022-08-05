@@ -32,7 +32,7 @@ namespace CairoEngine
         {
             foreach(Controller controller in controllers)
             {
-                foreach(Entity entity in controller.possessedEntities)
+                foreach(CObject entity in controller.possessedEntities)
                 {
                     entity.inputs = controller.inputs;
                 }
@@ -106,7 +106,7 @@ namespace CairoEngine
         /// </summary>
         /// <param name="controller">The Controller that will possess the Entity.</param>
         /// <param name="entity">The Entity to possess</param>
-        public static void Possess(Controller controller, Entity entity)
+        public static void Possess(Controller controller, CObject entity)
         {
             if (entity.controller == null)
             {

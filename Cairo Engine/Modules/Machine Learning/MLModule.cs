@@ -162,7 +162,7 @@ namespace CairoEngine
                 {
                     //Add the Senser Behaviour
                     Senser senserBehaviour = (Senser)networkObject.AddComponent(Type.GetType(senserInfo.MonoBehaviour));
-                    GameObject behaviourObject = Object.Instantiate(senserInfo.prefab);
+                    GameObject behaviourObject = GameObject.Instantiate(senserInfo.prefab);
 
                     //Set up Senser props
                     senserBehaviour.template = senserInfo;
@@ -250,7 +250,7 @@ namespace CairoEngine
             genePools[network.info.ID].networks.Remove(network);
             if(network.gameObject != null)
             {
-                Object.Destroy(network.gameObject);
+                GameObject.Destroy(network.gameObject);
             }
         }
 
@@ -262,7 +262,7 @@ namespace CairoEngine
         {
             NeuralNetworkBehaviour networkBehaviour = networkObject.GetComponent<NeuralNetworkBehaviour>();
             genePools[networkBehaviour.template.ID].networks.Remove(networkBehaviour.network);
-            Object.Destroy(networkObject);
+            GameObject.Destroy(networkObject);
         }
 
         /// <summary>

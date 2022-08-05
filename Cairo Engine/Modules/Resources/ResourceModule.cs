@@ -32,7 +32,7 @@ namespace CairoEngine
         /// <returns>The all.</returns>
         /// <param name="path">Path.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static T[] LoadAll<T>(string path) where T : Object
+        public static T[] LoadAll<T>(string path) where T : ScriptableObject
         {
             List<T> resources = new List<T>();
 

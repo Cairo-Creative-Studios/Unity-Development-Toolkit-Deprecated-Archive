@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using CairoEngine.Scripting;
+using UnityEngine;
 
 namespace CairoEngine
 {
-    public class ScriptTemplate
+    [CreateAssetMenu(menuName = "Event Sheet")]
+    public class ScriptTemplate : Resource
     {
         public List<Node> nodes = new List<Node>();
 
         void OnEnable()
         {
-            nodes.Add(new Event());
         }
     }
 }

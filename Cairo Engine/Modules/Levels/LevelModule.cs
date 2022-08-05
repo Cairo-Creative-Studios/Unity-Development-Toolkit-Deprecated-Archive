@@ -156,6 +156,7 @@ namespace CairoEngine
 
         public static Transform GetSpawn()
         {
+            Debug.Log(spawnPoints[0].transform.position);
             return spawnPoints[0].transform;
         }
 

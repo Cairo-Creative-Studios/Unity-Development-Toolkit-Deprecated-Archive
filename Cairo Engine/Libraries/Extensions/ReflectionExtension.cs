@@ -63,21 +63,6 @@ namespace CairoEngine.Reflection
         }
 
         /// <summary>
-        /// Gets a Child Class from the Instance
-        /// </summary>
-        /// <param name="instance">Instance.</param>
-        /// <param name="className">Class name.</param>
-        public static void GetChildClass(this object instance, string className)
-        {
-
-        }
-
-        public static void GenerateReflectionInstance(this object instance)
-        {
-            ReflectionModule.AddInstance(instance);
-        }
-
-        /// <summary>
         /// Gets nested Classes within the given Instance
         /// </summary>
         /// <returns>The nested classes as tree.</returns>

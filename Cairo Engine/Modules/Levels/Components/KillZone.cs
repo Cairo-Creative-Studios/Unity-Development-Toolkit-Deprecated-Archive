@@ -14,7 +14,7 @@ namespace CairoEngine
         /// <summary>
         /// The Type of Damage to Apply to Entities within this Kill Zone.
         /// </summary>
-        public DamageTypeTemplate damageType;
+        public DamageInstegator instegator;
 
     }
 }

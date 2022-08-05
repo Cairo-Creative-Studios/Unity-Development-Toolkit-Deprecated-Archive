@@ -13,7 +13,7 @@ namespace CairoEngine
         /// </summary>
         public ControllerTemplate template;
 
-        public List<Entity> possessedEntities = new List<Entity>();
+        public List<CObject> possessedEntities = new List<CObject>();
 
         /// <summary>
         /// The Controller's Inputs and their current State.

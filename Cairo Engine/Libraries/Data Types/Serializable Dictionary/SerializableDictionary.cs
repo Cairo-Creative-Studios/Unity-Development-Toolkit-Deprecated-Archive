@@ -170,6 +170,7 @@ public class SDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializati
         }
     }
 
+    [Serializable]
     public class DictionaryItem
     {
         public TKey key;

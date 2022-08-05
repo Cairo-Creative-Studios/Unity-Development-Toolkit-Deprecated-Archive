@@ -63,9 +63,8 @@ namespace CairoEngine
             //Initialize Modules
             BehaviourModule.Init();
             ControllerModule.Init();
-            EntityModule.Init();
             GameModeModule.Init();
-            InventoryModule.Init();
+            InputModule.Init();
             LevelModule.Init();
             MLModule.Init();
             ObjectModule.Init();
@@ -83,7 +82,7 @@ namespace CairoEngine
             var importedRuntime = runtimeGameObject.AddComponent(Type.GetType(runtimeTemplate.runtimeClass));
             Engine.singleton.runtime = (Runtime)importedRuntime;
 
-            SMModule.CreateStateMachine(importedRuntime);
+            StateMachineModule.CreateStateMachine(importedRuntime);
         }
 
         void Update()
@@ -91,16 +90,14 @@ namespace CairoEngine
             //Update Modules
             BehaviourModule.Update();
             ControllerModule.Update();
-            EntityModule.Update();
             GameModeModule.Update();
-            InventoryModule.Update();
             LevelModule.Update();
             MLModule.Update();
             ObjectModule.Update();
             PlayerModule.Update();
             BehaviourModule.Update();
             UIModule.Update();
-            SMModule.Update();
+            StateMachineModule.Update();
         }
 
         void FixedUpdate()
@@ -141,7 +138,7 @@ namespace CairoEngine
         /// <param name="prefab">The Prefab to create a new GameObject from</param>
         public static GameObject CreatePrefabInstance(GameObject prefab)
         {
-            GameObject createdInstance = Object.Instantiate(prefab);
+            GameObject createdInstance = GameObject.Instantiate(prefab);
             UIModule.CheckIn(createdInstance, prefab);
             LevelModule.CheckIn(createdInstance);
             return createdInstance;
