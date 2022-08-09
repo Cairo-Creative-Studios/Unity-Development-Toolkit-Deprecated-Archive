@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup levelmodule Level Module
+ *  Additional documentation for group 'Level Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +13,7 @@ using UnityEngine.SceneManagement;
 namespace CairoEngine
 {
     /// <summary>
-    /// The Level Manager is a layer on top of Scene Management that allows you to spawn and manipulate the Scene as a whole.
+    /// The Level Manager is a layer on top of Scene Management that allows you to spawn and manipulate the Scene as a whole. Levels are also used for Level Streaming, Saving and Loading Level States, and Level specific objects like Spawners.
     /// </summary>
     public class LevelModule
     {
@@ -156,6 +161,7 @@ namespace CairoEngine
 
         public static Transform GetSpawn()
         {
+            Debug.Log(spawnPoints[0].transform.position);
             return spawnPoints[0].transform;
         }
 

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using B83.Unity.Attributes;
-using UnityEngine.InputSystem;
 
 namespace CairoEngine
 {
@@ -13,7 +12,7 @@ namespace CairoEngine
     {
         [Tooltip("If the Controller is a Team Player, it will be used on the Score Board, disable to control pawns that don't score.")]
         public bool teamPlayer = false;
-        [Tooltip("The Controller's Inputs. If the Controller is an AI Controller, it will interface Network Outputs to this Dictionary.")]
-        public SDictionary<string, InputAction> inputs = new SDictionary<string, InputAction>();
+        [Tooltip("The Inputs belonging to the Controller")]
+        public InputMap inputMap;
     }
 }

@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup gamemodemodule Game Mode Module
+ *  Additional documentation for group 'Gameplay Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -127,7 +132,7 @@ namespace CairoEngine
                     currentCinematic = gameMode.gameStartClip;
                 }
 
-                EntityModule.SpawnPawn(gameMode.defaultPawnInfo, LevelModule.spawnPoints[0].transform.position);
+                ObjectModule.Spawn(gameMode.defaultPlayerObjectTemplate.ID, LevelModule.GetSpawn());
             }
             else
                 Debug.LogWarning("The requested Game Mode: " + gameModeName + " does not exist.");
@@ -138,10 +143,9 @@ namespace CairoEngine
 
         }
 
-        public static void SpawnDefaultPawn()
+        public static void SpawnDefaultPlayerObject()
         {
-            EntityModule.SpawnPawn(gameMode.defaultPawnInfo, LevelModule.spawnPoints[0].transform.position);
-
+            ObjectModule.Spawn(gameMode.defaultPlayerObjectTemplate.ID, LevelModule.GetSpawn());
         }
 
         /// <summary>

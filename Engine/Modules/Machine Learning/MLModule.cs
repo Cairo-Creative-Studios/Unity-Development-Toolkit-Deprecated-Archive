@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup machinelearningmodule Machine Learning Module
+ *  Additional documentation for group 'Machine Learning Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +13,9 @@ using UnityEngine;
 
 namespace CairoEngine
 {
+    /// <summary>
+    /// The Machine Learning Module simplifies the creation and manipulation of Machine Learning Agents, allowing them to be used with very little input from the user by modularizing Training Data and mapping it to the rest of the Toolkit. Despite it's surface level simiplicity, it comes with a ton of features, and can be used for any application.
+    /// </summary>
     public class MLModule
     {
         //Specimen information
@@ -162,7 +170,7 @@ namespace CairoEngine
                 {
                     //Add the Senser Behaviour
                     Senser senserBehaviour = (Senser)networkObject.AddComponent(Type.GetType(senserInfo.MonoBehaviour));
-                    GameObject behaviourObject = Object.Instantiate(senserInfo.prefab);
+                    GameObject behaviourObject = GameObject.Instantiate(senserInfo.prefab);
 
                     //Set up Senser props
                     senserBehaviour.template = senserInfo;
@@ -250,7 +258,7 @@ namespace CairoEngine
             genePools[network.info.ID].networks.Remove(network);
             if(network.gameObject != null)
             {
-                Object.Destroy(network.gameObject);
+                GameObject.Destroy(network.gameObject);
             }
         }
 
@@ -262,7 +270,7 @@ namespace CairoEngine
         {
             NeuralNetworkBehaviour networkBehaviour = networkObject.GetComponent<NeuralNetworkBehaviour>();
             genePools[networkBehaviour.template.ID].networks.Remove(networkBehaviour.network);
-            Object.Destroy(networkObject);
+            GameObject.Destroy(networkObject);
         }
 
         /// <summary>

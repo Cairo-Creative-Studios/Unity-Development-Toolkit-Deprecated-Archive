@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup playermodule Player Module
+ *  Additional documentation for group 'Player Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;

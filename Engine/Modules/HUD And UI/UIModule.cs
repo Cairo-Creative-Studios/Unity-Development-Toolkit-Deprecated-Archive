@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup uimodule UI Module
+ *  Additional documentation for group 'UI Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +15,9 @@ using CairoEngine.UI;
 
 namespace CairoEngine
 {
+    /// <summary>
+    /// Controls Display of User Interfaces, with many tools for simplifying display of Information. 
+    /// </summary>
     public class UIModule
     {
         /// <summary>
@@ -80,7 +88,7 @@ namespace CairoEngine
             //Destroy all the Camera Overlays
             foreach(GameObject overlay in overlays)
             {
-                Object.Destroy(overlay);
+                GameObject.Destroy(overlay);
             }
             //Clear the UXML Root
             root = new VisualElement();

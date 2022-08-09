@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup resourcemodule Resource Module
+ *  Additional documentation for group 'Resource Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -6,6 +11,9 @@ using UnityEngine;
 
 namespace CairoEngine
 {
+    /// <summary>
+    /// The Resource Module creates an interface for Data Management that optimizes loading information in the case of large games with many Objects.
+    /// </summary>
     public class ResourceModule
     {
         /// <summary>
@@ -32,7 +40,7 @@ namespace CairoEngine
         /// <returns>The all.</returns>
         /// <param name="path">Path.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static T[] LoadAll<T>(string path) where T : Object
+        public static T[] LoadAll<T>(string path) where T : ScriptableObject
         {
             List<T> resources = new List<T>();
 

@@ -13,12 +13,17 @@ namespace CairoEngine
         /// </summary>
         public ControllerTemplate template;
 
-        public List<Entity> possessedEntities = new List<Entity>();
+        public List<CObject> possessedEntities = new List<CObject>();
 
         /// <summary>
         /// The Controller's Inputs and their current State.
         /// </summary>
         public SDictionary<string, float> inputs = new SDictionary<string, float>();
+
+        /// <summary>
+        /// A string representation of all the Values of the Inputs in the Controller
+        /// </summary>
+        public string inputString = "";
 
         /// <summary>
         /// Whether the Controller has already been Checked in or not

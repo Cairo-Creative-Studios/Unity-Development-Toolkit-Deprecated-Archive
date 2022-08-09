@@ -3,20 +3,19 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace CairoEngine
 {
     public class PlayerController : Controller
     {
         public int player = -1;
-        public SDictionary<string, InputAction> inputActions = new SDictionary<string, InputAction>();
+        public SDictionary<string, Input> inputActions = new SDictionary<string, Input>();
     
         void Update()
         {
             foreach(string input in inputActions.Keys)
             {
-                inputs[input] = inputActions[input].ReadValue<float>();
+                inputs[input] = inputActions[input].Get();
             }
         }
     }

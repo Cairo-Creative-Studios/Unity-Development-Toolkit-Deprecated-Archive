@@ -19,11 +19,11 @@ namespace CairoEngine.MachineLearning.Sensers
         /// <summary>
         /// The index/value of the Inputs within the Neural Network
         /// </summary>
-        [ReadOnly] public SerializableDictionary<int,double> inputs = new SerializableDictionary<int, double>();
+        [ReadOnly] public SDictionary<int,double> inputs = new SDictionary<int, double>();
         /// <summary>
         /// The Inputs along with their names
         /// </summary>
-        [ReadOnly] public SerializableDictionary<string, int> inputNames = new SerializableDictionary<string, int>();
+        [ReadOnly] public SDictionary<string, int> inputNames = new SDictionary<string, int>();
         /// <summary>
         /// The Game Object this Senser was assigned to
         /// </summary>

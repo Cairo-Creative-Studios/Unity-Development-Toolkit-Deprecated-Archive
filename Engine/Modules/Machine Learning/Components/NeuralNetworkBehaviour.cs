@@ -32,10 +32,10 @@ namespace CairoEngine
         /// <summary>
         /// Names and Values of the Inputs
         /// </summary>
-        [ReadOnly] public SerializableDictionary<string, double> inputs = new SerializableDictionary<string, double>();
+        [ReadOnly] public SDictionary<string, double> inputs = new SDictionary<string, double>();
         /// <summary>
         /// Names and Values of the Outputs
         /// </summary>
-        [ReadOnly] public SerializableDictionary<string, double> outputs = new SerializableDictionary<string, double>();
+        [ReadOnly] public SDictionary<string, double> outputs = new SDictionary<string, double>();
     }
 }

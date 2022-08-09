@@ -31,7 +31,7 @@ namespace CairoEngine.MachineLearning.Sensers
                 for (int i = 0; i < gridSize; i++)
                 {
                     //Instantiate the default Grid Unit Object
-                    GameObject gridUnitObject = Object.Instantiate(shiftGridInfo.GridUnitPrefab);
+                    GameObject gridUnitObject = GameObject.Instantiate(shiftGridInfo.GridUnitPrefab);
                     //Set the Parent of the Grid Unit Object to the Senser Object
                     gridUnitObject.transform.parent = senserObject.transform;
 
@@ -53,8 +53,8 @@ namespace CairoEngine.MachineLearning.Sensers
             }
             else
             {
-                Object.Destroy(senserObject);
-                grid = Object.Instantiate(shiftGridInfo.generatedGrid);
+                GameObject.Destroy(senserObject);
+                grid = GameObject.Instantiate(shiftGridInfo.generatedGrid);
                 grid.transform.parent = agentObject.transform;
             }
         }

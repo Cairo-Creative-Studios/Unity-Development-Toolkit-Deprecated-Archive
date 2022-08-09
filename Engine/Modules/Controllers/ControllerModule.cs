@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup controllermodule Controller Module
+ *  Additional documentation for group 'Controller Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -32,7 +37,7 @@ namespace CairoEngine
         {
             foreach(Controller controller in controllers)
             {
-                foreach(Entity entity in controller.possessedEntities)
+                foreach(CObject entity in controller.possessedEntities)
                 {
                     entity.inputs = controller.inputs;
                 }
@@ -51,7 +56,7 @@ namespace CairoEngine
             if (template != null)
                 aIController.template = template;
 
-            foreach (string inputName in template.inputs.Keys)
+            foreach (string inputName in template.inputMap.inputs.Keys)
             {
                 aIController.inputs.Add(inputName, 0);
             }
@@ -76,12 +81,12 @@ namespace CairoEngine
             if (template != null)
                 playerController.template = template;
 
-            foreach(string inputName in template.inputs.Keys)
+            foreach(string inputName in template.inputMap.inputs.Keys)
             {
                 playerController.inputs.Add(inputName,0);
             }
 
-            playerController.inputActions = template.inputs;
+            playerController.inputActions = template.inputMap.inputs;
 
             foreach(string key in playerController.inputActions.Keys)
             {
@@ -106,13 +111,44 @@ namespace CairoEngine
         /// </summary>
         /// <param name="controller">The Controller that will possess the Entity.</param>
         /// <param name="entity">The Entity to possess</param>
-        public static void Possess(Controller controller, Entity entity)
+        public static void Possess(Controller controller, CObject entity)
         {
             if (entity.controller == null)
             {
                 entity.controller = controller;
                 controller.possessedEntities.Add(entity);
             }
+        }
+
+        /// <summary>
+        /// Possess the specified Entity with a Controller
+        /// </summary>
+        /// <param name="controllerIndex">The Index of the Controller in the Controller Module</param>
+        /// <param name="entity">The Entity to possess</param>
+        public static void Possess(int controllerIndex, CObject entity)
+        {
+            if (entity.controller == null)
+            {
+                Controller curController = controllers[controllerIndex];
+                entity.controller = curController;
+                curController.possessedEntities.Add(entity);
+            }
+        }
+
+        /// <summary>
+        /// Returns a controller that has yet to Possess any Objects
+        /// </summary>
+        /// <returns>The free controller.</returns>
+        public static Controller GetFreeController()
+        {
+            foreach(Controller controller in controllers)
+            {
+                if (controller.possessedEntities.Count<1)
+                {
+                    return controller;
+                }
+            }
+            return null;
         }
 
         /// <summary>

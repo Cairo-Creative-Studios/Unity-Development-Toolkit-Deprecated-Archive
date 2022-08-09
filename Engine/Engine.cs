@@ -1,3 +1,15 @@
+/*! \mainpage Cairo Gameplay Toolkit
+ *
+ * \section intro_sec Introduction
+ *
+ * Welcome to the Cairo Creative Studios Gameplay Toolkit Documentation! Here you will find all the information on elements of the Toolkit, as well as examples on how to use it! 
+ *
+ * \section install_sec Installation
+ * Download the most recent released Unity Package from here: https://github.com/Cairo-Creative-Studios/Cairo-Gameplay-Toolkit/releases
+ * \n 
+ * You can also purchase it from Itch.io if you're interested in donating to the Toolkit's development: https://cairocreative.itch.io/cairo-engine
+ */
+
 //Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
@@ -6,6 +18,8 @@ using UnityEngine;
 using System.Reflection;
 using UnityEngine.SceneManagement;
 using B83.Unity.Attributes;
+using CairoEngine.Reflection;
+using CairoEngine.StateMachine;
 
 namespace CairoEngine
 {
@@ -16,13 +30,18 @@ namespace CairoEngine
     public class Engine : MonoBehaviour
     {
         public static Engine singleton;
+        /// <summary>
+        /// The Modules that are Available in the Engine
+        /// </summary>
+        public static List<string> modules = new List<string>();
 
         public static List<string> flags = new List<string>();
 
         public SDictionary<string, GameObject> enginePrefabs = new SDictionary<string, GameObject>();
 
-        [MonoScript] public string runtimeClass = "Runtime";
         public static RuntimeTemplate runtimeTemplate;
+
+        public static bool started = false;
         /// <summary>
         /// The Runtime controls the overall flow of the Game by interacting with the Engine. 
         /// </summary>
@@ -56,18 +75,15 @@ namespace CairoEngine
 
             //Initialize Modules
             BehaviourModule.Init();
-            CameraModule.Init();
             ControllerModule.Init();
-            EntityModule.Init();
             GameModeModule.Init();
-            InventoryModule.Init();
+            InputModule.Init();
             LevelModule.Init();
             MLModule.Init();
             ObjectModule.Init();
             PlayerModule.Init();
             BehaviourModule.Init();
             UIModule.Init();
-            StateMachineModule.Init();
 
             //Create the Game Runtime
             GameObject runtimeGameObject = new GameObject
@@ -79,25 +95,24 @@ namespace CairoEngine
             var importedRuntime = runtimeGameObject.AddComponent(Type.GetType(runtimeTemplate.runtimeClass));
             Engine.singleton.runtime = (Runtime)importedRuntime;
 
-            StateMachineModule.EnableStateMachine(runtimeGameObject, importedRuntime);
+            StateMachineModule.CreateStateMachine(importedRuntime);
+
+            started = true;
         }
 
         void Update()
         {
             //Update Modules
             BehaviourModule.Update();
-            CameraModule.Update();
             ControllerModule.Update();
-            EntityModule.Update();
             GameModeModule.Update();
-            InventoryModule.Update();
             LevelModule.Update();
             MLModule.Update();
             ObjectModule.Update();
             PlayerModule.Update();
-            StateMachineModule.Update();
             BehaviourModule.Update();
             UIModule.Update();
+            StateMachineModule.Update();
         }
 
         void FixedUpdate()
@@ -138,11 +153,12 @@ namespace CairoEngine
         /// <param name="prefab">The Prefab to create a new GameObject from</param>
         public static GameObject CreatePrefabInstance(GameObject prefab)
         {
-            GameObject createdInstance = Object.Instantiate(prefab);
+            GameObject createdInstance = GameObject.Instantiate(prefab);
             UIModule.CheckIn(createdInstance, prefab);
             LevelModule.CheckIn(createdInstance);
             return createdInstance;
         }
+
         #endregion
     }
 }
