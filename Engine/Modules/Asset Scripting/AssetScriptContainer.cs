@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace CairoEngine
 {
+    ///<summary>
+    /// The Asset Script Container holds all Asset based Scripting information within it, so the Scripting information can be Serialized and shared easily.
+    ///</summary>
     [Serializable]
     public class AssetScriptContainer
     {

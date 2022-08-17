@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:GroupBox name="Event" style="overflow: visible; align-items: auto; flex-direction: row; flex-wrap: nowrap; flex-grow: 0; flex-basis: auto; -unity-background-scale-mode: stretch-to-fill; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-top: 0; padding-bottom: 0;">
+        <ui:VisualElement name="Condition" style="left: auto; width: -217px; right: auto; position: relative; align-items: auto; flex-direction: row; background-color: rgb(36, 74, 115); padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; -unity-background-scale-mode: stretch-to-fill; overflow: visible; flex-grow: 1; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
+            <ui:Label tabindex="-1" text="Condition" display-tooltip-when-elided="true" name="Condition" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Action" style="left: auto; width: auto; align-items: auto; flex-direction: row; justify-content: flex-start; overflow: visible; background-color: rgba(255, 55, 0, 0.24); padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; max-width: none; min-width: auto; flex-wrap: nowrap; flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118);">
+            <ui:Label tabindex="-1" text="Action" display-tooltip-when-elided="true" name="Action" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:GroupBox>
+</ui:UXML>

@@ -85,17 +85,7 @@ namespace CairoEngine
             BehaviourModule.Init();
             UIModule.Init();
 
-            //Create the Game Runtime
-            GameObject runtimeGameObject = new GameObject
-            {
-                name = "Runtime"
-            };
-            runtimeGameObject.transform.parent = Engine.singleton.transform;
-
-            var importedRuntime = runtimeGameObject.AddComponent(Type.GetType(runtimeTemplate.runtimeClass));
-            Engine.singleton.runtime = (Runtime)importedRuntime;
-
-            StateMachineModule.CreateStateMachine(importedRuntime);
+            ControllerModule.CreatePlayerController(0);
 
             started = true;
         }

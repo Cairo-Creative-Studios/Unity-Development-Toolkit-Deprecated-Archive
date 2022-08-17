@@ -61,7 +61,7 @@ namespace CairoEngine.Behaviour
         /// The Asset Scripting Container allows game Logic to be built with Drag and Drop Variables and Methods, rather than with Code.
         /// </summary>
         [Tooltip("The Asset Scripting Container allows game Logic to be built with Drag and Drop Variables and Methods, rather than with Code.")]
-        public AssetScriptContainer scriptContainer;
+        public AssetScriptContainer scriptContainer = new AssetScriptContainer();
 
         /// <summary>
         /// Updates the Core of the Behaviour, done once every tick

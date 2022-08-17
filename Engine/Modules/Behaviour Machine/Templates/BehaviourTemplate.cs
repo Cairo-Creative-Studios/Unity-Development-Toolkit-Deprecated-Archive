@@ -1,4 +1,9 @@
-﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+﻿/*! \addtogroup behaviourmodule Behaviour Template
+ *  Additional documentation for group 'Behaviour Module'
+ *  @{
+ */
+
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
@@ -30,7 +35,7 @@ namespace CairoEngine
         /// The Asset Scripting Container allows game Logic to be built with Drag and Drop Variables and Methods, rather than with Code.
         /// </summary>
         [Tooltip("The Asset Scripting Container allows game Logic to be built with Drag and Drop Variables and Methods, rather than with Code.")]
-        public AssetScriptContainer scriptContainer;
+        public AssetScriptContainer scriptContainer = new AssetScriptContainer();
 
         [Header(" - Sounds - ")]
         /// <summary>

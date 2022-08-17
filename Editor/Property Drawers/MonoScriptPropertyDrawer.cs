@@ -46,9 +46,26 @@ namespace B83.Unity.Editor.PropertyDrawers
             for (int i = 0; i < scripts.Length; i++)
             {
                 var type = scripts[i].GetClass();
-                if (type != null && !m_ScriptCache.ContainsKey(type.FullName))
+
+                if (type != null)
                 {
-                    m_ScriptCache.Add(type.FullName, scripts[i]);
+                    if (type.Namespace != null)
+                    {
+                        if (type.Namespace.Length > 0 && !m_ScriptCache.ContainsKey(type.Namespace + "." + type.FullName))
+                        {
+                            m_ScriptCache.Add(type.Namespace + "." + type.FullName, scripts[i]);
+                        }
+                        else if (!m_ScriptCache.ContainsKey(type.FullName))
+                        {
+
+                            m_ScriptCache.Add(type.FullName, scripts[i]);
+                        }
+                    }
+                    else if (!m_ScriptCache.ContainsKey(type.FullName))
+                    {
+
+                        m_ScriptCache.Add(type.FullName, scripts[i]);
+                    }
                 }
             }
         }

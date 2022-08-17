@@ -208,7 +208,7 @@ namespace CairoEngine
         /// <param name="gameObject">Game object.</param>
         public static void AddBehaviourObject(GameObject gameObject)
         {
-            gameObject.transform.parent = behaviourObjectPool.transform;
+            //gameObject.transform.parent = behaviourObjectPool.transform;
         }
 
         public static void RemoveBehaviourObject(GameObject gameObject)
@@ -228,12 +228,15 @@ namespace CairoEngine
         {
             AssetScriptContainer scriptContainer = (AssetScriptContainer)behaviour.GetField("scriptContainer");
 
-            foreach(AssetMethod method in scriptContainer.Input)
+            if(scriptContainer != null)
             {
-                if (!assetMethods.Contains(method))
-                    assetMethods.Add(method);
+                foreach (AssetMethod method in scriptContainer.Input)
+                {
+                    if (!assetMethods.Contains(method))
+                        assetMethods.Add(method);
 
-                method.subscribers.Add(behaviour);
+                    method.subscribers.Add(behaviour);
+                }
             }
         }
 

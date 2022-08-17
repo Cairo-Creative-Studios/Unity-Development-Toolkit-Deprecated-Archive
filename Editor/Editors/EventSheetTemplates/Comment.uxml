@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Comment" style="background-color: rgb(67, 111, 74);">
+        <ui:Label tabindex="-1" text="//Comments" display-tooltip-when-elided="true" picking-mode="Ignore" style="border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -10,7 +10,7 @@ namespace CairoData
         public T value;
         [NonSerialized] public Tree<T> tree;
         [NonSerialized] public Node<T> parent;
-        public int[] index;
+        [HideInInspector] public int[] index;
         public List<Node<T>> children = new List<Node<T>>();
 
         public Node(Tree<T> tree, T value, Node<T> parent, int[] index)

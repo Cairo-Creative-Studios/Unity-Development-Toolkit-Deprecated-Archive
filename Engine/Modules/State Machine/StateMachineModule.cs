@@ -28,15 +28,15 @@ namespace CairoEngine
         /// </summary>
         public static void Update()
         {
-            foreach(StateMachineComponent component in components)
-            {
-                //Get the Current State Hiearchy as a String
-                string asString = component.machine.states.currentNode.GetValuesInHiearchy().ConvertToString('/');
-                //Set the Current State Value as the Hiearchy with the Root Class cut out
-                component.currentState = asString.PopAtIndex(0,'/');
-                //Set the Watching value (The Class the Component is monitoring) as the Root of the Hiearchy, which is the Root Class for the State Machine
-                component.watching = asString.TokenAt(0, '/');
-            }
+            //foreach(StateMachineComponent component in components)
+            //{
+            //    //Get the Current State Hiearchy as a String
+            //    string asString = component.machine.states.currentNode.GetValuesInHiearchy().ConvertToString('/');
+            //    //Set the Current State Value as the Hiearchy with the Root Class cut out
+            //    component.currentState = asString.PopAtIndex(0,'/');
+            //    //Set the Watching value (The Class the Component is monitoring) as the Root of the Hiearchy, which is the Root Class for the State Machine
+            //    component.watching = asString.TokenAt(0, '/');
+            //}
 
             foreach(Machine machine in machines)
             {

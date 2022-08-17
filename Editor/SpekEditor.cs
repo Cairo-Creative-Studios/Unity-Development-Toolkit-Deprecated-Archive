@@ -33,6 +33,12 @@ namespace CairoEngine
 
         #region Menu Items
 
+        [MenuItem("Cairo/Event Sheet Editor")]
+        private static void ShowWindow()
+        {
+            EventSheetEditor window = (EventSheetEditor)EditorWindow.GetWindow(typeof(EventSheetEditor), false, "Event Sheet Editor");
+            window.Show();
+        }
 
         [MenuItem("Cairo/Level Tools/Create Spawn Point")]
         private static void CreateSpawnPoint()

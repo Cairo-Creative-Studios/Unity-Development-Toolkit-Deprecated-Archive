@@ -14,11 +14,11 @@ namespace CairoData
         /// <summary>
         /// The Currently Selected Node of the Tree
         /// </summary>
-        public Node<T> currentNode = null;
+        [NonSerialized] public Node<T> currentNode = null;
         /// <summary>
         /// The Cursor Placement in the Tree
         /// </summary>
-        public int[] cursor;
+        [NonSerialized] public int[] cursor;
 
         /// <summary>
         /// Gets and Sets the Value at the given Index

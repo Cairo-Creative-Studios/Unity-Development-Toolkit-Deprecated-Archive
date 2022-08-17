@@ -81,9 +81,12 @@ namespace CairoEngine
             if (template != null)
                 playerController.template = template;
 
-            foreach(string inputName in template.inputMap.inputs.Keys)
+            if(template.inputMap!= null)
             {
-                playerController.inputs.Add(inputName,0);
+                foreach (string inputName in template.inputMap.inputs.Keys)
+                {
+                    playerController.inputs.Add(inputName, 0);
+                }
             }
 
             playerController.inputActions = template.inputMap.inputs;
@@ -160,7 +163,7 @@ namespace CairoEngine
         {
             foreach(ControllerTemplate template in templates)
             {
-                if (template.ID == ID)
+                if (template.ID == ID||ID=="")
                     return template;
             }
             return null;

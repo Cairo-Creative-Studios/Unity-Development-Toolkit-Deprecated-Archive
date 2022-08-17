@@ -23,6 +23,11 @@ namespace CairoEngine
         /// </summary>
         [Tooltip("The Child nested in the Instance to call the Method on.")]
         public string child = "";
+        /// <summary>
+        /// The Last Value 
+        /// </summary>
+        [Tooltip("The Last Value returned from this Asset Method")]
+        public object lastValue = null;
 
         /// <summary>
         /// Adds an object as a Subscriber to this Method. When the Call Method is Called, it will be called on all of the Method's Subscribers
@@ -37,12 +42,13 @@ namespace CairoEngine
         /// Call the Method on the Subscibing Instances
         /// </summary>
         /// <param name="parameters">Parameters.</param>
-        public void Call(object[] parameters = null)
+        public object Call(object[] parameters = null)
         {
             foreach(object instance in subscribers)
             {
-                instance.CallMethod(method, parameters);
+                return instance.CallMethod(method, parameters);
             }
+            return null;
         }
     }
 }

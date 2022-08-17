@@ -34,7 +34,7 @@ namespace CairoEngine
         /// </summary>
         private static List<LevelTemplate> levelInfos = new List<LevelTemplate>();
 
-        private static Level currentLevel;
+        public static Level currentLevel;
 
         public static void Init()
         {
