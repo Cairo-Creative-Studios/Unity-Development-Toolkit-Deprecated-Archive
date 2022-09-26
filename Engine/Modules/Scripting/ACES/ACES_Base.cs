@@ -1,4 +1,10 @@
-﻿namespace CairoEngine.Scripting
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace CairoEngine.Scripting
 {
     /// <summary>
     /// Base Class for all ACES Nodes
@@ -14,16 +20,18 @@
         /// </summary>
         public Block block;
         /// <summary>
-        /// Asset Methods can be imported in place of Typical Conditions, Actions, and Triggers
+        /// Types that the ACES Script is to be Used for.
         /// </summary>
-        public AssetMethod assetMethod;
-        /// <summary>
-        /// The Instance of the Node, used for performing the
-        /// </summary>
-        public object ACEinstance;
+        public List<Type> types;
         /// <summary>
         /// The Parameters of the Node
         /// </summary>
         public SDictionary<string, object> parameters = new SDictionary<string, object>();
+
+        [RuntimeInitializeOnLoadMethod]
+        public virtual void Init()
+        {
+            ScriptModule.AddAces(this);
+        }
     }
 }

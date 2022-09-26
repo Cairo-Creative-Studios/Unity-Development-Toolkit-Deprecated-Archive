@@ -7,8 +7,9 @@ using UnityEngine;
 namespace CairoEngine
 {
     [CreateAssetMenu(menuName = "Cairo Game/Gameplay/Level")]
-    public class LevelTemplate : CObjectTemplate
+    public class LevelTemplate : ScriptableObject
     {
+		public string ID = "Default";
         public string sceneName = "Test Scene";
     }
 }

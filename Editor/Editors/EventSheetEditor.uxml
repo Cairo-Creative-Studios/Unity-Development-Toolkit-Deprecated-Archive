@@ -1,6 +1,2 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="Block" src="project://database/Assets/Cairo%20Engine/Editor/Editors/EventSheetTemplates/Block.uxml?fileID=9197481963319205126&amp;guid=c51da006b4f42a4e79901484f052939f&amp;type=3#Block" />
-    <ui:ScrollView picking-mode="Ignore" style="overflow: hidden; background-color: rgb(89, 89, 89); width: 100%; height: 100%; -unity-background-scale-mode: stretch-to-fill; min-height: 100%; min-width: 100%; flex-grow: 1;">
-        <ui:Instance template="Block" name="Block" style="justify-content: flex-start; min-height: auto;" />
-    </ui:ScrollView>
 </ui:UXML>

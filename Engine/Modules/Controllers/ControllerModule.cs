@@ -5,43 +5,71 @@
 
 //Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using CairoEngine.Reflection;
 
-namespace CairoEngine
+namespace CairoEngine.Controllers
 {
     /// <summary>
     /// Manages Controllers in the game, their ownership, the types of Controllers to create, Entity Possesion and more.
     /// </summary>
-    public class ControllerModule
+    public class ControllerModule : MonoBehaviour
     {
+		public bool initialize = true;
+
+        /// <summary>
+        /// The Controller Module Singleton
+        /// </summary>
+        public static ControllerModule singleton;
+
+        /// <summary>
+        /// Controller Templates loaded from the Resources folder
+        /// </summary>
+        private static List<ControllerTemplate> templates = new List<ControllerTemplate>();
         /// <summary>
         /// The currently active Controllers in the game
         /// </summary>
-        private static List<Controller> controllers = new List<Controller>();
+        [SerializeField] private List<Controller> controllers = new List<Controller>();
 
-        private static List<ControllerTemplate> templates = new List<ControllerTemplate>();
+        private SDictionary<ControllerTemplate, List<Controller>> templateControllerGroups = new SDictionary<ControllerTemplate, List<Controller>>();
+        /// <summary>
+        /// Objects that have been possessed by a Controller
+        /// </summary>
+        private List<GameObject> possessedObjects = new List<GameObject>();
 
+        private static int deviceCount = 0;
+
+        [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
-            //Create the first Player 
-            //CreatePlayerController(-1);
+            GameObject singletonObject = new GameObject();
+            singleton = singletonObject.AddComponent<ControllerModule>();
+            GameObject.DontDestroyOnLoad(singleton);
+            singleton.name = "Cairo Controller Module";
             templates.AddRange(Resources.LoadAll<ControllerTemplate>(""));
+
+			if (!singleton.initialize)
+				GameObject.Destroy(singletonObject);
         }
 
         /// <summary>
         /// Updates the controllers and their Controlled Entities
         /// </summary>
-        public static void Update()
+        void Update()
         {
             foreach(Controller controller in controllers)
             {
-                foreach(CObject entity in controller.possessedEntities)
+                foreach(object entity in controller.possessedObjects)
                 {
-                    entity.inputs = controller.inputs;
+                    entity.SetField("inputs", controller.inputs);
                 }
             }
+        }
+
+        public static void AddTemplate(ControllerTemplate template)
+        {
+            templates.Add(template);
         }
 
         /// <summary>
@@ -71,11 +99,11 @@ namespace CairoEngine
 
             GameObject gameObject = new GameObject
             {
-                name = "Player Controller " + controllers.Count
+                name = "Player Controller " + singleton.controllers.Count
             };
             PlayerController playerController = gameObject.AddComponent<PlayerController>();
-            gameObject.transform.parent = Engine.singleton.transform;
-            controllers.Add(playerController);
+            //gameObject.transform.parent = Engine.singleton.transform;
+            singleton.controllers.Add(playerController);
             playerController.checkedIn = true;
 
             if (template != null)
@@ -91,21 +119,58 @@ namespace CairoEngine
 
             playerController.inputActions = template.inputMap.inputs;
 
-            foreach(string key in playerController.inputActions.Keys)
-            {
-                playerController.inputActions[key].Enable();
-            }
-
             return playerController;
         }
 
-        /// <summary>
-        /// Checks in a Controller if it hasn't already been added in the Controller Module
-        /// </summary>
-        /// <param name="controller">The Controller to add</param>
-        public static void CheckIn(Controller controller)
+        public static int CreateDevice()
         {
-            controllers.Add(controller);
+            return deviceCount++;
+        }
+
+        public static PlayerController CreatePlayerController(int device, ControllerTemplate template)
+		{
+			GameObject gameObject = new GameObject
+			{
+				name = "Player Controller " + singleton.controllers.Count
+			};
+			PlayerController playerController = gameObject.AddComponent<PlayerController>();
+			//gameObject.transform.parent = Engine.singleton.transform;
+			singleton.controllers.Add(playerController);
+			playerController.checkedIn = true;
+
+			if (template != null)
+				playerController.template = template;
+
+			if (template.inputMap != null)
+			{
+				foreach (string inputName in template.inputMap.inputs.Keys)
+				{
+					playerController.inputs.Add(inputName, 0);
+				}
+			}
+
+			playerController.inputActions = template.inputMap.inputs;
+
+            if (singleton.templateControllerGroups.ContainsKey(template))
+            {
+                singleton.templateControllerGroups[template].Add(playerController);
+            }
+            else
+            {
+                singleton.templateControllerGroups.Add(template, new List<Controller>());
+                singleton.templateControllerGroups[template].Add(playerController);
+            }
+
+            return playerController;
+		}
+
+		/// <summary>
+		/// Checks in a Controller if it hasn't already been added in the Controller Module
+		/// </summary>
+		/// <param name="controller">The Controller to add</param>
+		public static void CheckIn(Controller controller)
+        {
+            singleton.controllers.Add(controller);
             controller.checkedIn = true;
         }
 
@@ -114,12 +179,11 @@ namespace CairoEngine
         /// </summary>
         /// <param name="controller">The Controller that will possess the Entity.</param>
         /// <param name="entity">The Entity to possess</param>
-        public static void Possess(Controller controller, CObject entity)
+        public static void Possess(Controller controller, object entity)
         {
-            if (entity.controller == null)
+            if (entity.GetField("controller") == null)
             {
-                entity.controller = controller;
-                controller.possessedEntities.Add(entity);
+                controller.possessedObjects.Add(entity);
             }
         }
 
@@ -128,13 +192,12 @@ namespace CairoEngine
         /// </summary>
         /// <param name="controllerIndex">The Index of the Controller in the Controller Module</param>
         /// <param name="entity">The Entity to possess</param>
-        public static void Possess(int controllerIndex, CObject entity)
+        public static void Possess(int controllerIndex, object entity)
         {
-            if (entity.controller == null)
+            if (entity.GetField("controller") == null)
             {
-                Controller curController = controllers[controllerIndex];
-                entity.controller = curController;
-                curController.possessedEntities.Add(entity);
+                Controller curController = singleton.controllers[controllerIndex];
+                curController.possessedObjects.Add(entity);
             }
         }
 
@@ -144,9 +207,9 @@ namespace CairoEngine
         /// <returns>The free controller.</returns>
         public static Controller GetFreeController()
         {
-            foreach(Controller controller in controllers)
+            foreach(Controller controller in singleton.controllers)
             {
-                if (controller.possessedEntities.Count<1)
+                if (controller.possessedObjects.Count<1)
                 {
                     return controller;
                 }

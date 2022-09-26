@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="EventContainer" src="project://database/Assets/Cairo%20Engine/Editor/Editors/EventSheetTemplates/EventContainer.uxml?fileID=9197481963319205126&amp;guid=88a9b55de32c5b7ae8167d25cb1754ef&amp;type=3#EventContainer" />
+    <ui:GroupBox name="Nest" style="flex-direction: row; background-color: rgb(89, 89, 89); overflow: visible; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px; visibility: visible;">
+        <ui:VisualElement name="Indent" picking-mode="Ignore" style="width: 35px;" />
+        <ui:Instance template="EventContainer" name="EventContainer" style="width: 100%;" />
+    </ui:GroupBox>
+</ui:UXML>

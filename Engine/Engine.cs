@@ -53,9 +53,6 @@ namespace CairoEngine
         [RuntimeInitializeOnLoadMethod]
         public static void Inialize()
         {
-            RuntimeTemplate[] runtimeTemplates = Resources.LoadAll<RuntimeTemplate>("");
-            runtimeTemplate = runtimeTemplates[0];
-
             Scene previousScene = SceneManager.GetActiveScene();
             Scene engineScene = SceneManager.CreateScene("Engine");
             SceneManager.SetActiveScene(engineScene);
@@ -72,83 +69,8 @@ namespace CairoEngine
         {
             //Set the Singleton
             singleton = this;
-
-            //Initialize Modules
-            BehaviourModule.Init();
-            ControllerModule.Init();
-            GameModeModule.Init();
-            InputModule.Init();
-            LevelModule.Init();
-            MLModule.Init();
-            ObjectModule.Init();
-            PlayerModule.Init();
-            BehaviourModule.Init();
-            UIModule.Init();
-
-            ControllerModule.CreatePlayerController(0);
-
             started = true;
         }
-
-        void Update()
-        {
-            //Update Modules
-            BehaviourModule.Update();
-            ControllerModule.Update();
-            GameModeModule.Update();
-            LevelModule.Update();
-            MLModule.Update();
-            ObjectModule.Update();
-            PlayerModule.Update();
-            BehaviourModule.Update();
-            UIModule.Update();
-            StateMachineModule.Update();
-        }
-
-        void FixedUpdate()
-        {
-            //FixedUpdate Modules
-            BehaviourModule.FixedUpdate();
-        }
-        #endregion
-
-        #region Global Methods
-        /// <summary>
-        /// Gets the nested types with the Base Type of the given name. 
-        /// </summary>
-        /// <returns>The nested types from base.</returns>
-        /// <param name="type">Type to find Nested Types in</param>
-        /// <param name="baseTypeName">Base type name.</param>
-        public static Type[] GetNestedTypesOfBase(Type type, string baseTypeName)
-        {
-            Type[] types = type.GetNestedTypes();
-            List<Type> desiredTypes = new List<Type>();
-
-            foreach (Type curType in types)
-            {
-                if (curType.BaseType.Name == baseTypeName)
-                {
-                    desiredTypes.Add(curType);
-                }
-
-                Debug.Log(curType);
-            }
-
-            return desiredTypes.ToArray();
-        }
-
-        /// <summary>
-        /// Creates an instance of a Prefab, running initialization code on it through the Engine's Modules afterward.
-        /// </summary>
-        /// <param name="prefab">The Prefab to create a new GameObject from</param>
-        public static GameObject CreatePrefabInstance(GameObject prefab)
-        {
-            GameObject createdInstance = GameObject.Instantiate(prefab);
-            UIModule.CheckIn(createdInstance, prefab);
-            LevelModule.CheckIn(createdInstance);
-            return createdInstance;
-        }
-
         #endregion
     }
 }

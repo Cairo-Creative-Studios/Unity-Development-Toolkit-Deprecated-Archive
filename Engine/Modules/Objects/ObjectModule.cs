@@ -5,31 +5,40 @@
 
 //Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using B83.Unity.Attributes;
 
-namespace CairoEngine
+namespace CairoEngine.Objects
 {
     /// <summary>
     /// The Object Module interfaces with Cairo Objects, and enables simple creation of complex Objects within the game, with very little input from the user. Using Scriptable Objects, the Toolkit can be used to create pretty much any kind of Gameplay scenario without any code at all.
     /// </summary>
-    public class ObjectModule
+    public class ObjectModule : MonoBehaviour
     {
+		public bool initialize = true;
+        /// <summary>
+        /// The Object Module Singleton
+        /// </summary>
+        public static ObjectModule singleton;
+        /// <summary>
+        /// When true, all Game Objects implement Object Extension Components when they're created
+        /// </summary>
+        [Tooltip("When true, all Game Objects implement Object Extension Components when they're created")]
+        public bool implementGlobally = true;
 
         /// <summary>
         /// The objects that the Engine is controlling.
         /// </summary>
-        private static List<CObject> objects = new List<CObject>();
+        private static List<ObjectExtension> objects = new List<ObjectExtension>();
         /// <summary>
         /// The Game Objects that have been added to the Spawn Pool
         /// </summary>
-        private static Dictionary<string,Queue<GameObject>> spawnPool = new Dictionary<string,Queue<GameObject>>();
-
-        private static List<CObjectTemplate> templates = new List<CObjectTemplate>();
-
-        private static Dictionary<string, List<CObject>> activeTags = new Dictionary<string, List<CObject>>();
+        [Tooltip("The Spawn Pools controlled by the Object Module")]
+        [SerializeField] private Dictionary<string,Queue<GameObject>> spawnPool = new Dictionary<string,Queue<GameObject>>();
+        /// <summary>
+        /// Tags for Objects that have been created with Object Extensions
+        /// </summary>
+        [SerializeField] private Dictionary<string, List<ObjectExtension>> activeTags = new Dictionary<string, List<ObjectExtension>>();
 
         /// <summary>
         /// The current Spawn Pool
@@ -42,48 +51,37 @@ namespace CairoEngine
         [Tooltip("The current Moving Speed of the Object")]
         public Vector3 Velocity;
 
+        [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
-            templates.AddRange(Resources.LoadAll<CObjectTemplate>(""));
-        }
-
-        public static void Update()
-        {
-
-        }
+            GameObject singletonObject = new GameObject();
+            singleton = singletonObject.AddComponent<ObjectModule>();
+            singletonObject.name = "Cairo Object Module";
+            GameObject.DontDestroyOnLoad(singletonObject);
+			if (!singleton.initialize)
+				GameObject.Destroy(singletonObject);
+		}
 
         #region Objects
         ///<summary>
         /// Adds an Object to the Object list
         ///</summary>
-        public static void AddObject(CObject addedObject)
+        public static void AddObject(ObjectExtension addedObject)
         {
             objects.Add(addedObject);
         }
 
         /// <summary>
-        /// Checks a Game Object into the Object Module
-        /// </summary>
-        /// <param name="registeredObject">Registered object.</param>
-        //public static Object CheckIn(GameObject registeredObject)
-        //{
-        //    //Add the Object Component and Enable the State Machine on it.
-        //    Object createdObject = registeredObject.AddComponent<Object>();
-        //    StateMachineModule.EnableStateMachine(registeredObject, createdObject);
-        //    return createdObject;
-        //}
-
-        /// <summary>
         /// Creates a new Object and Returns it.
         /// </summary>
         /// <returns>The object.</returns>
-        public static CObject CreateObject(string name)
+        public static ObjectExtension CreateObject()
         {
-            GameObject spekObject = new GameObject();
-            CObject spekBehaviour = spekObject.AddComponent<CObject>();
-            objects.Add(spekBehaviour);
-            spekBehaviour.OID = objects.Count - 1;
-            return spekBehaviour;
+            GameObject createdGameObject = new GameObject();
+            ObjectExtension createdObject = createdGameObject.AddComponent<ObjectExtension>();
+            objects.Add(createdObject);
+            createdObject.OID = objects.Count - 1;
+            return createdObject;
         }
         #endregion
 
@@ -105,39 +103,39 @@ namespace CairoEngine
             //The Object that is Spawned
             GameObject spawnedObject;
 
-            if (spawnPool.ContainsKey(ID))
+            if (singleton.spawnPool.ContainsKey(ID))
             {
-                if (spawnPool[ID].Count > 0)
+                if (singleton.spawnPool[ID].Count > 0)
                 {
-                    spawnedObject = spawnPool[ID].Dequeue();
+                    spawnedObject = singleton.spawnPool[ID].Dequeue();
                     spawnedObject.SetActive(true);
 
-                    AddBehaviours(spawnedObject, ID);
+                    //AddBehaviours(spawnedObject, ID);
 
                     return spawnedObject;
                 }
             }
 
 
-            CObjectTemplate template = GetTemplate(ID);
+            //ObjectTemplate template = GetTemplate(ID);
 
-            if (template != null)
-            {
-                if (template.prefab != null)
-                {
-                    spawnedObject = Engine.CreatePrefabInstance(template.prefab);
-                    spawnedObject.transform.position = spawner.position;
-                    spawnedObject.transform.eulerAngles = spawner.eulerAngles;
-                    CObject objectBehaviour = spawnedObject.AddComponent<CObject>();
-                    objectBehaviour.template = template;
+            //if (template != null)
+            //{
+            //    if (template.prefab != null)
+            //    {
+            //        spawnedObject = new GameObject();
+            //        spawnedObject.transform.position = spawner.position;
+            //        spawnedObject.transform.eulerAngles = spawner.eulerAngles;
+            //        ObjectExtension objectBehaviour = spawnedObject.AddComponent<ObjectExtension>();
+            //        objectBehaviour.template = template;
 
-                    objectBehaviour.poolID = ID;
+            //        objectBehaviour.poolID = ID;
 
-                    AddBehaviours(spawnedObject, ID);
+            //        AddBehaviours(spawnedObject, ID);
 
-                    return spawnedObject;
-                }
-            }
+            //        return spawnedObject;
+            //    }
+            //}
 
             return null;
         }
@@ -146,7 +144,7 @@ namespace CairoEngine
         /// Spawns the Game Object and adds it to the Spawn Pool.
         /// </summary>
         /// <returns>The spawn.</returns>
-        public static GameObject Spawn(CObjectTemplate template, Transform spawner)
+        public static GameObject Spawn(ObjectTemplate template, Transform spawner)
         {
             //The Object that is Spawned
             GameObject spawnedObject;
@@ -155,16 +153,12 @@ namespace CairoEngine
             {
                 if (template.prefab != null)
                 {
-                    spawnedObject = Engine.CreatePrefabInstance(template.prefab);
+                    spawnedObject = new GameObject();
                     spawnedObject.transform.position = spawner.position;
                     spawnedObject.transform.eulerAngles = spawner.eulerAngles;
-                    CObject objectBehaviour = spawnedObject.AddComponent<CObject>();
+                    ObjectExtension objectBehaviour = spawnedObject.AddComponent<ObjectExtension>();
                     objectBehaviour.template = template;
-
-                    objectBehaviour.poolID = template.ID;
-
-                    AddBehaviours(spawnedObject, template.ID);
-
+                    objectBehaviour.poolID = template.poolID;
                     return spawnedObject;
                 }
             }
@@ -178,12 +172,12 @@ namespace CairoEngine
         /// <param name="gameObject">Game object.</param>
         public static void Destroy(GameObject gameObject)
         {
-            string ID = gameObject.GetComponent<CObject>().poolID;
+            string ID = gameObject.GetComponent<ObjectExtension>().poolID;
 
-            if (!spawnPool.ContainsKey(ID))
-                spawnPool.Add(ID,new Queue<GameObject>());
+            if (!singleton.spawnPool.ContainsKey(ID))
+                singleton.spawnPool.Add(ID,new Queue<GameObject>());
 
-            spawnPool[ID].Enqueue(gameObject);
+            singleton.spawnPool[ID].Enqueue(gameObject);
             gameObject.SetActive(false);
         }
 
@@ -191,19 +185,19 @@ namespace CairoEngine
         /// Activates the tags.
         /// </summary>
         /// <param name="instance">Instance.</param>
-        public static void ActivateTags(CObject instance)
+        public static void ActivateTags(ObjectExtension instance)
         {
             foreach(string tag in instance.template.tags)
             {
-                if (activeTags.ContainsKey(tag))
+                if (singleton.activeTags.ContainsKey(tag))
                 {
-                    if (!activeTags[tag].Contains(instance))
-                        activeTags[tag].Add(instance);
+                    if (!singleton.activeTags[tag].Contains(instance))
+                        singleton.activeTags[tag].Add(instance);
                 }
                 else
                 {
-                    activeTags.Add(tag, new List<CObject>());
-                    activeTags[tag].Add(instance);
+                    singleton.activeTags.Add(tag, new List<ObjectExtension>());
+                    singleton.activeTags[tag].Add(instance);
                 }
             }
         }
@@ -212,64 +206,12 @@ namespace CairoEngine
         /// Removes the Object from Active Tags
         /// </summary>
         /// <param name="instance">Instance.</param>
-        public static void RemoveTags(CObject instance)
+        public static void RemoveTags(ObjectExtension instance)
         {
             foreach(string tag in instance.template.tags)
             {
-                activeTags[tag].Remove(instance);
+                singleton.activeTags[tag].Remove(instance);
             }
-        }
-
-        /// <summary>
-        /// Add Behaviours to Spawned Objects from it's List of Behaviours in the Object Template
-        /// </summary>
-        public static void AddBehaviours(GameObject spawnedObject, string ID)
-        {
-            CObjectTemplate template = GetTemplate(ID);
-
-            if (template != null)
-            {
-                if (template.behaviours.Count > 0)
-                {
-                    foreach (BehaviourTemplate behaviour in template.behaviours)
-                    {
-                        BehaviourModule.AddBehaviour(spawnedObject, behaviour);
-                    }
-                }
-            }
-            else
-                Debug.LogWarning("Can't add nonexistent "+ID+" Behaviour to " + spawnedObject);
-        }
-        /// <summary>
-        /// Add Behaviours to Spawned Objects from it's List of Behaviours in the Object Template
-        /// </summary>
-        public static void AddBehaviours(GameObject spawnedObject, CObjectTemplate template)
-        {
-            if (template != null)
-            {
-                if (template.behaviours.Count > 0)
-                {
-                    foreach (BehaviourTemplate behaviour in template.behaviours)
-                    {
-                        BehaviourModule.AddBehaviour(spawnedObject, behaviour);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get an Object Template by it's ID
-        /// </summary>
-        /// <returns>The template.</returns>
-        /// <param name="ID">Identifier.</param>
-        private static CObjectTemplate GetTemplate(string ID)
-        {
-            foreach(CObjectTemplate template in templates)
-            {
-                if (template.ID == ID)
-                    return template;
-            }
-            return null;
         }
     }
 }

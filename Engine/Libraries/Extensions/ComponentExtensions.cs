@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using UnityEngine;
 
 public static class ComponentExtensionss

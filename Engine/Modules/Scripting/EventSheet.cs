@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoData;
@@ -11,6 +13,13 @@ namespace CairoEngine.Scripting
     [CreateAssetMenu(menuName = "Event Sheet")]
     public class EventSheet : ScriptableObject
     {
+        /// <summary>
+        /// The actual Structure of the Event Sheet file
+        /// </summary>
         [HideInInspector] public Tree<Block> script = new Tree<Block>(new Block());
+        /// <summary>
+        /// All the Groups in the Event sheet, and coupled with their Enabled State
+        /// </summary>
+        [HideInInspector] public SDictionary<string, bool> groups = new SDictionary<string, bool>();
     }
 }

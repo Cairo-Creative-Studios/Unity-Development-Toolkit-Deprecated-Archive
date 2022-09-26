@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -8,6 +10,30 @@ namespace CairoEngine.Reflection
 {
     public static class ReflectionExtension
     {
+        /// <summary>
+        /// Gets the nested types with the Base Type of the given name. 
+        /// </summary>
+        /// <returns>The nested types from base.</returns>
+        /// <param name="type">Type to find Nested Types in</param>
+        /// <param name="baseTypeName">Base type name.</param>
+        public static Type[] GetNestedTypesOfBase(this Type type, string baseTypeName)
+        {
+            Type[] types = type.GetNestedTypes();
+            List<Type> desiredTypes = new List<Type>();
+
+            foreach (Type curType in types)
+            {
+                if (curType.BaseType.Name == baseTypeName)
+                {
+                    desiredTypes.Add(curType);
+                }
+
+                Debug.Log(curType);
+            }
+
+            return desiredTypes.ToArray();
+        }
+
         /// <summary>
         /// Calls a Method on the Instance
         /// </summary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -11,14 +12,12 @@ namespace CairoEngine
     public class Editor
     {
         public static List<LevelTemplate> levelInfos = new List<LevelTemplate>();
-        public static List<GameModeTemplate> gameModeInfos = new List<GameModeTemplate>();
 
         [InitializeOnLoadMethod]
         public static async Task Init()
         {
             //Load Data files
             levelInfos.AddRange(Resources.LoadAll<LevelTemplate>(""));
-            gameModeInfos.AddRange(Resources.LoadAll<GameModeTemplate>(""));
 
             while (true)
             {

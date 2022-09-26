@@ -16,19 +16,24 @@ namespace CairoEngine
     /// <summary>
     /// The Machine Learning Module simplifies the creation and manipulation of Machine Learning Agents, allowing them to be used with very little input from the user by modularizing Training Data and mapping it to the rest of the Toolkit. Despite it's surface level simiplicity, it comes with a ton of features, and can be used for any application.
     /// </summary>
-    public class MLModule
+    public class MLModule : MonoBehaviour
     {
+		public bool initialize = false;
+
         //Specimen information
         private static Dictionary<string, GenePool> genePools = new Dictionary<string, GenePool>();
         private static Dictionary<GameObject, int> networkObjects = new Dictionary<GameObject, int>();
 
         public static bool enableStats = true;
 
+        public static MLModule singleton;
+
         //Default Properties
 
         /// <summary>
         /// Initialize the Machine Learning Module.
         /// </summary>
+        [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
             List<NeuralNetworkTemplate> neuralNetworkInfosList = new List<NeuralNetworkTemplate>();
@@ -38,12 +43,22 @@ namespace CairoEngine
             {
                 genePools.Add(info.ID, new GenePool(info));
             }
-        }
+
+            //Create the Machine Learning Module Singleton
+            GameObject singletonObject = new GameObject();
+            singleton = singletonObject.AddComponent<MLModule>();
+			singleton.name = "Machine Learning Module";
+
+            GameObject.DontDestroyOnLoad(singletonObject);
+
+			if (!singleton.initialize)
+				GameObject.Destroy(singletonObject);
+		}
 
         /// <summary>
         /// Update the Machine Learning Module
         /// </summary>
-        public static void Update()
+        public void Update()
         {
             //Loop through all the Neural Networks and Update them.
             foreach(GenePool pool in genePools.Values)
@@ -155,7 +170,8 @@ namespace CairoEngine
         private static GameObject InstantiatePrefab(NeuralNetworkTemplate info)
         {
             //Network Object Properties
-            GameObject networkObject = Engine.CreatePrefabInstance(info.prefab);
+            GameObject networkObject = GameObject.Instantiate(info.prefab);
+            
             NeuralNetworkBehaviour behaviour = networkObject.AddComponent<NeuralNetworkBehaviour>();
 
             //If the Object has sensers
@@ -307,32 +323,6 @@ namespace CairoEngine
                 this.info = info;
             }
 
-            /// <summary>
-            /// Call the Crossover Method for all Crossover Candidates
-            /// </summary>
-            //public void Breed()
-            //{
-            //    while (crossoverCandidates.Count > 0)
-            //    {
-            //        Crossover(crossoverCandidates.Dequeue());
-            //    }
-            //}
-
-            /// <summary>
-            /// Crossover genes from two Parents
-            /// </summary>
-            /// <param name="firstParent">First parent.</param>
-            //public void Crossover(NeuralNetwork firstParent)
-            //{
-            //    NeuralNetwork secondParent = FindMate(firstParent);
-            //    MLModule.CreateNetwork(firstParent, secondParent);
-            //}
-
-            /// <summary>
-            /// Finds a good mate for the Parent
-            /// </summary>
-            /// <returns>The mate.</returns>
-            /// <param name="firstParent">First parent.</param>
             public NeuralNetwork FindMate(NeuralNetwork firstParent)
             {
                 double fitness = firstParent.GetFitness();

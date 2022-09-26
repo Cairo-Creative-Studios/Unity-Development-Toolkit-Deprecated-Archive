@@ -68,8 +68,8 @@ namespace CairoEngine
 
                 if (rootObjectAsSpawn != null)
                     spawnPoints.Add(rootObjectAsSpawn);
+
             }
-            level.childInstances.AddRange(gameObjects);
 
             currentLevel = level;
 

@@ -1,9 +1,32 @@
-﻿using System;
+﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-#if ENABLE_LEGACY_INPUT_MANAGER
+
+#if ENABLE_INPUT_SYSTEM
+namespace CairoEngine
+{
+    [Serializable]
+    public class Input
+    {
+        public InputAction inputAction;
+
+        public float Get()
+        {
+            float returnValue = 0;
+
+            inputAction.Enable();
+
+            returnValue = inputAction.ReadValue<float>();
+
+            return returnValue;
+        }
+    }
+}
+#elif ENABLE_LEGACY_INPUT_MANAGER
 namespace CairoEngine
 {
     public class Input
@@ -33,34 +56,10 @@ namespace CairoEngine
 
         }
 
-        public void Enable() {
-         }
-    }
+        public void Enable() 
+        {
+        
 }
-#endif
-#if ENABLE_INPUT_SYSTEM
-namespace CairoEngine
-{
-    [Serializable]
-    public class Input
-    {
-        public InputAction inputAction;
-
-        public float Get()
-        {
-            float returnValue = 0;
-
-            inputAction.Enable();
-
-            returnValue = inputAction.ReadValue<float>();
-
-            return returnValue;
-        }
-
-        public void Enable()
-        {
-
-        }
     }
 }
 #endif

@@ -23,11 +23,11 @@ namespace CairoEngine
         /// <summary>
         /// The Controller the Player is using (Usually Assigned through the Engine's Game Mode functionality.
         /// </summary>
-        public PlayerController playerController;
+        //public PlayerController playerController;
 
-        public Player(PlayerController playerController)
-        {
-            this.playerController = playerController;
-        }
+        //public Player(PlayerController playerController)
+        //{
+        //    this.playerController = playerController;
+        //}
     }
 }

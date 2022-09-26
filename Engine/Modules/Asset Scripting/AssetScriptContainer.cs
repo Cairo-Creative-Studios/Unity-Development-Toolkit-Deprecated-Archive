@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CairoEngine
 {
@@ -25,5 +26,10 @@ namespace CairoEngine
         /// </summary>
         [Tooltip("Asset Events called by the Instance.")]
         public SDictionary<string, AssetMethod> Output = new SDictionary<string, AssetMethod>();
+        /// <summary>
+        /// Unity Events called by the Instance
+        /// </summary>
+        [Tooltip("Unity Events called by the Instance")]
+        public SDictionary<string, UnityEvent> Events = new SDictionary<string, UnityEvent>();
     }
 }

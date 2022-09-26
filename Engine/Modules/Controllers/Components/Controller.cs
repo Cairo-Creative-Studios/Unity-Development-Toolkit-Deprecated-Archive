@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace CairoEngine.Controllers
 {
     public class Controller : MonoBehaviour
     {
@@ -13,7 +13,7 @@ namespace CairoEngine
         /// </summary>
         public ControllerTemplate template;
 
-        public List<CObject> possessedEntities = new List<CObject>();
+        public List<object> possessedObjects = new List<object>();
 
         /// <summary>
         /// The Controller's Inputs and their current State.

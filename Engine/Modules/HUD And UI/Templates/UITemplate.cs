@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CairoEngine.UI;
 
-namespace CairoEngine
+namespace CairoEngine.UI
 {
     [CreateAssetMenu(menuName ="Cairo Game/UI Template")]
-    public class UITemplate : Resource
+    public class UITemplate : ScriptableObject
     {
-
+		public string ID = "Default";
         /// <summary>
         /// The UXML files to use for rendering the UI.
         /// </summary>

@@ -11,9 +11,8 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using System.Reflection;
-using CairoEngine.UI;
 
-namespace CairoEngine
+namespace CairoEngine.UI
 {
     /// <summary>
     /// Controls Display of User Interfaces, with many tools for simplifying display of Information. 

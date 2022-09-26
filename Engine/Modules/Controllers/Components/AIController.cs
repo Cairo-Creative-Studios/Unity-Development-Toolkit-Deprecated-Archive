@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace CairoEngine.Controllers
 {
     public class AIController : Controller
     {

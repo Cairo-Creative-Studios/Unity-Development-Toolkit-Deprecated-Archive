@@ -39,28 +39,28 @@ namespace CairoEngine
         /// <summary>
         /// Adds a Player to the Game.
         /// </summary>
-        public static void AddPlayer()
-        {
-            players.Add(new Player(ControllerModule.CreatePlayerController(-1)));
-        }
+        //public static void AddPlayer()
+        //{
+        //    players.Add(new Player(ControllerModule.CreatePlayerController(-1)));
+        //}
 
-        public static void SetPlayerControllers(PlayerController playerController)
-        {
-            foreach (Player player in players)
-            {
-                player.playerController = playerController;
-            }
-        }
+        //public static void SetPlayerControllers(PlayerController playerController)
+        //{
+        //    foreach (Player player in players)
+        //    {
+        //        player.playerController = playerController;
+        //    }
+        //}
 
         /// <summary>
         /// Sets the Player Controller for one Player. Use this if some Players need to use a different kind of Controller.
         /// </summary>
         /// <param name="player">The Player</param>
         /// <param name="playerController">Player controller.</param>
-        public static void SetPlayerControllerForOne(int playerID, PlayerController playerController)
-        {
-            players[playerID].playerController = playerController;
-        }
+        //public static void SetPlayerControllerForOne(int playerID, PlayerController playerController)
+        //{
+        //    players[playerID].playerController = playerController;
+        //}
 
         #endregion
 

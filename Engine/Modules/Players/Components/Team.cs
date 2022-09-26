@@ -26,7 +26,7 @@ namespace CairoEngine
         /// <summary>
         /// The Controllers given to the Members of the Teams.
         /// </summary>
-        public List<Controller> members = new List<Controller>();
+        //public List<Controller> members = new List<Controller>();
         /// <summary>
         /// The friendly teams according to this Team, can be used to form temporary alliances between different Teams.
         /// </summary>

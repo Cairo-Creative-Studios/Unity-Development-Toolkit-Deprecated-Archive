@@ -14,8 +14,9 @@ namespace CairoEngine.MachineLearning
     /// A base Senser class to use for 
     /// </summary>
     [CreateAssetMenu(menuName = "Cairo Game/Machine Learning/Senser")]
-    public class SenserTemplate : Resource
+    public class SenserTemplate : ScriptableObject
     {
+        public string ID = "Default Senser";
         /// <summary>
         /// Delays the rate at which the Senser updates, in attempt to improve performance
         /// </summary>

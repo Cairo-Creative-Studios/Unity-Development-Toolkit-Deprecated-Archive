@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
+using CairoEngine.Scripting;
 using UnityEditor;
 
-[CustomEditor(typeof(CairoEngine.EventSheet))]
+[CustomEditor(typeof(EventSheet))]
 public class EventSheetInspector : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        CairoEngine.EventSheet myScript = (CairoEngine.EventSheet)target;
+        EventSheet myScript = (EventSheet)target;
         if (GUILayout.Button("Open in Event Sheet Editor"))
         {
             EventSheetEditor window = (EventSheetEditor)EditorWindow.GetWindow(typeof(EventSheetEditor), false, "Event Sheet Editor");
