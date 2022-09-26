@@ -10,7 +10,9 @@ namespace CairoEngine.Controllers
     [CreateAssetMenu(menuName = "Cairo Game/Gameplay/Controller")]
     public class ControllerTemplate : ScriptableObject
     {
-        [Tooltip("")]
+        [Tooltip("Whether this Controller should be used for Players primarily (can still be used for AI if desired)")]
+        public bool isPlayer = true;
+        [Tooltip("The ID of the the controller")]
         public string ID = "";
         [Tooltip("If the Controller is a Team Player, it will be used on the Score Board, disable to control pawns that don't score.")]
         public bool teamPlayer = false;

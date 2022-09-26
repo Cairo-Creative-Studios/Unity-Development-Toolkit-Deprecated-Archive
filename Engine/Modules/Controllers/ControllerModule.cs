@@ -60,9 +60,13 @@ namespace CairoEngine.Controllers
         {
             foreach(Controller controller in controllers)
             {
-                foreach(object entity in controller.possessedObjects)
+                foreach(GameObject entity in controller.possessedObjects)
                 {
-                    entity.SetField("inputs", controller.inputs);
+                    MonoBehaviour[] components = entity.GetComponents<MonoBehaviour>();
+                    foreach(object component in components)
+                    {
+                        component.SetField("inputs", controller.inputs);
+                    }
                 }
             }
         }
@@ -102,7 +106,7 @@ namespace CairoEngine.Controllers
                 name = "Player Controller " + singleton.controllers.Count
             };
             PlayerController playerController = gameObject.AddComponent<PlayerController>();
-            //gameObject.transform.parent = Engine.singleton.transform;
+            gameObject.transform.parent = singleton.transform;
             singleton.controllers.Add(playerController);
             playerController.checkedIn = true;
 
@@ -179,12 +183,9 @@ namespace CairoEngine.Controllers
         /// </summary>
         /// <param name="controller">The Controller that will possess the Entity.</param>
         /// <param name="entity">The Entity to possess</param>
-        public static void Possess(Controller controller, object entity)
+        public static void Possess(Controller controller, GameObject objectToPossess)
         {
-            if (entity.GetField("controller") == null)
-            {
-                controller.possessedObjects.Add(entity);
-            }
+            controller.possessedObjects.Add(objectToPossess);
         }
 
         /// <summary>
@@ -192,7 +193,7 @@ namespace CairoEngine.Controllers
         /// </summary>
         /// <param name="controllerIndex">The Index of the Controller in the Controller Module</param>
         /// <param name="entity">The Entity to possess</param>
-        public static void Possess(int controllerIndex, object entity)
+        public static void Possess(int controllerIndex, GameObject entity)
         {
             if (entity.GetField("controller") == null)
             {

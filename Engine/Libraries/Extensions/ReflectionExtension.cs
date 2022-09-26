@@ -88,6 +88,11 @@ namespace CairoEngine.Reflection
             }
         }
 
+        public static bool HasMethod(this Type type, string methodName)
+        {
+            return type.GetMethod(methodName) != null;
+        }
+
         /// <summary>
         /// Gets nested Classes within the given Instance
         /// </summary>

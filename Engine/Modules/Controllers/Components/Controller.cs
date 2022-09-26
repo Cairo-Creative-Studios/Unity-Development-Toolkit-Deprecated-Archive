@@ -13,7 +13,7 @@ namespace CairoEngine.Controllers
         /// </summary>
         public ControllerTemplate template;
 
-        public List<object> possessedObjects = new List<object>();
+        public List<GameObject> possessedObjects = new List<GameObject>();
 
         /// <summary>
         /// The Controller's Inputs and their current State.

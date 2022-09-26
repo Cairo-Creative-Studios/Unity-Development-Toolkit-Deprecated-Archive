@@ -20,23 +20,23 @@ public class SDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializati
 
     public TValue this[TKey key]
     {
-        get 
+        get
         {
             if (dictionary.ContainsKey(key))
                 return dictionary[key];
             else
             {
-                Debug.LogWarning("Key "+key+" doesn't exist!");
+                Debug.LogWarning("Key " + key + " doesn't exist!");
                 return default(TValue);
             }
         }
 
-        set 
+        set
         {
             if (!dictionary.ContainsKey(key))
                 dictionary.Add(key, value);
-            else 
-                dictionary[key] = value; 
+            else
+                dictionary[key] = value;
         }
     }
 

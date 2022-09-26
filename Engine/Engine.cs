@@ -19,7 +19,17 @@ using System.Reflection;
 using UnityEngine.SceneManagement;
 using B83.Unity.Attributes;
 using CairoEngine.Reflection;
+
+//Modules
 using CairoEngine.StateMachine;
+using CairoEngine.Controllers;
+using CairoEngine.Objects;
+using CairoEngine.Drivers;
+using CairoEngine.UI;
+using CairoEngine.MachineLearning;
+using CairoEngine.SaveSystem;
+using CairoEngine.InventoryManagement;
+using CairoEngine.Scripting;
 
 namespace CairoEngine
 {
@@ -29,6 +39,9 @@ namespace CairoEngine
     /// </summary>
     public class Engine : MonoBehaviour
     {
+        public delegate void InitializeEngine();
+        public static event InitializeEngine EngineInitialized; 
+
         public static Engine singleton;
         /// <summary>
         /// The Modules that are Available in the Engine
@@ -70,6 +83,12 @@ namespace CairoEngine
             //Set the Singleton
             singleton = this;
             started = true;
+
+            //When all the Engine Singletons are created, call the Engine Initialization method
+            if (ControllerModule.singleton != null && ObjectModule.singleton != null && DriverModule.singleton != null && SaveSystemModule.singleton != null)
+            {
+                EngineInitialized?.Invoke();
+            }
         }
         #endregion
     }

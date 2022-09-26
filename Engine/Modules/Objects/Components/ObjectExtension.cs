@@ -1,22 +1,48 @@
 //Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
-/**Base Class for all Spektor engine Objects**/
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine.Behaviour;
-using CairoEngine.Reflection;
 using System.Reflection;
-using ToolBox.Serialization;
+using CairoEngine.Controllers;
 
-namespace CairoEngine
+namespace CairoEngine.Objects
 {
-    public class CObject : MonoBehaviour
+    /// <summary>
+    /// An Extension to Game 
+    /// </summary>
+    public class ObjectExtension : CairoBehaviour
     {
         /// <summary>
-        /// The Controller of this Entity
+        /// The Pool ID for the Object, used for Object Pooling
         /// </summary>
-        public Controller controller;
+        [Tooltip("The ID of the Object Pool this belongs to")]
+        public string poolID = "Default";
+        /// <summary>
+        /// The tags assigned to the Object
+        /// </summary>
+        [Tooltip("The tags assigned to the Object, for picking")]
+        public List<string> tags = new List<string>();
+
+        public enum PossessionStatus
+        {
+            dontPossess,
+            automatic,
+            firstPlayer,
+            secondPlayer,
+            thirdPlayer,
+            fourthPlayer
+        }
+        /// <summary>
+        /// The Status of Possession for the Instance Upon Creation
+        /// </summary>
+        [Tooltip("The Status of Possession for the Instance Upon Creation")]
+        public PossessionStatus initialPossessionStatus = 0;
+        /// <summary>
+        /// If the Controller Template is set, it will force the creation of a Controller Object using the given Template, and possess this Object with it.
+        /// </summary>
+        [Tooltip("If the Controller Template is set, it will force the creation of a Controller Object using the given Template, and possess this Object with it.")]
+        public ControllerTemplate controllerTemplate;
+
         /// <summary>
         /// The Inputs recieved from the Controller of the Entity.
         /// </summary>
@@ -35,12 +61,7 @@ namespace CairoEngine
         /// The Template belonging to this Object
         /// </summary>
         [Tooltip("The Template Belonging to this Object")]
-        public CObjectTemplate template;
-        /// <summary>
-        /// The Behaviours that have been added to the Object.
-        /// </summary>
-        [Tooltip("The Cairo Behaviours attached to the Object")]
-        public List<object> behaviours = new List<object>();
+        public ObjectTemplate template;
         /// <summary>
         /// Properties that are Created/Utilized by the Object's Behaviours
         /// </summary>
@@ -57,11 +78,6 @@ namespace CairoEngine
         [Tooltip("Flags that have been attached to the Object")]
         public List<string> flags = new List<string>();
         /// <summary>
-        /// The ID of the Pool this Object belongs to
-        /// </summary>
-        [Tooltip("The ID of the Object Pool this belongs to")]
-        public string poolID = "";
-        /// <summary>
         /// The Level this Object is a part of.
         /// </summary>
         [Tooltip("The Level this Object Belongs to")]
@@ -71,11 +87,6 @@ namespace CairoEngine
         /// </summary>
         [Tooltip("The Objects that have set this Object as their parent")]
         public List<GameObject> children = new List<GameObject>();
-        /// <summary>
-        /// The Moving Velocity of the Object
-        /// </summary>
-        [Tooltip("The Moving Velocity of the Object")]
-        public Vector3 velocity = new Vector3();
 
         public enum SaveSettings
         {
@@ -83,20 +94,34 @@ namespace CairoEngine
             Transform,
             Behaviours
         }
-
-        void Start()
-        {
-            Enable();
-        }
+        /// <summary>
+        /// <see langword="true"/> if waiting for the Engine to Start before Inializing the Instance
+        /// </summary>
+        private bool waitForEngine = false;
 
         //Continuously Update the Values of Properties
         void Update()
         {
-            if (active)
+            if (active && Engine.started)
             {
                 foreach (object property in properties.Values)
                 {
                     SetChildProperties(property);
+                }
+            }
+        }
+
+        public override void EngineInitialized()
+        {
+            if (initialPossessionStatus == PossessionStatus.automatic)
+            {
+                if (controllerTemplate != null)
+                {
+                    if (controllerTemplate.isPlayer)
+                    {
+                        PlayerController playerController = ControllerModule.CreatePlayerController(0, controllerTemplate);
+                        ControllerModule.Possess(playerController, gameObject);
+                    }
                 }
             }
         }
@@ -107,44 +132,6 @@ namespace CairoEngine
         /// <param name="saveSettings">Save settings.</param>
         public void Save(SaveSettings saveSettings = 0)
         {
-
-        }
-
-        /// <summary>
-        /// Calls a method in the specified Behaviour that has been attached to the Cairo Object
-        /// </summary>
-        /// <returns>The behaviour method.</returns>
-        /// <param name="methodName">Method name.</param>
-        /// <param name="paramaters">Paramaters.</param>
-        /// <typeparam name="BehaviourType">The 1st type parameter.</typeparam>
-        public object CallBehaviourMethod<BehaviourType>(string methodName, object[] paramaters)
-        {
-            foreach(object behaviour in behaviours)
-            {
-                if(behaviour.GetType().Name == typeof(BehaviourType).Name)
-                {
-                    return behaviour.CallMethod(methodName, paramaters);
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Enables the behaviour.
-        /// </summary>
-        /// <param name="behaviour">Behaviour.</param>
-        public void EnableBehaviour(string behaviour)
-        {
-            GetBehaviour(behaviour).Enable();
-        }
-
-        /// <summary>
-        /// Disables the behaviour.
-        /// </summary>
-        public void DisableBehaviour(string behaviour)
-        {
-            GetBehaviour(behaviour).Disable();
         }
 
         /// <summary>
@@ -171,8 +158,6 @@ namespace CairoEngine
                 properties[name] = value;
             else
                 properties.Add(name, value);
-
-            //SetChildProperties(value);
             return value;
         }
 
@@ -190,61 +175,6 @@ namespace CairoEngine
                 else
                     properties.Add(from.GetType().Name+"."+field.Name, field.GetValue(from));
             }
-        }
-
-        /// <summary>
-        /// Enable this instance.
-        /// </summary>
-        public void Enable()
-        {
-            active = false;
-
-            foreach(object behaviourType in behaviours)
-            {
-                behaviourType.CallMethod("Enable");
-            }
-
-            ObjectModule.ActivateTags(this);
-        }
-
-        /// <summary>
-        /// Disable this instance.
-        /// </summary>
-        public void Disable()
-        {
-            active = false;
-
-            foreach (CairoBehaviour<object> behaviourType in behaviours)
-            {
-                behaviourType.Disable();
-            }
-
-            ObjectModule.RemoveTags(this);
-        }
-
-        void OnDestroy()
-        {
-            ObjectModule.RemoveTags(this);
-            behaviours.Clear();
-            BehaviourModule.RemoveBehaviourObject(gameObject);
-        }
-
-        /// <summary>
-        /// Get a Behaviour attached to the Object
-        /// </summary>
-        /// <returns>The behaviour.</returns>
-        /// <param name="ID">Identifier.</param>
-        private CairoBehaviour<object> GetBehaviour(string ID)
-        {
-            foreach(CairoBehaviour<object> behaviourType in behaviours)
-            {
-                if(((BehaviourTemplate)(object)behaviourType.template).ID == ID)
-                {
-                    return behaviourType;
-                }
-            }
-
-            return null;
         }
     }
 }

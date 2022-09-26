@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine.Reflection;
-using CairoEngine.Controllers;
 
 namespace CairoEngine.Drivers
 {
@@ -19,9 +18,6 @@ namespace CairoEngine.Drivers
         /// </summary>
         [Tooltip("The Template to use for the Driver Core")]
         public DriverCoreTemplate template;
-
-        [Tooltip("When modified, will subscribe the Core to the Controller with the Given Template when the Core is created")]
-        public ControllerTemplate possessingControllerTemplate = null;
 
         /// <summary>
         /// A List of Drivers attached to the Game Object

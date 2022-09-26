@@ -88,7 +88,11 @@ namespace CairoEngine.Drivers
         /// <returns>The inputs.</returns>
         public virtual void SetInputs(SDictionary<string, float>  newInputs)
         {
-            foreach (string input in newInputs.Keys)
+            string[] keys = { "" };
+            Array.Resize<string>(ref keys, newInputs.Count);
+            newInputs.Keys.CopyTo(keys,0);
+
+            foreach (string input in keys)
             {
                 if(inputMap.ContainsKey(input))
                     if(inputs.ContainsKey(inputMap[input]))
