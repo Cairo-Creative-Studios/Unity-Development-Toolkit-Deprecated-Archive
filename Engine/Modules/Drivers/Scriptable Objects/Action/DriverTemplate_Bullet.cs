@@ -40,8 +40,10 @@ namespace CairoEngine.Drivers
         public Vector3 rotation = new Vector3(0, 0, 0);
 
         [Header(" - Motion - ")]
-        [Tooltip("Whether to use Input from a Controller to move around")]
-        public bool controllable = false;
+        [Tooltip("Whether to force the direction below when the Driver is enabled")]
+        public bool forceDirection = false;
+        [Tooltip("The Direction to Start moving in when the Driver is enabled, if Force Direction is set to true")]
+        public Vector3 startDirection = new Vector3(0, 0, 0);
         /// <summary>
         /// The Life Span of the Projectile. If above zero, it will die after this duration of time passes after it's Spawn.
         /// </summary>
@@ -68,6 +70,14 @@ namespace CairoEngine.Drivers
         /// </summary>
         [Tooltip("An optional list of Commands to give to the Projectile to affect it's Movement over time.")]
         public string motionCommands = "";
+
+        [Header(" - Input - ")]
+        [Tooltip("Whether to use Input from a Controller to move around")]
+        public bool controllable = false;
+        [Tooltip("Acceleration to top Input Movement speed in any given direction")]
+        public Vector3 inputAcceleration = new Vector3(0.2f,0.2f,0.2f);
+        [Tooltip("Max Input movement speed in any given direction")]
+        public Vector3 inputMaxSpeed = new Vector3(1f, 1f, 1f);
 
 
         [Header(" - Magnet - ")]
@@ -111,10 +121,10 @@ namespace CairoEngine.Drivers
 
             foreach (string defaultEvent in "Shot,Hit,Timeout".TokenArray())
             {
-                if (!scriptContainer.Output.ContainsKey(defaultEvent))
-                    scriptContainer.Output.Add(defaultEvent, null);
-                if (!scriptContainer.Events.ContainsKey(defaultEvent))
-                    scriptContainer.Events.Add(defaultEvent, null);
+                if (!scriptContainer.output.ContainsKey(defaultEvent))
+                    scriptContainer.output.Add(defaultEvent, null);
+                if (!scriptContainer.events.ContainsKey(defaultEvent))
+                    scriptContainer.events.Add(defaultEvent, null);
             }
         }
     }

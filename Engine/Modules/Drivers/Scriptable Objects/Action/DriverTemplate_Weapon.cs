@@ -63,8 +63,10 @@ namespace CairoEngine.Drivers
 
             foreach (string defaultEvent in "Shot,Pickup,Putdown".TokenArray())
             {
-                if (!scriptContainer.Output.ContainsKey(defaultEvent))
-                    scriptContainer.Output.Add(defaultEvent, null);
+                if (!scriptContainer.output.ContainsKey(defaultEvent))
+                    scriptContainer.output.Add(defaultEvent, null);
+                if (!scriptContainer.events.ContainsKey(defaultEvent))
+                    scriptContainer.events.Add(defaultEvent, null);
             }
         }
     }

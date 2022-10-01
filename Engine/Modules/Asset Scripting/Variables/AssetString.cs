@@ -7,6 +7,6 @@ namespace CairoEngine
     [CreateAssetMenu(menuName = "Cairo Game/Scripting/Asset Variables/String")]
     public class AssetString : AssetVariableBase
     {
-        public AssetVariable<string> value;
+        public AssetVariable<string> variable;
     }
 }

@@ -130,8 +130,10 @@ namespace CairoEngine.Drivers
 
             foreach (string defaultEvent in "Idle, Run, Land, Jump, Fall, Hit".TokenArray())
             {
-                if (!scriptContainer.Output.ContainsKey(defaultEvent))
-                    scriptContainer.Output.Add(defaultEvent, null);
+                if (!scriptContainer.output.ContainsKey(defaultEvent))
+                    scriptContainer.output.Add(defaultEvent, null);
+                if (!scriptContainer.events.ContainsKey(defaultEvent))
+                    scriptContainer.events.Add(defaultEvent, null);
             }
 
 			foreach(string defaultAnimationProperty in "HorizontalSpeed, VerticalSpeed, isGrounded".TokenArray())

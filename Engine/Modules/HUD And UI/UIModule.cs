@@ -1,4 +1,4 @@
-﻿/*! \addtogroup uimodule UI Module
+﻿    /*! \addtogroup uimodule UI Module
  *  Additional documentation for group 'UI Module'
  *  @{
  */
@@ -17,8 +17,16 @@ namespace CairoEngine.UI
     /// <summary>
     /// Controls Display of User Interfaces, with many tools for simplifying display of Information. 
     /// </summary>
-    public class UIModule
+    public class UIModule : MonoBehaviour
     {
+        //public PanelSettings defaultPanelSettings;
+        //public VisualTreeAsset defaultUIDocument;
+        public GameObject UIContainerPrefab;
+
+        public static UIModule singleton;
+
+        public UIDocument documentComponent;
+
         /// <summary>
         /// The data to use for the UI that should be Displayed.
         /// </summary>
@@ -31,52 +39,27 @@ namespace CairoEngine.UI
         /// <summary>
         /// All the UI Binds in the Module, ordered by the Field Instances grouped with the Element that is to be modified
         /// </summary>
-        private static List<ElementBind> binds = new List<ElementBind>();
+        //private static List<ElementBind> binds = new List<ElementBind>();
 
         /// <summary>
         /// The current UI root, is recreated when the UI is Reset
         /// </summary>
-        private static VisualElement root;
+        public VisualElement root;
 
         /// <summary>
         /// All the current Overlays. Created when the UI is loaded, and deleted when reset.
         /// </summary>
         private static List<GameObject> overlays = new List<GameObject>();
 
-
-        public enum PropertyType
-        {
-            Text,
-            Width,
-            Height,
-            Color
-        }
-
+        [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
-            uiTemplates.AddRange(Resources.LoadAll<UITemplate>(""));
-        }
-
-        public static void Update()
-        {
-            //Update Element properties for Binds
-            foreach (ElementBind bind in binds)
-            {
-                //Choose what to do depending on the Property that is intended to be modified by the Bind
-                switch (bind.property)
-                {
-                    case PropertyType.Width:
-                        bind.element.transform.scale = new Vector3(bind.element.transform.scale.x,(float)bind.field.GetValue(bind.instance),bind.element.transform.scale.z);
-                        break;
-                    case PropertyType.Height:
-                        bind.element.transform.scale = new Vector3((float)bind.field.GetValue(bind.instance), bind.element.transform.scale.y, bind.element.transform.scale.z);
-                        break;
-                    case PropertyType.Text:
-                        TextElement asText = (TextElement)bind.element;
-                        asText.text = (string)bind.field.GetValue(bind.instance);
-                        break;
-                }
-            }
+            GameObject singletonObject = new GameObject();
+            singleton = singletonObject.AddComponent<UIModule>();
+            GameObject uiContainer = GameObject.Instantiate(singleton.UIContainerPrefab);
+            singleton.root = uiContainer.GetComponent<UIDocument>().rootVisualElement;
+            GameObject.DontDestroyOnLoad(singletonObject);
+            singleton.name = "UI Module";
         }
 
         /// <summary>
@@ -90,10 +73,10 @@ namespace CairoEngine.UI
                 GameObject.Destroy(overlay);
             }
             //Clear the UXML Root
-            root = new VisualElement();
+            //root = new VisualElement();
 
-            //Empty the current Binds list
-            binds = new List<ElementBind>();
+            ////Empty the current Binds list
+            //binds = new List<ElementBind>();
         }
 
         /// <summary>
@@ -103,14 +86,14 @@ namespace CairoEngine.UI
         /// <param name="field">The name of the Field to Bind</param>
         /// <param name="elementName">The Element to Bind to</param>
         /// <param name="property">The Element's Property</param>
-        public static void Bind(object boundClass, string field, string elementName, PropertyType property)
-        {
-            //Get the Element from the current Visual Element Tree
-            VisualElement element = root.Q<VisualElement>(elementName);
+        //public static void Bind(object boundClass, string field, string elementName, PropertyType property)
+        //{
+        //    //Get the Element from the current Visual Element Tree
+        //    //VisualElement element = root.Q<VisualElement>(elementName);
 
-            //Add the bind to the bind List
-            binds.Add(new ElementBind(boundClass, field, element, property));
-        }
+        //    //Add the bind to the bind List
+        //    //binds.Add(new ElementBind(boundClass, field, element, property));
+        //}
 
         /// <summary>
         /// Sets the user interface to the Specified UI Object
@@ -136,8 +119,8 @@ namespace CairoEngine.UI
                 visualElement.CloneTree(tree);
 
                 //Add the Tree to the root with it's Style Sheet
-                root.Add(tree);
-                root.styleSheets.Add(ui.UXMLFiles[visualElement]);
+                //root.Add(tree);
+                //root.styleSheets.Add(ui.UXMLFiles[visualElement]);
             }
 
             //Render the Camera Overlays added to the UI
@@ -181,7 +164,7 @@ namespace CairoEngine.UI
                         //Get the Component that the Game Object Bind is for
                         var component = checkedObject.GetComponent(bind.boundBehaviour);
                         //Bind the Element to the Game Object's Field
-                        Bind(component, bind.fieldName, bind.element, (PropertyType)bind.property);
+                        //Bind(component, bind.fieldName, bind.element, (PropertyType)bind.property);
                         break;
                     }
                 }
@@ -189,35 +172,80 @@ namespace CairoEngine.UI
         }
 
         /// <summary>
-        /// Instances of the Objects in the UI Module who's fields are being tracked
+        /// Renders the given UI Information from the UI Template, and returns an Object Array of all the elements that will have to be Discarded when disabling the UI
         /// </summary>
-        class ElementBind
+        /// <returns>The user interface.</returns>
+        /// <param name="UI">User interface.</param>
+        public static VisualElement[] RenderUI(UIItem item)
         {
-            public object instance;
-            public FieldInfo field;
-            public VisualElement element;
-            public PropertyType property;
+            List<VisualElement> elements = new List<VisualElement>();
 
-            public ElementBind(object instance, string fieldName, VisualElement element, PropertyType property)
+            if (singleton == null || singleton.root == null)
             {
-                this.instance = instance;
-                field = instance.GetType().GetField(fieldName);
-                this.property = property;
-                this.element = element; 
+                return null;
             }
 
-            public object this[string fieldName]
+            VisualElement tree = new VisualElement();
+            if (item.UIDocument != null)
             {
-                get
-                {
-                    return field.GetValue(instance);
-                }
-                set
-                {
-                    field.SetValue(instance, value);
-                }
+                //Ge the Visual Element Tree from the current Visual Element Asset
+                item.UIDocument.CloneTree(tree);
+
+                //Add the Tree to the root with it's Style Sheet
+                singleton.root.Add(tree);
+            }
+
+            if(item.styleSheet!=null)
+                singleton.root.styleSheets.Add(item.styleSheet);
+
+            if(item.UIDocument != null)
+                elements.Add(tree);
+
+            return elements.ToArray();
+        }
+
+        /// <summary>
+        /// Destroy the given UI Items
+        /// </summary>
+        /// <param name="elements">Elements.</param>
+        public static void DestroyUI(List<UIItem> items)
+        {
+            foreach(UIItem item in items)
+            {
+                item.Destroy();
             }
         }
+
+        /// <summary>
+        /// Instances of the Objects in the UI Module who's fields are being tracked
+        /// </summary>
+        //class ElementBind
+        //{
+        //    public object instance;
+        //    public FieldInfo field;
+        //    public VisualElement element;
+        //    public PropertyType property;
+
+        //    public ElementBind(object instance, string fieldName, VisualElement element, PropertyType property)
+        //    {
+        //        this.instance = instance;
+        //        field = instance.GetType().GetField(fieldName);
+        //        this.property = property;
+        //        this.element = element; 
+        //    }
+
+        //    public object this[string fieldName]
+        //    {
+        //        get
+        //        {
+        //            return field.GetValue(instance);
+        //        }
+        //        set
+        //        {
+        //            field.SetValue(instance, value);
+        //        }
+        //    }
+        //}
 
     }
 }

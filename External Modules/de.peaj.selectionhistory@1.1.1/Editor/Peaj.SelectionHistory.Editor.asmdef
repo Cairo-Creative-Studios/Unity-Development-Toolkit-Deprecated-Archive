@@ -1,0 +1,17 @@
+{
+    "name": "Peaj.SelectionHistory.Editor",
+    "references": [
+        "GUID:cfb30589bae3bf84b8512586ece72755"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

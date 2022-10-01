@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using CairoEngine.Reflection;
 
 namespace CairoEngine
 {
@@ -15,21 +16,32 @@ namespace CairoEngine
         /// Asset Variables contained within the Instance.
         /// </summary>
         [Tooltip("Asset Variables contained within the Instance.")]
-        public List<AssetVariableBase> Variables = new List<AssetVariableBase>();
+        public List<AssetVariableBase> variables = new List<AssetVariableBase>();
         /// <summary>
         /// The input.
         /// </summary>
         [Tooltip("Asset Events called within the Instance.")]
-        public List<AssetMethod> Input = new List<AssetMethod>();
+        public List<AssetMethod> input = new List<AssetMethod>();
         /// <summary>
         /// Asset Events called by the Behaviour
         /// </summary>
         [Tooltip("Asset Events called by the Instance.")]
-        public SDictionary<string, AssetMethod> Output = new SDictionary<string, AssetMethod>();
+        public SDictionary<string, AssetMethod> output = new SDictionary<string, AssetMethod>();
         /// <summary>
         /// Unity Events called by the Instance
         /// </summary>
         [Tooltip("Unity Events called by the Instance")]
-        public SDictionary<string, UnityEvent> Events = new SDictionary<string, UnityEvent>();
+        public SDictionary<string, UnityEvent> events = new SDictionary<string, UnityEvent>();
+
+        public void Update()
+        {
+            foreach(AssetVariableBase variable in variables)
+            {
+                if(variable.fieldReference != null)
+                {
+                    variable.fieldReference.Set(((object)variable).GetField("variable")?.GetField("value"));
+                }
+            }
+        }
     }
 }

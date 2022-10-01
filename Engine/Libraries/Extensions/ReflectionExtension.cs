@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using CairoData;
+using B83.Unity.Attributes;
 
 namespace CairoEngine.Reflection
 {
@@ -151,6 +152,162 @@ namespace CairoEngine.Reflection
                 tree.Add(child, node.index);
                 NestSearchMethod(tree, child, baseClassName, instantiate,count);
             }
+        }
+    }
+
+    public class ReflectionContainer
+    {
+        /// <summary>
+        /// References to types stored within this Container
+        /// </summary>
+        SDictionary<string, FieldReference> typeReferences = new SDictionary<string, FieldReference>();
+
+        /// <summary>
+        /// Adds the Instance's Fields as Field References in the Reflection Container 
+        /// </summary>
+        public void AddFieldReferences(object type)
+        {
+            FieldInfo[] fieldInfos = type.GetType().GetFields();
+
+            foreach(FieldInfo fieldInfo in fieldInfos)
+            {
+                typeReferences.Add(fieldInfo.Name, new FieldReference(type, fieldInfo));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Holds a Reference to a Field within an Instance of a Class
+    /// </summary>
+    [Serializable]
+    public class FieldReference : ISerializationCallbackReceiver
+    {
+        public object instance;
+        public FieldInfo field;
+
+        [ReadOnly] public string name;
+        [ReadOnly] public string value;
+
+        /// <summary>
+        /// Creates an Instance field from the given variable
+        /// </summary>
+        /// <param name="field">Field.</param>
+        public FieldReference(object instance, FieldInfo field)
+        {
+            this.instance = instance;
+            this.field = field;
+        }
+
+        //Serialization
+        public virtual void OnBeforeSerialize()
+        {
+            if(field != null && instance != null)
+            {
+                name = field.Name;
+                value = instance.ToString();
+            }
+            else
+            {
+                name = "null";
+                value = "null";
+            }
+        }
+        public virtual void OnAfterDeserialize()
+        {
+            if (field != null && instance != null)
+            {
+                name = field.Name;
+                value = instance.ToString();
+            }
+            else
+            {
+                name = "null";
+                value = "null";
+            }
+        }
+
+        /// <summary>
+        /// Get the Value of the Field, given it's Type
+        /// </summary>
+        /// <returns>The get.</returns>
+        public T Get<T>()
+        {
+            return (T)instance.GetField(field.Name);
+        }
+
+        /// <summary>
+        /// Gets the value of a Field using Objects
+        /// </summary>
+        /// <returns>The get.</returns>
+        public object Get()
+        {
+            return instance.GetField(field.Name);
+        }
+
+        /// <summary>
+        /// Set the Value of the Field, given it's Type
+        /// </summary>
+        /// <param name="value">Value.</param>
+        public void Set<T>(T value)
+        {
+            instance.SetField(field.Name,value);
+        }
+
+        /// <summary>
+        /// Set the Value of the field, using Objects
+        /// </summary>
+        /// <param name="value">Value.</param>
+        public void Set(object value)
+        {
+            instance.SetField(field.Name, value);
+        }
+    }
+
+    /// <summary>
+    /// Holds a Reference to an 
+    /// </summary>
+    [Serializable]
+    public class MonoBehaviourFieldReference : FieldReference
+    {
+        [Tooltip("The Game Object that the MonoBehaviour is attached to")]
+        public GameObject gameObject;
+        [Tooltip("The MonoBehaviour to pick the Field from")]
+        //[MonoScript] public string MonoBehaviour;
+        //[Tooltip("The Field to Select from the MonoBehaviour")]
+        public string selectedField = "";
+        public MonoBehaviour monoBehaviour;
+
+        object behaviour;
+
+        public MonoBehaviourFieldReference(object instance, FieldInfo field) : base(instance, field)
+        {
+        }
+
+        void Update()
+        {
+            //behaviour = gameObject.GetComponent(Type.GetType(MonoBehaviour));
+        }
+
+        public override void OnAfterDeserialize()
+        {
+            if (monoBehaviour)
+            {
+                instance = monoBehaviour;
+                field = instance.GetType().GetField(selectedField);
+            }
+
+            base.OnAfterDeserialize();
+        }
+
+        public override void OnBeforeSerialize()
+        {
+            if (monoBehaviour)
+            {
+                instance = monoBehaviour;
+                field = instance.GetType().GetField(selectedField);
+            }
+
+            base.OnBeforeSerialize();
         }
     }
 }

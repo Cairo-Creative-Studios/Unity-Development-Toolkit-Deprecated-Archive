@@ -69,6 +69,7 @@ namespace CairoEngine.Drivers
                     {
                         ((MonoBehaviour)driver).enabled = true;
                         driver.CallMethod("SetInputs", new object[] { inputs });
+                        ((AssetScriptContainer)driver.GetField("scriptContainer"))?.Update();
                     }
                 }
                 else
@@ -81,12 +82,48 @@ namespace CairoEngine.Drivers
             }
 		}
 
-		/// <summary>
-		/// Sends a Message to a Behaviour
-		/// </summary>
-		/// <typeparam name="T">The Type of the Behavour to Message</typeparam>
-		/// <returns>The message to send to the Behaviour</returns>
-		public object Message<T>(string message, object[] parameters)
+        /// <summary>
+        /// Get a Driver by it's Type and ID.
+        /// </summary>
+        /// <returns>The driver.</returns>
+        /// <param name="ID">The ID of the Driver.</param>
+        /// <typeparam name="T">The Type of the Driver</typeparam>
+        public object GetDriver<T>(string ID)
+        {
+            foreach(string key in states.Keys)
+            {
+                foreach(object driver in states[key])
+                {
+                    if(driver.GetType().Name == typeof(T).Name&&((DriverTemplate)driver.GetField("template")).ID == ID)
+                    {
+                        return driver;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Get's a Driver from the active State, given it's Type
+        /// </summary>
+        /// <returns>The driver.</returns>
+        /// <typeparam name="T">The Type of the Driver to get</typeparam>
+        public object GetDriver<T>()
+        {
+            foreach(object driver in states[currentState])
+            {
+                if (driver.GetType().Name == typeof(T).Name)
+                    return driver;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Sends a Message to a Behaviour
+        /// </summary>
+        /// <typeparam name="T">The Type of the Behavour to Message</typeparam>
+        /// <returns>The message to send to the Behaviour</returns>
+        public object Message<T>(string message, object[] parameters)
         {
             foreach (object driver in states[currentState])
             {
@@ -153,12 +190,12 @@ namespace CairoEngine.Drivers
             //Use the Character Controller for movement if one is active on the Object
             if (characterController != null)
             {
-                characterController.Move(speed);
+                characterController.Move(speed * Time.deltaTime);
             }
             //Otherwise, Update the Transform
             else
             {
-                transform.position += speed;
+                transform.position += speed * Time.deltaTime;
             }
         }
     }

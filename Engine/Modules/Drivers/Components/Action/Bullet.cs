@@ -12,7 +12,7 @@ namespace CairoEngine.Drivers
         /// Projectile shooter information.
         /// </summary>
         public int team = -1;
-        public float life;
+        public float life = 50;
         /// <summary>
         /// The damage instegator to spawn once the Damage is Triggered
         /// </summary>
@@ -22,7 +22,8 @@ namespace CairoEngine.Drivers
         /// </summary>
         public Weapon weapon;
         public Vector3 direction;
-        public Vector3 speed;
+        public Vector3 speed = new Vector3(0,0,0);
+        public Vector3 inputSpeed = new Vector3(0,0,0);
 
         public bool fired = false;
         bool fireTriggered = false;
@@ -31,10 +32,23 @@ namespace CairoEngine.Drivers
 
         public bool returnToHolder = false;
 
+        void OnEnable()
+        {
+            if (template!=null&&template.forceDirection)
+                direction = template.startDirection;
+        }
+
         void Start()
         {
-
             originalParent = transform.parent;
+
+            if (template.forceDirection)
+                direction = template.startDirection;
+
+            if (direction.x == 0 && direction.y == 0 && direction.z == 0)
+            {
+                Debug.LogWarning("Direction has not been set for the Bullet Driver of " + gameObject.name + ", the Bullet Driver will not move the Object.");
+            }
         }
 
         /// <summary>
@@ -47,7 +61,6 @@ namespace CairoEngine.Drivers
 
         void Update()
         {
-
             if (template.autofire)
                 fired = true;
 
@@ -55,7 +68,7 @@ namespace CairoEngine.Drivers
             {
                 if (!fireTriggered)
                 {
-                    template.scriptContainer.Events["Shot"].Invoke();
+                    template.scriptContainer.events["Shot"].Invoke();
                     fireTriggered = true;
                     if (!template.setAngle)
                         transform.eulerAngles = template.startingAngle;
@@ -75,31 +88,27 @@ namespace CairoEngine.Drivers
 
                 bool canMove = true;
 
+                Vector3 moveDir = Vector3.zero;
                 if (template.controllable)
                 {
-                    if (inputs["Accelerate"] != 0)
-                    {
-                        speed = new Vector3(0, inputs["MoveVertical"] * template.directionalSpeed * Time.deltaTime, 0);
-                        speed = speed.Lerp(direction * template.speed, template.acceleration); 
-                    }
-                    else
-                    {
-                        speed = new Vector3(0, inputs["MoveVertical"] * template.directionalSpeed * Time.deltaTime, 0);
-                    }
+                    //transform.eulerAngles += new Vector3(inputs["RotateX"],inputs["RotateY"] * Time.deltaTime, 0);
 
-                    transform.eulerAngles += new Vector3(inputs["RotateX"],inputs["RotateY"] * Time.deltaTime, 0);
+                    float inputDirection = 0;
+                    inputSpeed = new Vector3(inputs["MoveHorizontal"], 0, 0);
+                    inputDirection = Mathf.Atan2(inputSpeed.normalized.x, inputSpeed.normalized.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-
-                }
-                else
-                {
-                    speed = speed.Lerp(direction * template.speed, template.acceleration);
+                    moveDir = Quaternion.Euler(0, inputDirection, 0) * Vector3.forward * template.inputMaxSpeed.x;
                 }
 
-                core.Move(speed);
+                speed = speed.Lerp(direction * template.speed, template.acceleration) + new Vector3(0,inputs["MoveVertical"],0);
+
+                if (template.enableGravity)
+                    speed += Physics.gravity;
+
+                core.Move(speed + moveDir);
 
                 life += Time.deltaTime;
-                if (life > template.lifespan&&template.lifespan>0)
+                if (life > template.lifespan && template.lifespan > 0)
                 {
                     Timeout();
                 }
@@ -108,7 +117,6 @@ namespace CairoEngine.Drivers
             if (returnToHolder)
             {
                 transform.position = transform.position.Lerp(originalParent.position,0.3f);
-
 
                 //Handle Display
                 if (template.setAngle)
@@ -134,7 +142,7 @@ namespace CairoEngine.Drivers
                     fired = false;
                     break;
                 case DriverTemplate_Bullet.TimeoutFunction.CallEvent:
-                    template.scriptContainer.Events["Timeout"].Invoke();
+                    template.scriptContainer.events["Timeout"].Invoke();
                     break;
             }
         }

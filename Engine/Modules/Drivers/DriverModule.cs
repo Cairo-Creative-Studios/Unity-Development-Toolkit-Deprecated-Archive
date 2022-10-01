@@ -99,7 +99,6 @@ namespace CairoEngine.Drivers
             foreach (string inputName in template.inputMap.Keys)
             {
                 behaviourType.CallMethod("AddInput", new object[] { template.inputMap[inputName], inputName });
-
             }
 
             //Inherit the Script Container

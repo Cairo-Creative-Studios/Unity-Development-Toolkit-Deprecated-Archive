@@ -243,11 +243,9 @@ namespace CairoEngine.Drivers
                 else
                 {
                     root.onGround = false;
-                    root.animator.SetBool("isGrounded", root.onGround);
                 }
 
-                    root.core.velocity.y += root.template.jumpStrength;
-
+                root.core.velocity.y += root.template.jumpStrength;
 
                 UpdateStates();
                 UpdatePhysics();

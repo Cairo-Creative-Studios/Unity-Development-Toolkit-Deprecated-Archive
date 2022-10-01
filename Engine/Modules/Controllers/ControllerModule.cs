@@ -65,7 +65,7 @@ namespace CairoEngine.Controllers
                     MonoBehaviour[] components = entity.GetComponents<MonoBehaviour>();
                     foreach(object component in components)
                     {
-                        component.SetField("inputs", controller.inputs);
+                        component.CallMethod("SetInputs",new object[] { controller.inputs });
                     }
                 }
             }

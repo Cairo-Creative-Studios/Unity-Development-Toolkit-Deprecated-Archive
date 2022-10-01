@@ -33,7 +33,9 @@ namespace CairoEngine.Drivers
         /// </summary>
         [HideInInspector] public Transform rootTransform;
 
-		 public AssetScriptContainer scriptContainer;
+        [Tooltip("Asset Script Container, contains Events, Methods and Variables to interface with the Driver.")]
+        public AssetScriptContainer scriptContainer;
+
 
 	 	[Header(" - Input - ")]
         public SDictionary<string, float> inputs = new SDictionary<string, float>();

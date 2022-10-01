@@ -1,0 +1,32 @@
+{
+  "name": "com.kitbashery.tween-components",
+  "version": "1.0.0",
+  "displayName": "Tween Components",
+  "description": "A component based interpolation system.",
+  "unity": "2021.3",
+  "unityRelease": "0f1",
+  "documentationUrl": "https://kitbashery.com/docs/tween-components",
+  "changelogUrl": "https://github.com/Kitbashery/Tween-Components/releases",
+  "licensesUrl": "https://github.com/Kitbashery/Tween-Components/blob/main/LICENSE",
+  "keywords": [
+    "Tween",
+    "Interpolation",
+    "Animation"
+  ],
+  "author": {
+    "name": "Kitbashery",
+    "email": "kitbashery@gmail.com",
+    "url": "https://www.kitbashery.com"
+  },
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Demo Scene(s)",
+      "description": "Tween Components Demo scene(s).",
+      "path": "Samples~/Demo"
+    }
+  ],
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "com.faster-games.editor-tools",
+  "version": "1.2.0",
+  "displayName": "FasterGames EditorTools",
+  "description": "Tools for improving the Unity Editor experience.",
+  "unity": "2020.3",
+  "unityRelease": "13f1",
+  "documentationUrl": "https://editor-tools.faster-games.com/",
+  "changelogUrl": "https://github.com/faster-games/editor-tools/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/faster-games/editor-tools/blob/main/LICENSE",
+  "dependencies": {},
+  "keywords": [
+    "faster-games",
+    "editor",
+    "tools"
+  ],
+  "author": {
+    "name": "Ben Greenier",
+    "email": "ben+faster-games@bengreenier.com",
+    "url": "https://bengreenier.com"
+  },
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}

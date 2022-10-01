@@ -1,0 +1,22 @@
+{
+    "name": "CairoEngine",
+    "rootNamespace": "CairoEngine",
+    "references": [
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:f06555f75b070af458a003d92f9efb00",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:40f914846e8079065ce748d2b233be6f",
+        "GUID:c39f04a503334584da539f678462c7a2",
+        "GUID:70dc180080efcf14392f0369475097e5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
