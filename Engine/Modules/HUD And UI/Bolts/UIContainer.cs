@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CairoEngine.Scripting;
 using CairoEngine.Reflection;
+using NaughtyAttributes;
+using System.Reflection;
+using CairoEngine.AssetScripting;
 
 namespace CairoEngine.UI
 {
@@ -99,7 +101,7 @@ namespace CairoEngine.UI
         }
 
         /// <summary>
-        /// Updates the Properties of the Element Binds
+        /// Updates the Properties of the Element Binds intelligently, automatically handling adapting Asset Variables to the Properties they've been Bound to.
         /// </summary>
         void UpdateAssetBinds()
         {
@@ -109,22 +111,22 @@ namespace CairoEngine.UI
                 return;
             }
 
-            foreach(UIBind bind in boundElements)
+            foreach (UIBind bind in boundElements)
             {
-                switch (bind.property)
+                //If the Property the Asset Variable is Bound to is the Text of the Visual Element, get the Value ToString
+                if (bind.property == "Text")
                 {
-                    case UIBind.Property.Text:
-                        ((TextElement)bind.element).text = ((AssetString)bind.variable)?.variable?.value;
-                        break;
-                    case UIBind.Property.Color:
-                        ((object)bind.element.style).SetField("backgroundColor", (Color)((object)bind.variable)?.GetField("variable")?.GetField("value"));
-                        break;
-                    case UIBind.Property.Width:
-                        ((object)bind.element.style).SetField("width", (float)((object)bind.variable)?.GetField("variable")?.GetField("value"));
-                        break;
-                    case UIBind.Property.Height:
-                        ((object)bind.element.style).SetField("height", (float)((object)bind.variable)?.GetField("variable")?.GetField("value"));
-                        break;
+                    ((TextElement)bind.element).text = bind.variable?.GetField("variable")?.GetField("value")?.ToString();
+                }
+                //Otherwise, determine how to evaluate the Value of the Asset Variable based on it's Type and what Property it's been Bound to
+                else
+                {
+                    switch (bind.variable.GetType().Name)
+                    {
+                        case "AssetNumber":
+                            ((object)bind.element.style).SetProperty("UnityEngine.UIElements.IStyle." + bind.property, new StyleFloat((float)((object)bind.variable)?.GetField("variable")?.GetField("value")));
+                            break;
+                    }
                 }
             }
         }
@@ -146,17 +148,28 @@ namespace CairoEngine.UI
     [Serializable]
     public class UIBind
     {
-        public enum Property
-        {
-            Text,
-            Width,
-            Height,
-            Color
-        }
 
         public string elementID = "";
-        public Property property;
+        [Dropdown("GetStyleProperties")]
+        public string property;
         public AssetVariableBase variable;
         public VisualElement element;
+
+        DropdownList<string> GetStyleProperties()
+        {
+            VisualElement element = new VisualElement();
+
+            DropdownList<string> properties = new DropdownList<string>();
+            properties.Add("Text", "Text");
+
+            PropertyInfo[] fieldInfos = typeof(IStyle).GetProperties();
+            foreach (PropertyInfo field in fieldInfos)
+            {
+                if(field.Name.TokenCount('_') == 1)
+                    properties.Add(field.Name, field.Name);
+            }
+
+            return properties;
+        }
     }
 }

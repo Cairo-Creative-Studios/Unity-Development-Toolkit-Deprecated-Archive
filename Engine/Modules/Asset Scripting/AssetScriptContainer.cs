@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using CairoEngine.Reflection;
 
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
     ///<summary>
     /// The Asset Script Container holds all Asset based Scripting information within it, so the Scripting information can be Serialized and shared easily.
@@ -32,16 +32,5 @@ namespace CairoEngine
         /// </summary>
         [Tooltip("Unity Events called by the Instance")]
         public SDictionary<string, UnityEvent> events = new SDictionary<string, UnityEvent>();
-
-        public void Update()
-        {
-            foreach(AssetVariableBase variable in variables)
-            {
-                if(variable.fieldReference != null)
-                {
-                    variable.fieldReference.Set(((object)variable).GetField("variable")?.GetField("value"));
-                }
-            }
-        }
     }
 }

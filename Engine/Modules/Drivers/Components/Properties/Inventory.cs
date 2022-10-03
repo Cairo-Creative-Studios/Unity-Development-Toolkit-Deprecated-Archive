@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using CairoEngine.InventoryManagement;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
 {
 	public class Inventory : Driver<DriverTemplate_Inventory>
 	{
+        /// <summary>
+        /// The Items in the Inventory
+        /// </summary>
+        [Tooltip("The Items in the Inventory")]
+        [Foldout("Properties")]
 		public List<DriverTemplate_InventoryItem> items = new List<DriverTemplate_InventoryItem>();
 
 		void Start()

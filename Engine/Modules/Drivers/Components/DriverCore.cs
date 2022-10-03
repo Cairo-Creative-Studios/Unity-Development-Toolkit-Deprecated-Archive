@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine.Reflection;
+using NaughtyAttributes;
 
 namespace CairoEngine.Drivers
 {
@@ -12,32 +13,50 @@ namespace CairoEngine.Drivers
     /// </summary>
     public class DriverCore : MonoBehaviour
     {
+        /// <summary>
+        /// The Driver Core's Tags, for Identification
+        /// </summary>
+        [Tooltip("The Driver Core's Tags, for Identification")]
+        [Foldout("Properties")]
 		public List<string> tags = new List<string>();
         /// <summary>
         /// The Template to use for the Driver Core
         /// </summary>
         [Tooltip("The Template to use for the Driver Core")]
+        [Foldout("Properties")]
         public DriverCoreTemplate template;
-
         /// <summary>
         /// A List of Drivers attached to the Game Object
         /// </summary>
         [Tooltip("A List of Drivers attached to the Game Object")]
+        [Foldout("Properties")]
         public SDictionary<string, List<object>> states = new SDictionary<string, List<object>>();
-
+        /// <summary>
+        /// The State that the Driver Core is Currently in. Only the Drivers within this State will be Enabled
+        /// </summary>
+        [Tooltip("The State that the Driver Core is Currently in. Only the Drivers within this State will be Enabled")]
+        [Foldout("Properties")]
+        [Dropdown("GetStateList")]
         public string currentState = "";
+
         /// <summary>
         /// The Moving Velocity of the Object
         /// </summary>
         [Tooltip("The Moving Velocity of the Object")]
+        [Foldout("Scope")]
         public Vector3 velocity = new Vector3();
         /// <summary>
         /// Properties of the Driver Core, acts as a List of Variables in the Game Object's Scope
         /// </summary>
         [Tooltip("Properties of the Driver Core, acts as a List of Variables in the Game Object's Scope")]
+        [Foldout("Scope")]
         public SDictionary<string, object> properties = new SDictionary<string, object>();
-
-		public SDictionary<string, float> inputs = new SDictionary<string, float>();
+        /// <summary>
+        /// The Inputs Recieved from a Controller, to be Translated within the Core's Drivers
+        /// </summary>
+        [Tooltip("The Inputs Recieved from a Controller, to be Translated within the Core's Drivers")]
+        [Foldout("Scope")]
+        public SDictionary<string, float> inputs = new SDictionary<string, float>();
 
         UnityEngine.CharacterController characterController;
 
@@ -69,7 +88,6 @@ namespace CairoEngine.Drivers
                     {
                         ((MonoBehaviour)driver).enabled = true;
                         driver.CallMethod("SetInputs", new object[] { inputs });
-                        ((AssetScriptContainer)driver.GetField("scriptContainer"))?.Update();
                     }
                 }
                 else

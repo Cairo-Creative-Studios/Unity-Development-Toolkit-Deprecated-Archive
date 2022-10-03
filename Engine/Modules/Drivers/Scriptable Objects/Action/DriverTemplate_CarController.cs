@@ -7,7 +7,7 @@ using CairoEngine;
 
 namespace CairoEngine.Drivers
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Behaviours/Car Controller", fileName = "[BEHAVIOUR] Car Controller")]
+    [CreateAssetMenu(menuName = "Drivers/Action/Car Controller", fileName = "[DRIVER] Car Controller")]
     public class DriverTemplate_CarController : DriverTemplate
     {
         [Header("")]
@@ -18,10 +18,10 @@ namespace CairoEngine.Drivers
         [Tooltip("The Seats of the Vehicle")]
         public List<Seat> seats = new List<Seat>();
 
-        //Initialize the Behaviour Class for this Behaviour
+        //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.behaviourClass = "CairoEngine.Drivers.CarController";
+            this.driverClass = "CairoEngine.Drivers.CarController";
 
             SetInputMap(new string[] { "Steer", "Accel", "Brake"}, new string[] { "Driver_MoveHorizontal", "Driver_LeftZAxis", "Driver_RightZAxis"});
 

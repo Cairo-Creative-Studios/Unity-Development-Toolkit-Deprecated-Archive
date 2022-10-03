@@ -44,15 +44,7 @@ namespace CairoEngine.Reflection
         /// <param name="parameters">Parameters.</param>
         public static object CallMethod(this object instance, string methodName, object[] parameters = null, string child = "")
         {
-            object returnValue = null;
-
-            MethodInfo method = instance.GetType().GetMethod(methodName);
-            if (method != null)
-            {
-                returnValue = method.Invoke(instance, parameters);
-            }
-
-            return returnValue;
+            return instance.GetType().GetMethod(methodName)?.Invoke(instance, parameters);
         }
 
         /// <summary>
@@ -63,15 +55,7 @@ namespace CairoEngine.Reflection
         /// <param name="fieldName">Field name.</param>
         public static object GetField(this object instance, string fieldName, string child = "")
         {
-            object returnValue = null;
-
-            FieldInfo field = instance.GetType().GetField(fieldName);
-            if(field != null)
-            {
-                returnValue = field.GetValue(instance);
-            }
-
-            return returnValue;
+            return instance.GetType().GetField(fieldName)?.GetValue(instance);
         }
 
         /// <summary>
@@ -82,11 +66,23 @@ namespace CairoEngine.Reflection
         /// <param name="value">Value.</param>
         public static void SetField(this object instance, string fieldName, object value, string child = "")
         {
-            FieldInfo field = instance.GetType().GetField(fieldName);
-            if (field != null)
-            {
-                field.SetValue(instance, value);
-            }
+            instance.GetType().GetField(fieldName)?.SetValue(instance, value);
+        }
+
+        /// <summary>
+        /// Sets the Value of a Member from the Instance
+        /// </summary>
+        /// <param name="instance">Instance.</param>
+        /// <param name="propertyName">Member name.</param>
+        /// <param name="value">Value.</param>
+        public static void SetProperty(this object instance, string propertyName, object value)
+        {
+            instance.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(instance, value);
+        }
+
+        public static object GetProperty(this object instance, string propertyName)
+        {
+            return instance.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(instance);
         }
 
         public static bool HasMethod(this Type type, string methodName)
@@ -270,7 +266,7 @@ namespace CairoEngine.Reflection
     public class MonoBehaviourFieldReference : FieldReference
     {
         [Tooltip("The Game Object that the MonoBehaviour is attached to")]
-        public GameObject gameObject;
+        [HideInInspector] public GameObject gameObject;
         [Tooltip("The MonoBehaviour to pick the Field from")]
         //[MonoScript] public string MonoBehaviour;
         //[Tooltip("The Field to Select from the MonoBehaviour")]

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine.Reflection;
 
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
     public class AssetVariableBase : ScriptableObject
     {
-        public MonoBehaviourFieldReference fieldReference;
     }
 }

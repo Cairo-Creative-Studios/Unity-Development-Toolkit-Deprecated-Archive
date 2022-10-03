@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using CairoEngine.StateMachine;
 using CairoEngine.Reflection;
+using NaughtyAttributes;
 
 namespace CairoEngine.Drivers
 {

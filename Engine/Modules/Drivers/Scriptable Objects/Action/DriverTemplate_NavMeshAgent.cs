@@ -1,22 +1,32 @@
 ﻿using System;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Behaviours/Nav Mesh Agent", fileName = "[BEHAVIOUR] Nav Mesh Agent")]
+    [CreateAssetMenu(menuName = "Drivers/Action/ANav Mesh Agent", fileName = "[DRIVER] Nav Mesh Agent")]
     public class DriverTemplate_NavMeshAgent : DriverTemplate
     {
         [Header("")]
         [Header(" -- Nav Mesh Agent -- ")]
-        [Tooltip("The Path to the Nav Mesh Agent within the Object's Prefab")]
-        public string agentPath = "";
+        /// <summary>
+        /// The desired Range from the Target that the Agent wants to be in, if it's not in range it will keep following the Target
+        /// </summary>
         [Tooltip("The desired Range from the Target that the Agent wants to be in, if it's not in range it will keep following the Target")]
+        [Foldout("Properties")]
         public float range = 100f;
+        /// <summary>
+        /// The Path to the Nav Mesh Agent within the Object's Prefab
+        /// </summary>
+        [Tooltip("The Path to the Nav Mesh Agent within the Object's Prefab")]
+        [Foldout("Component Paths")]
+        public string agentPath = "";
 
-        //Initialize the Behaviour Class for this Behaviour
+
+        //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.behaviourClass = "CairoEngine.Drivers.NavMeshAgent";
+            this.driverClass = "CairoEngine.Drivers.NavMeshAgent";
 
             foreach (string defaultEvent in "Following,Stopped,Arrived".TokenArray())
             {

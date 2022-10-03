@@ -1,6 +1,7 @@
 ﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
+using Homebrew;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
@@ -8,29 +9,69 @@ namespace CairoEngine.Drivers
     [Serializable]
     public class Bullet : Driver<DriverTemplate_Bullet>
     {
+
+        /// <summary>
+        /// The current Lifespan of the Bullet
+        /// </summary>
+        [Tooltip("The current Lifespan of the Bullet")]
+        public float life = 0;
+        /// <summary>
+        /// The Direction the Bullet is moving in
+        /// </summary>
+        [Tooltip("The Direction the Bullet is moving in")]
+        [Foldout("Properties")]
+        public Vector3 direction;
+        /// <summary>
+        /// The moving Speed of the Bullet
+        /// </summary>
+        [Tooltip("The moving Speed of the Bullet")]
+        [Foldout("Properties")]
+        public Vector3 speed = new Vector3(0, 0, 0);
+        /// <summary>
+        /// The Speed given from Inputs into the Bullet driver
+        /// </summary>
+        [Tooltip("The Speed given from Inputs into the Bullet driver")]
+        [Foldout("Properties")]
+        public Vector3 inputSpeed = new Vector3(0, 0, 0);
         /// <summary>
         /// Projectile shooter information.
         /// </summary>
+        [Tooltip("Projectile shooter information.")]
+        [Foldout("Player")]
         public int team = -1;
-        public float life = 50;
-        /// <summary>
-        /// The damage instegator to spawn once the Damage is Triggered
-        /// </summary>
-        public DamageInstegator damageInstegator;
         /// <summary>
         /// The Weapon that shot this Projectile
         /// </summary>
+        [Tooltip("The Weapon that shot this Projectile")]
+        [Foldout("Components")]
         public Weapon weapon;
-        public Vector3 direction;
-        public Vector3 speed = new Vector3(0,0,0);
-        public Vector3 inputSpeed = new Vector3(0,0,0);
-
+        /// <summary>
+        /// The damage instegator to spawn once the Damage is Triggered
+        /// </summary>
+        [Tooltip("The damage instegator to spawn once the Damage is Triggered")]
+        [Foldout("Components")]
+        public DamageInstegator damageInstegator;
+        /// <summary>
+        /// Whether the Bullet has been Fired
+        /// </summary>
+        [Tooltip("Whether the Bullet has been Fired")]
+        [Foldout("State")]
         public bool fired = false;
-        bool fireTriggered = false;
-
-        [HideInInspector] public Transform originalParent;
-
+        /// <summary>
+        /// Whether the Bullet should Return to it's Parent
+        /// </summary>
+        [Tooltip("Whether the Bullet should Return to it's Parent")]
+        [Foldout("State")]
         public bool returnToHolder = false;
+
+        /// <summary>
+        /// If the Fire Method has been Triggered
+        /// </summary>
+        bool fireTriggered = false;
+        /// <summary>
+        /// The Parent of the Bullet, for Returning To Holder
+        /// </summary>
+        [HideInInspector] public Transform originalParent;
 
         void OnEnable()
         {
@@ -86,7 +127,7 @@ namespace CairoEngine.Drivers
                     transform.eulerAngles += template.rotation;
                 }
 
-                bool canMove = true;
+                //bool canMove = true;
 
                 Vector3 moveDir = Vector3.zero;
                 if (template.controllable)

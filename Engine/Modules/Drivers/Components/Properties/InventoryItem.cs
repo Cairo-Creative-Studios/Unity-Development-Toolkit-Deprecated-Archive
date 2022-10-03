@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using CairoEngine.InventoryManagement;
+using Homebrew;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
@@ -13,7 +14,14 @@ namespace CairoEngine.Drivers
         /// <summary>
         /// The ID of the Owner of this Item
         /// </summary>
-       public int ownerID = -1;
+        [Tooltip("The ID of the Owner of this Item")]
+        [Foldout("Properties")]
+        public int ownerID = -1;
+        /// <summary>
+        /// Whether the Item has been Picked Up or not
+        /// </summary>
+        [Tooltip("Whether the Item has been Picked Up or not")]
+        [Foldout("Properties")]
         public bool pickedUp = false;
 
 

@@ -4,9 +4,11 @@ using UnityEngine;
 
 namespace CairoEngine.Drivers
 {
-	[CreateAssetMenu(menuName = "Cairo Game/Behaviours/Saveable", fileName = "[BEHAVIOUR] Saveable")]
+	[CreateAssetMenu(menuName = "Drivers/Properties/Saveable", fileName = "[DRIVER] Saveable")]
 	public class DriverTemplate_Saveable : DriverTemplate
 	{
+        [Header("")]
+        [Header(" -- SaveAble -- ")]
 		/// <summary>
 		/// Lists of Fields within Monobehaviours that are to be Saved and Loaded
 		/// </summary>
@@ -16,7 +18,7 @@ namespace CairoEngine.Drivers
 		//Initialize the Behaviour Class for this Behaviour
 		private void OnEnable()
 		{
-			this.behaviourClass = "CairoEngine.Drivers.Saveable";
+			this.driverClass = "CairoEngine.Drivers.Saveable";
 		}
 	}
 }

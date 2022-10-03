@@ -1,5 +1,5 @@
-﻿/*! \addtogroup behaviourmodule Behaviour Module
- *  Additional documentation for group 'Behaviour Module'
+﻿/*! \addtogroup drivermodule Driver Module
+ *  Additional documentation for group 'Driver Module'
  *  @{
  */
 
@@ -13,17 +13,17 @@ using CairoEngine.Reflection;
 namespace CairoEngine.Drivers
 {
     /// <summary>
-    /// The Driver Manager (Previously called the Behaviour Module) handles Drivers 
+    /// The Driver Manager (Previously called the Driver Module) handles Drivers 
     /// </summary>
     public class DriverModule : MonoBehaviour
     {
 		public bool initialize = true;
-        private static GameObject behaviourObjectPool;
+        private static GameObject driverObjectPool;
 
         /// <summary>
-        /// All the Game Objects with their Behaviours managed by the Behaviour Module
+        /// All the Game Objects with their Drivers managed by the Driver Module
         /// </summary>
-        public static Dictionary<GameObject, DriverCore> behaviours = new Dictionary<GameObject, DriverCore>();
+        public static Dictionary<GameObject, DriverCore> drivers = new Dictionary<GameObject, DriverCore>();
         /// <summary>
         /// The Default Audio Library
         /// </summary>
@@ -44,102 +44,102 @@ namespace CairoEngine.Drivers
 		}
 
         /// <summary>
-        /// Adds the Behaviour and passes the given Behaviour Type Info to it.
+        /// Adds the Driver and passes the given Driver Type Info to it.
         /// </summary>
         /// <param name="gameObject">Game object.</param>
-        /// <param name="Template">The Template of the Behaviour to add to the object</param>
+        /// <param name="Template">The Template of the Driver to add to the object</param>
         public static void AddDriver(GameObject gameObject, string state, object Template, DriverCore core = null)
         {
-            //Get the Behavour Template and Behaviour
+            //Get the Behavour Template and Driver
             DriverTemplate template = (DriverTemplate)Template;
-            object behaviourType = gameObject.AddComponent(Type.GetType(template.behaviourClass));
+            object driverType = gameObject.AddComponent(Type.GetType(template.driverClass));
             
-            behaviourType.SetField("template",template);
-			behaviourType.SetField("core", core);
+            driverType.SetField("template",template);
+			driverType.SetField("core", core);
 
-            //Get the Root Object Behaviour attached to the Game Object 
-            if (!behaviours.ContainsKey(gameObject))
+            //Get the Root Object Driver attached to the Game Object 
+            if (!drivers.ContainsKey(gameObject))
             {
-                //Create one if it doesn't exist, so the Behaviour Module can interface with it, and add it to the Behaviours List
-                behaviours.Add(gameObject, gameObject.GetComponent<DriverCore>());
+                //Create one if it doesn't exist, so the Driver Module can interface with it, and add it to the Drivers List
+                drivers.Add(gameObject, gameObject.GetComponent<DriverCore>());
             }
 
             DriverCore driverCore = gameObject.GetComponent<DriverCore>();
             if(driverCore == null)
                 driverCore = gameObject.AddComponent<DriverCore>();
 
-            //Add the Behaviour to the Object's Behaviour List
+            //Add the Driver to the Object's Driver List
             if (!driverCore.states.ContainsKey(state))
                 driverCore.states.Add(state, new List<object>());
-            driverCore.states[state].Add(behaviourType);
+            driverCore.states[state].Add(driverType);
 
-            //Set Behaviour Properties
-            behaviourType.SetField("gameObject", gameObject);
-            behaviourType.SetField("transform", gameObject.transform);
+            //Set Driver Properties
+            driverType.SetField("gameObject", gameObject);
+            driverType.SetField("transform", gameObject.transform);
 
             //Get the Root Transform and Animator using the Paths in the Template, to child objects instanced with the Prefab
             if (driverCore.template != null)
             {
                 if (driverCore.template.rootPath != "")
-                    behaviourType.SetField("rootTransform", driverCore.transform.Find(driverCore.template.rootPath));
+                    driverType.SetField("rootTransform", driverCore.transform.Find(driverCore.template.rootPath));
                 else
-                    behaviourType.SetField("rootTransform", driverCore.transform);
+                    driverType.SetField("rootTransform", driverCore.transform);
                 if (driverCore.template.animatorPath != "")
-                    behaviourType.SetField("animator", driverCore.transform.Find(driverCore.template.animatorPath).gameObject.GetComponent<Animator>());
+                    driverType.SetField("animator", driverCore.transform.Find(driverCore.template.animatorPath).gameObject.GetComponent<Animator>());
                 else
-                    behaviourType.SetField("animator", driverCore.GetComponent<Animator>());
+                    driverType.SetField("animator", driverCore.GetComponent<Animator>());
             }
             else
             {
-                behaviourType.SetField("rootTransform", driverCore.transform);
-                behaviourType.SetField("animator", driverCore.GetComponent<Animator>());
+                driverType.SetField("rootTransform", driverCore.transform);
+                driverType.SetField("animator", driverCore.GetComponent<Animator>());
             }
 
-            //Add all the Inputs to the Behaviour from the Input Map
-            foreach (string inputName in template.inputMap.Keys)
+            //Add all the Inputs to the Driver from the Input Translation Dictionary
+            foreach (string inputName in template.inputTranslation.Keys)
             {
-                behaviourType.CallMethod("AddInput", new object[] { template.inputMap[inputName], inputName });
+                driverType.CallMethod("AddInput", new object[] { template.inputTranslation[inputName], inputName });
             }
 
             //Inherit the Script Container
-            //behaviourType.SetField("scriptContainer", template.scriptContainer);
+            //driverType.SetField("scriptContainer", template.scriptContainer);
         }
 
         /// <summary>
-        /// Sends a Message to Behaviours in a Game Object. If <paramref name="behaviour"/> is set, it will only send the Message to the Behaviour with that Name.
+        /// Sends a Message to Drivers in a Game Object. If <paramref name="driver"/> is set, it will only send the Message to the Driver with that Name.
         /// </summary>
         /// <param name="gameObject">Game object.</param>
         /// <param name="message">Message.</param>
         /// <param name="parameters">Parameters.</param>
-        /// <param name="behaviour">Behaviour.</param>
-        public static void Message(GameObject gameObject, string message,object[] parameters = null,string behaviour = "")
+        /// <param name="driver">Driver.</param>
+        public static void Message(GameObject gameObject, string message,object[] parameters = null,string driver = "")
         {
-            if (behaviours.ContainsKey(gameObject))
+            if (drivers.ContainsKey(gameObject))
             {
-                if (behaviour == "")
+                if (driver == "")
                 {
-                    foreach (object behaviourType in behaviours[gameObject].states[behaviours[gameObject].currentState])
+                    foreach (object driverType in drivers[gameObject].states[drivers[gameObject].currentState])
                     {
-                        behaviourType.CallMethod(message, parameters);
+                        driverType.CallMethod(message, parameters);
                     }
                 }
                 else
                 {
-                    foreach(object behaviourType in behaviours[gameObject].states[behaviours[gameObject].currentState])
+                    foreach(object driverType in drivers[gameObject].states[drivers[gameObject].currentState])
                     {
-                        if(((DriverTemplate)behaviourType.GetField("template")).ID == behaviour)
+                        if(((DriverTemplate)driverType.GetField("template")).ID == driver)
                         {
-                            behaviourType.CallMethod(message, parameters);
+                            driverType.CallMethod(message, parameters);
                         }
                     }
                 }
             }
             else
-                Debug.LogWarning("Can't send Message to Object, " + gameObject.name + ", as no Behaviours have been added to it.");
+                Debug.LogWarning("Can't send Message to Object, " + gameObject.name + ", as no Drivers have been added to it.");
         }
 
         /// <summary>
-        /// Sends a Message to a Behaviour in the Specified Cairo Object
+        /// Sends a Message to a Driver in the Specified Cairo Object
         /// </summary>
         /// <returns>The message.</returns>
         /// <param name="cobject">Cobject.</param>
@@ -148,10 +148,10 @@ namespace CairoEngine.Drivers
         {
             GameObject selectedObject = cobject.gameObject;
 
-            foreach(object behaviour in cobject.states[cobject.currentState])
+            foreach(object driver in cobject.states[cobject.currentState])
             {
-                if (behaviour.GetType() == typeof(T))
-                    return behaviour.CallMethod(message, parameters);
+                if (driver.GetType() == typeof(T))
+                    return driver.CallMethod(message, parameters);
             }
 
             return null;
@@ -159,24 +159,24 @@ namespace CairoEngine.Drivers
 
         public static void MessageCore(GameObject gameObject, string message, object[] parameters)
         {
-            if(behaviours.ContainsKey(gameObject))
-                behaviours[gameObject].CallMethod(message, parameters);
+            if(drivers.ContainsKey(gameObject))
+                drivers[gameObject].CallMethod(message, parameters);
         }
 
         /// <summary>
-        /// Adds a Behaviour Specific Object to the Behaviour Object Pool 
+        /// Adds a Driver Specific Object to the Driver Object Pool 
         /// </summary>
         /// <param name="gameObject">Game object.</param>
-        public static void AddBehaviourObject(GameObject gameObject)
+        public static void AddDriverObject(GameObject gameObject)
         {
-            //gameObject.transform.parent = behaviourObjectPool.transform;
+            //gameObject.transform.parent = driverObjectPool.transform;
         }
 
-        public static void RemoveBehaviourObject(GameObject gameObject)
+        public static void RemoveDriverObject(GameObject gameObject)
         {
-            if (behaviours.ContainsKey(gameObject))
+            if (drivers.ContainsKey(gameObject))
             {
-                behaviours.Remove(gameObject);
+                drivers.Remove(gameObject);
             }
         }
 

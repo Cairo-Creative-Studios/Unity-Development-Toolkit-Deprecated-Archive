@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Scripting/Asset Variables/Color")]
+    [CreateAssetMenu(menuName = "Asset Scripting/Variables/Color")]
     public class AssetColor : AssetVariableBase
     {
         public AssetVariable<Color> variable;

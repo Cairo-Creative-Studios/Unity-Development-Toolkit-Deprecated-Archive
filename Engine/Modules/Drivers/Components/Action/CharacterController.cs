@@ -3,6 +3,7 @@
 using System;
 using UnityEngine;
 using CairoEngine.StateMachine;
+using NaughtyAttributes;
 
 namespace CairoEngine.Drivers
 {
@@ -18,7 +19,7 @@ namespace CairoEngine.Drivers
         private bool onGround = false;
         private Transform pivot;
         private Vector3 lastPivotPosition = new Vector3();
-        private float offGroundTimer = 0;
+        //private float offGroundTimer = 0;
         private int tick = 0;
         private bool canJump = false;
 		Vector3 moveDir;

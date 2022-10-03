@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine;
 using RVP;
+using Homebrew;
 //using RVP;
 
 namespace CairoEngine.Drivers
@@ -12,8 +13,17 @@ namespace CairoEngine.Drivers
     [Serializable]
     public class CarController : Driver<DriverTemplate_CarController>
     {
+        /// <summary>
+        /// The Vehicle Simulation Agent
+        /// </summary>
+        [Tooltip("The Vehicle Simulation Agent")]
+        [Foldout("Components")]
         public VehicleParent vehicle;
-
+        /// <summary>
+        //The Direction the Car is Moving in
+        /// </summary>
+        [Tooltip("The Direction the Car is Moving in")]
+        [Foldout("Properties")]
         private float direction = 0;
         private Vector2 movementInput = new Vector2();
 

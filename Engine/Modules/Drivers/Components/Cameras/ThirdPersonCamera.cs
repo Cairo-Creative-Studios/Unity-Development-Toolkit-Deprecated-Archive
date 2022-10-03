@@ -2,7 +2,6 @@
 
 using System;
 using UnityEngine;
-using CairoEngine;
 using Cinemachine;
 
 namespace CairoEngine.Drivers
@@ -35,7 +34,7 @@ namespace CairoEngine.Drivers
             }
             else
             {
-                DriverModule.AddBehaviourObject(freeLookObject);
+                DriverModule.AddDriverObject(freeLookObject);
             }
 
             freeLook.Follow = rootTransform;

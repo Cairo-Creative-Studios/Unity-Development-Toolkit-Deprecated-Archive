@@ -97,7 +97,7 @@ namespace CairoEngine.Objects
         /// <summary>
         /// <see langword="true"/> if waiting for the Engine to Start before Inializing the Instance
         /// </summary>
-        private bool waitForEngine = false;
+        //private bool waitForEngine = false;
 
         //Continuously Update the Values of Properties
         void Update()

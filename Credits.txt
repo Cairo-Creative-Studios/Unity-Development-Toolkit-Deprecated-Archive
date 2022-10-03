@@ -34,7 +34,11 @@ For simple Level Designing with the Asset Palette
 - Scene View Picker, by Roy Theunissen - https://github.com/RoyTheunissen/Scene-View-Picker
 For Object Picking in the Editor
 
-!- Naughty Attributes, by dbrizov - https://github.com/dbrizov/NaughtyAttributes
+- Naughty Attributes, by dbrizov - https://github.com/dbrizov/NaughtyAttributes
 For it's many glorious Inspector Attributes
 
-- Game Development Extensions, by 
+- Game Development Extensions, by dotBunny - https://github.com/dotBunny/GDX
+For it's amazing collection of useful extension methods!
+
+- Inspector Foldout Group, by PixeyeHQ - https://github.com/PixeyeHQ/InspectorFoldoutGroup
+Helping in keeping the Toolkit organzed since it's inclusion

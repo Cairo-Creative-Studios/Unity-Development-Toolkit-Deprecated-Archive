@@ -1,45 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Behaviours/Inventory Item", fileName = "[BEHAVIOUR] Inventory Item")]
+    [CreateAssetMenu(menuName = "Drivers/Properties/Inventory Item", fileName = "[DRIVER] Inventory Item")]
     public class DriverTemplate_InventoryItem : DriverTemplate
     {
         [Header("")]
         [Header(" -- Inventory Item -- ")]
-        [Header(" - Pickup - ")]
+        /// <summary>
+        /// Whether to Send Pick Up State Save Commands to the Saveable Script
+        /// </summary>
+        [Tooltip("Whether to Send Pick Up State Save Commands to the Saveable Script")]
+        public bool persist = true;
         /// <summary>
         /// Objects with these Tags can Pick Up this Item
         /// </summary>
         [Tooltip("Objects with these Tags can Pick Up this Item")]
+        [Foldout("Pickup")]
         public List<string> pickupTags = new List<string>();
         /// <summary>
         /// The maximum amount of this Item that can be held by an Object
         /// </summary>
         [Tooltip("The maximum amount of this Item that can be held by an Object")]
+        [Foldout("Pickup")]
         public int max = 1;
-        [Header(" - Drop - ")]
+        /// <summary>
+        /// Whether to Destroy the Game Object of the Inventory Item when Picked Up
+        /// </summary>
+        [Tooltip("Whether to Destroy the Game Object of the Inventory Item when Picked Up")]
+        public bool destroyOnPickup = true;
         /// <summary>
         /// Whether the Item can be dropped.
         /// </summary>
         [Tooltip("Whether the Item can be dropped.")]
+        [Foldout("Drop")]
         public bool canBeDropped = false;
         /// <summary>
         /// Whether to use the Object's Prefab when the Item is dropped
         /// </summary>
         [Tooltip("Whether to use the Object's Prefab when the Item is dropped")]
+        [Foldout("Drop")]
         public bool usePrefab = false;
 
-		public bool destroyOnPickup = true;
-		[Tooltip("Whether to Send Pick Up State Save Commands to the Saveable Script")]
-		public bool persist = true;
-
-        //Initialize the Behaviour Class for this Behaviour
+        //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.behaviourClass = "CairoEngine.Drivers.InventoryItem";
+            this.driverClass = "CairoEngine.Drivers.InventoryItem";
 
             foreach (string defaultEvent in "Pickup,Putdown".TokenArray())
             {

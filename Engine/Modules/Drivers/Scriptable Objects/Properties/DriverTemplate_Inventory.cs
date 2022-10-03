@@ -1,17 +1,21 @@
 ﻿using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
 {
-	[CreateAssetMenu(menuName = "Cairo Game/Behaviours/Inventory", fileName = "[BEHAVIOUR] Inventory")]
+	[CreateAssetMenu(menuName = "Drivers/Properties/Inventory", fileName = "[DRIVER] Inventory")]
 	public class DriverTemplate_Inventory : DriverTemplate
 	{
+        [Header("")]
+        [Header(" -- Inventory -- ")]
+        [Foldout("Properties")]
 		public List<string> pickupTags = new List<string>();
 
-		//Initialize the Behaviour Class for this Behaviour
+		//Initialize the driver Class for this driver
 		private void OnEnable()
 		{
-			this.behaviourClass = "CairoEngine.Drivers.Inventory";
+			this.driverClass = "CairoEngine.Drivers.Inventory";
 
 			foreach (string defaultEvent in "Pickup,Putdown".TokenArray())
             {

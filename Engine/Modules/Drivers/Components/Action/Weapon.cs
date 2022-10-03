@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
@@ -12,15 +13,46 @@ namespace CairoEngine.Drivers
         /// <summary>
         /// Resets to 0, and increments by Delta Time, to keep track of the Fire Rate Cooldown
         /// </summary>
+        [Tooltip("Resets to 0, and increments by Delta Time, to keep track of the Fire Rate Cooldown")]
+        [Foldout("Properties")]
         float cooldown;
-        public Transform muzzle;
-        public ParticleSystem muzzleFlash;
-        public bool canShoot = false;
-
-        public Transform attachedProjectile;
-        public Transform attachedProjectileParent;
-
+        /// <summary>
+        /// The Amount of Ammo currently in the Weapon
+        /// </summary>
+        [Tooltip("The Amount of Ammo currently in the Weapon")]
+        [Foldout("Properties")]
         public int ammo = 0;
+
+        /// <summary>
+        /// The Transform of the Muzzle to use for Muzzle Flashes
+        /// </summary>
+        [Tooltip("The Transform of the Muzzle to use for Muzzle Flashes")]
+        [Foldout("Components")]
+        public Transform muzzle;
+        /// <summary>
+        /// The Particle System to use for the Muzzle Flash
+        /// </summary>
+        [Tooltip("The Particle System to use for the Muzzle Flash")]
+        [Foldout("Components")]
+        public ParticleSystem muzzleFlash;
+        /// <summary>
+        /// The Transform of the Projectile that is attached to the Weapon
+        /// </summary>
+        [Tooltip("The Transform of the Projectile that is attached to the Weapon")]
+        [Foldout("Components")]
+        public Transform attachedProjectile;
+        /// <summary>
+        /// The Transform of the Parent for the Projectile to attached to, if the Projectile is to be attached
+        /// </summary>
+        [Tooltip("The Parent Transform of the Projectile that is attached to this Weapon")]
+        [Foldout("Components")]
+        public Transform attachedProjectileParent;
+        /// <summary>
+        /// Whether the Weapon can shoot at this Moment
+        /// </summary>
+        [Tooltip("Whether the Weapon can shoot at this Moment")]
+        [Foldout("State")]
+        public bool canShoot = false;
 
         void Start()
         {

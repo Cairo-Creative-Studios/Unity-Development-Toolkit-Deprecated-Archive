@@ -4,10 +4,11 @@ using System;
 using UnityEngine;
 using CairoEngine;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 namespace CairoEngine.Drivers
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Behaviours/Character Controller", fileName = "[BEHAVIOUR] Character Controller")]
+    [CreateAssetMenu(menuName = "Drivers/Action/Character Controller", fileName = "[DRIVER] Character Controller")]
     public class DriverTemplate_CharacterController : DriverTemplate
     {
         public enum MotionType
@@ -25,92 +26,101 @@ namespace CairoEngine.Drivers
         }
         [Header("")]
         [Header(" -- Character Controller -- ")]
-        [Header(" - Features - ")]
         /// <summary>
         /// Determines what Component is used as the base of the Character Controller
         /// </summary>
         [Tooltip("Determines what Component is used as the base of the Character Controller")]
+        [Foldout("Features")]
         public ControllerType controllerType;
         /// <summary>
         /// Whether to Align the Character to the Ground. (Must use a Pivot Object as the Parent of the Character, for Alignment)
         /// </summary>
         [Tooltip("Whether to Align the Character to the Ground. (Must use a Pivot Object as the Parent of the Character, for Alignment)")]
+        [Foldout("Features")]
         public bool slopeAlignment = true;
 
-        [Header(" - Child Paths - ")]
         /// <summary>
         /// The Path to the Child Object within the Prefab that Contains the Character Controller
         /// </summary>
         [Tooltip("The Path to the Child Object within the Prefab that Contains the Character Controller")]
+        [Foldout("Component Paths")]
         public string controllerPath = "";
         /// <summary>
         /// The Path to the Child Object within the Prefab that Contains the Rigid Body
         /// </summary>
         [Tooltip("The Path to the Child Object within the Prefab that Contains the Rigid Body")]
+        [Foldout("Component Paths")]
         public string rigidBodyPath = "";
         /// <summary>
         /// The Path to the Pivot to use for Ground Alignment
         /// </summary>
         [Tooltip("The Path to the Pivot to use for Ground Alignment")]
+        [Foldout("Component Paths")]
         public string groundPivotPath = "Pivot";
 
-        [Header(" - Base Movement Values - ")]
         /// <summary>
         /// The Base Movement Speed of the Character Controller
         /// </summary>
         [Tooltip("The Base Movement Speed of the Character Controller")]
+        [Foldout("Motion")]
         public float speed = 5f;
         /// <summary>
         /// Smooths out the change in Movement Speed
         /// </summary>
         [Tooltip("Smooths out the change in Movement Speed")]
+        [Foldout("Motion")]
         public float motionInterpolation = 0.15f;
         /// <summary>
         /// The Rate at which the Character Controller turns
         /// </summary>
         [Tooltip("The Rate at which the Character Controller turns")]
+        [Foldout("Motion")]
         public float turnRate = 0.5f;
-
-
-        [Header(" - Air Values - ")]
-        /// <summary>
-        /// The amount of motion to send to the Character when they're Jumping
-        /// </summary>
-        [Tooltip("The amount of motion to send to the Character when they're Jumping")]
-        public float airControl = 0;
         /// <summary>
         /// An Amount to add to the current Velocity of the Object when it has Jumped
         /// </summary>
         [Tooltip("An Amount to add to the current Velocity of the Object when it has Jumped")]
+        [Foldout("Motion")]
         public float jumpStrength = 10f;
+
+
+        /// <summary>
+        /// The amount of motion to send to the Character when they're Jumping
+        /// </summary>
+        [Tooltip("The amount of motion to send to the Character when they're Jumping")]
+        [Foldout("Air Motion")]
+        public float airControl = 0;
         /// <summary>
         /// An Interpolation Value to apply to moving in the direction of gravity, VS the Input Velocity
         /// </summary>
         [Tooltip("Interpolates from the current Y velocity to Gravity by this rate when not Jumping")]
+        [Foldout("Air Motion")]
         public float fallRate = 0.1f;
 
-        [Header(" - Helpers - ")]
         /// <summary>
         /// A Duration of time to stay at the peak of a Jump if the input remains held down
         /// </summary>
         [Tooltip("A Duration of time to stay at the peak of a Jump if the input remains held down")]
+        [Foldout("Modifiers")]
         public float jumpSustain = 1f;
         /// <summary>
         /// A Duration of time to remain in the Grounded State before beginning to Fall
         /// </summary>
         [Tooltip("A Duration of time to remain in the Grounded State before beginning to Fall")]
+        [Foldout("Modifiers")]
         public float cayoteTime = 0.25f;
         /// <summary>
         /// A Duration of time to remain in the Jumping State when not pressing the Jump Input button
         /// </summary>
         [Tooltip("A Duration of time to remain in the Jumping State when not pressing the Jump Input button")]
+        [Foldout("Modifiers")]
         public float hangTime = 0.25f;
 
-        //Initialize the Behaviour Class for this Behaviour
+        //Initialize the driver Class for this driver
         private void OnEnable()
         {
             //Set Default Class
-            this.behaviourClass = "CairoEngine.Drivers.CharacterController";
+            this.driverClass = "CairoEngine.Drivers.CharacterController";
 
             //Set Default Inputs
             SetInputMap(new string[] { "Horizontal", "Vertical", "Jump" }, new string[] { "MoveHorizontal", "MoveVertical", "Jump" });

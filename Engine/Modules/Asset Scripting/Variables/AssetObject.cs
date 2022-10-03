@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Scripting/Asset Variables/Object")]
+    [CreateAssetMenu(menuName = "Asset Scripting/Variables/Object")]
     public class AssetObject : AssetVariableBase
     {
         public AssetVariable<object> variable;

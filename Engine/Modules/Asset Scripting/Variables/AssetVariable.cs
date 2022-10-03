@@ -1,5 +1,5 @@
 ﻿using System;
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
     [Serializable]
     public class AssetVariable<T>

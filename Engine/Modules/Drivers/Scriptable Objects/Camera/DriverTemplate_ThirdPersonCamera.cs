@@ -5,7 +5,7 @@ using Cinemachine;
 
 namespace CairoEngine.Drivers
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Behaviours/Cameras/Third Person", fileName = "[BEHAVIOUR] Third Person Camera")]
+    [CreateAssetMenu(menuName = "Drivers/Cameras/Third Person", fileName = "[DRIVER] Third Person Camera")]
     public class DriverTemplate_ThirdPersonCamera : DriverTemplate
     {
         //[Header("")]
@@ -13,10 +13,10 @@ namespace CairoEngine.Drivers
         //[Tooltip("Time it takes for the Camera to recenter on the X axis (Recenters behind the Root Object)")]
         //public float resetXTime = 2f;
 
-        //Initialize the Behaviour Class for this Behaviour
+        //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.behaviourClass = "CairoEngine.Drivers.ThirdPersonCamera";
+            this.driverClass = "CairoEngine.Drivers.ThirdPersonCamera";
 
             SetInputMap(new string[] { "XAxis", "YAxis" }, new string[] { "LookHorizontal", "LookVertical" });
             

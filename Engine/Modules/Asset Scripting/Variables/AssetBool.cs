@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Scripting/Asset Variables/Bool")]
+    [CreateAssetMenu(menuName = "Asset Scripting/Variables/Bool")]
     public class AssetBool : AssetVariableBase
     {
         public AssetVariable<bool> variable;

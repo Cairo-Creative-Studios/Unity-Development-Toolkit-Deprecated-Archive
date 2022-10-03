@@ -4,9 +4,9 @@ using UnityEngine;
 using CairoEngine.Reflection;
 using System.Collections.Generic;
 
-namespace CairoEngine
+namespace CairoEngine.AssetScripting
 {
-    [CreateAssetMenu(menuName = "Cairo Game/Scripting/Method")]
+    [CreateAssetMenu(menuName = "Asset Scripting/Method")]
     public class AssetMethod : ScriptableObject
     {
         /// <summary>
