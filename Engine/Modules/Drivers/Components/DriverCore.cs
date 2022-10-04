@@ -24,6 +24,7 @@ namespace CairoEngine.Drivers
         /// </summary>
         [Tooltip("The Template to use for the Driver Core")]
         [Foldout("Properties")]
+        [Expandable]
         public DriverCoreTemplate template;
         /// <summary>
         /// A List of Drivers attached to the Game Object
@@ -69,9 +70,9 @@ namespace CairoEngine.Drivers
             foreach (String state in template.states.Keys)
             {
                 //Add all the default Behaviours of the Driver Core
-                foreach (DriverTemplate driverTemplate in template.states[state])
+                foreach (ExpandableDriverTemplate driverTemplate in template.states[state])
                 {
-                    DriverModule.AddDriver(gameObject, state, driverTemplate, this);
+                    DriverModule.AddDriver(gameObject, state, driverTemplate.template, this);
                 }
             }
             characterController = GetComponent<UnityEngine.CharacterController>();

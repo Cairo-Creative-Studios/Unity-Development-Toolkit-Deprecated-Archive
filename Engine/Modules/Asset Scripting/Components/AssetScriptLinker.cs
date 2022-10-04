@@ -64,9 +64,9 @@ namespace CairoEngine.AssetScripting
                 {
                     foreach (string state in template.states.Keys)
                     {
-                        foreach (DriverTemplate driver in template.states[state])
+                        foreach (ExpandableDriverTemplate driver in template.states[state])
                         {
-                            monoBehaviourList.Add("Runtime Generate Driver, " + driver.driverProperties.main.driverClass.TokenAt(driver.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.driverProperties.main.driverClass);
+                            monoBehaviourList.Add("Runtime Generate Driver, " + driver.template.driverProperties.main.driverClass.TokenAt(driver.template.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.template.driverProperties.main.driverClass);
                         }
                     }
                 }

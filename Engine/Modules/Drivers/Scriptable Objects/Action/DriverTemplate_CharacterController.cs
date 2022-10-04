@@ -172,6 +172,10 @@ namespace CairoEngine.Drivers
             [HorizontalLine(color: EColor.Gray)]
             public ModifierInfo modifiers = new ModifierInfo();
         }
+        /// <summary>
+        /// The Properties of the Character Controller Driver
+        /// </summary>
+        [Tooltip("The Properties of the Character Controller Driver")]
         [HorizontalLine(color: EColor.White)]
         [BoxGroup("Character Controller")]
         public CharacterControllerProperties characterControllerProperties = new CharacterControllerProperties();
