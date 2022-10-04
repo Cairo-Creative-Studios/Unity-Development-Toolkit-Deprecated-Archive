@@ -21,17 +21,9 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverClass = "CairoEngine.Drivers.CarController";
-
-            SetInputMap(new string[] { "Steer", "Accel", "Brake"}, new string[] { "Driver_MoveHorizontal", "Driver_LeftZAxis", "Driver_RightZAxis"});
-
-            foreach (string defaultEvent in "Accelerate, Brake, Stopped, Hit".TokenArray())
-            {
-                if (!scriptContainer.output.ContainsKey(defaultEvent))
-                    scriptContainer.output.Add(defaultEvent, null);
-                if (!scriptContainer.events.ContainsKey(defaultEvent))
-                    scriptContainer.events.Add(defaultEvent, null);
-            }
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.CarController";
+            SetInputTranslation(new string[] { "Steer", "Accel", "Brake" }, new string[] { "Driver_MoveHorizontal", "Driver_LeftZAxis", "Driver_RightZAxis" });
+            SetScriptingEvents("Accelerate, Brake, Stopped, Hit".TokenArray());
         }
     }
 }

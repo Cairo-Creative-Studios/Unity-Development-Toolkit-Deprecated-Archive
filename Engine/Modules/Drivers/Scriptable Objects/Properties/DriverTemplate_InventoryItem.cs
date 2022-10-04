@@ -48,15 +48,8 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverClass = "CairoEngine.Drivers.InventoryItem";
-
-            foreach (string defaultEvent in "Pickup,Putdown".TokenArray())
-            {
-                if (!scriptContainer.output.ContainsKey(defaultEvent))
-                    scriptContainer.output.Add(defaultEvent, null);
-                if (!scriptContainer.events.ContainsKey(defaultEvent))
-                    scriptContainer.events.Add(defaultEvent, null);
-            }
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.InventoryItem";
+            SetScriptingEvents("Pickup,Putdown".TokenArray());
         }
     }
 }

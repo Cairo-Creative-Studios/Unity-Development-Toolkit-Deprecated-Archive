@@ -114,16 +114,16 @@ namespace CairoEngine.Drivers
         /// Set the Input for the Driver
         /// </summary>
         /// <returns>The inputs.</returns>
-        public virtual void SetInputs(SDictionary<string, float>  newInputs)
+        public virtual void SetInputs(SDictionary<string, float> newInputs)
         {
             string[] keys = { "" };
             Array.Resize<string>(ref keys, newInputs.Count);
-            newInputs.Keys.CopyTo(keys,0);
+            newInputs.Keys.CopyTo(keys, 0);
 
             foreach (string input in keys)
             {
-                if(inputTranslation.ContainsKey(input))
-                    if(inputs.ContainsKey(inputTranslation[input]))
+                if (inputTranslation.ContainsKey(input))
+                    if (inputs.ContainsKey(inputTranslation[input]))
                         inputs[inputTranslation[input]] = newInputs[input];
             }
         }
@@ -131,7 +131,7 @@ namespace CairoEngine.Drivers
         /// <summary>
         /// Load Audio Defaults
         /// </summary>
-        public void InitializeAudio() 
+        public void InitializeAudio()
         {
             audioTable = (SDictionary<string, List<AudioClip>>)template.GetField("audioTable");
             string audioList = (string)template.GetField("audioList");
@@ -195,30 +195,30 @@ namespace CairoEngine.Drivers
             return core.SetProperty(name, value);
         }
 
-		/// <summary>
-		/// Sets the Value of an animation Property
-		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="value">Value.</param>
-		public void SetAnimationParameter(string name, object value)
-		{
-			DriverTemplate driverTemplate = (DriverTemplate)(object)template;
+        /// <summary>
+        /// Sets the Value of an animation Property
+        /// </summary>
+        /// <param name="name">Name.</param>
+        /// <param name="value">Value.</param>
+        public void SetAnimationParameter(string name, object value)
+        {
+            DriverTemplate driverTemplate = (DriverTemplate)(object)template;
 
-			if (animator != null && driverTemplate.animationParameterMap.ContainsKey(name))
-			{
-				switch (value.GetType().Name)
-				{
-					case "Boolean":
-						animator.SetBool(driverTemplate.animationParameterMap[name].name, (bool)value);
-						break;
-					case "Float":
-						animator.SetFloat(driverTemplate.animationParameterMap[name].name, ((float)value) * driverTemplate.animationParameterMap[name].scale);
-						break;
-					case "Single":
-						animator.SetFloat(driverTemplate.animationParameterMap[name].name, ((float)value) * driverTemplate.animationParameterMap[name].scale);
-						break;
-				}
-			}
-		}
-	}
+            if (animator != null && driverTemplate.driverProperties.animation.animationParameterMap.ContainsKey(name))
+            {
+                switch (value.GetType().Name)
+                {
+                    case "Boolean":
+                        animator.SetBool(driverTemplate.driverProperties.animation.animationParameterMap[name].name, (bool)value);
+                        break;
+                    case "Float":
+                        animator.SetFloat(driverTemplate.driverProperties.animation.animationParameterMap[name].name, ((float)value) * driverTemplate.driverProperties.animation.animationParameterMap[name].scale);
+                        break;
+                    case "Single":
+                        animator.SetFloat(driverTemplate.driverProperties.animation.animationParameterMap[name].name, ((float)value) * driverTemplate.driverProperties.animation.animationParameterMap[name].scale);
+                        break;
+                }
+            }
+        }
+    }
 }

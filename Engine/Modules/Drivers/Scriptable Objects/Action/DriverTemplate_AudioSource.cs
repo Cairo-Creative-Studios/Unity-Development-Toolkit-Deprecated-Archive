@@ -26,15 +26,8 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverClass = "CairoEngine.Drivers.AudoSource";
-
-            foreach(string defaultEvent in "Played,Stopped".TokenArray())
-            {
-                if (!scriptContainer.output.ContainsKey(defaultEvent))
-                    scriptContainer.output.Add(defaultEvent, null);
-                if (!scriptContainer.events.ContainsKey(defaultEvent))
-                    scriptContainer.events.Add(defaultEvent, null);
-            }
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.AudoSource";
+            SetScriptingEvents("Played,Stopped".TokenArray());
         }
     }
 }

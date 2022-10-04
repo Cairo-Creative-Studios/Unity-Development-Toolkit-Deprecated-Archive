@@ -32,15 +32,9 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverClass = "CairoEngine.Drivers.Damageable";
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.Damageable";
 
-            foreach (string defaultEvent in "Hit,HealthDepleted".TokenArray())
-            {
-                if (!scriptContainer.output.ContainsKey(defaultEvent))
-                    scriptContainer.output.Add(defaultEvent, null);
-                if (!scriptContainer.events.ContainsKey(defaultEvent))
-                    scriptContainer.events.Add(defaultEvent, null);
-            }
+            SetScriptingEvents("Hit,HealthDepleted".TokenArray());
         }
     }
 }

@@ -26,15 +26,8 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverClass = "CairoEngine.Drivers.NavMeshAgent";
-
-            foreach (string defaultEvent in "Following,Stopped,Arrived".TokenArray())
-            {
-                if (!scriptContainer.output.ContainsKey(defaultEvent))
-                    scriptContainer.output.Add(defaultEvent, null);
-                if (!scriptContainer.events.ContainsKey(defaultEvent))
-                    scriptContainer.events.Add(defaultEvent, null);
-            }
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.NavMeshAgent";
+            SetScriptingEvents("Following, Stopped, Arrived".TokenArray());
         }
     }
 }

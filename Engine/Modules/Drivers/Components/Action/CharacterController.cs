@@ -15,26 +15,26 @@ namespace CairoEngine.Drivers
 
         private float direction = 0;
         private Vector3 movementInput = new Vector3();
-		private Vector3 movementSpeed = new Vector3();
+        private Vector3 movementSpeed = new Vector3();
         private bool onGround = false;
         private Transform pivot;
         private Vector3 lastPivotPosition = new Vector3();
         //private float offGroundTimer = 0;
         private int tick = 0;
         private bool canJump = false;
-		Vector3 moveDir;
+        Vector3 moveDir;
 
-		void Start()
+        void Start()
         {
-            if (template.controllerPath != "")
+            if (template.characterControllerProperties.componentPaths.controllerPath != "")
             {
-                if(gameObject.transform.Find(template.controllerPath).gameObject.GetComponent<UnityEngine.CharacterController>() == null)
+                if (gameObject.transform.Find(template.characterControllerProperties.componentPaths.controllerPath).gameObject.GetComponent<UnityEngine.CharacterController>() == null)
                 {
-                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.transform.Find(template.controllerPath).gameObject.AddComponent<UnityEngine.CharacterController>());
+                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.transform.Find(template.characterControllerProperties.componentPaths.controllerPath).gameObject.AddComponent<UnityEngine.CharacterController>());
                 }
                 else
                 {
-                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.transform.Find(template.controllerPath).gameObject.GetComponent<UnityEngine.CharacterController>());
+                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.transform.Find(template.characterControllerProperties.componentPaths.controllerPath).gameObject.GetComponent<UnityEngine.CharacterController>());
                 }
             }
             else
@@ -44,16 +44,16 @@ namespace CairoEngine.Drivers
                     characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.AddComponent<UnityEngine.CharacterController>());
                 }
                 else
-				{
-					characterController = (UnityEngine.CharacterController) SetProperty("characterControllerComponent", gameObject.GetComponent<UnityEngine.CharacterController>());
-					Debug.Log(characterController);
-				}
+                {
+                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.GetComponent<UnityEngine.CharacterController>());
+                    Debug.Log(characterController);
+                }
             }
 
             //Get a local reference
             StateMachineModule.AddComponent(gameObject, StateMachineModule.CreateStateMachine(this));
-            pivot = gameObject.transform.Find(template.groundPivotPath);
-		}
+            pivot = gameObject.transform.Find(template.characterControllerProperties.componentPaths.groundPivotPath);
+        }
 
         void Update()
         {
@@ -62,11 +62,11 @@ namespace CairoEngine.Drivers
             //Interpolate Movement Input toward the current Controller Inputs
             movementInput = new Vector3(inputs["Horizontal"], movementInput.y, inputs["Vertical"]);
 
-            if(animator != null)
+            if (animator != null)
             {
-            	SetAnimationParameter("HorizontalSpeed", Mathf.Abs(core.velocity.x) + Mathf.Abs(core.velocity.z));
-				SetAnimationParameter("isGrounded", onGround);
-				SetAnimationParameter("VerticalSpeed", characterController.velocity.y);
+                SetAnimationParameter("HorizontalSpeed", Mathf.Abs(core.velocity.x) + Mathf.Abs(core.velocity.z));
+                SetAnimationParameter("isGrounded", onGround);
+                SetAnimationParameter("VerticalSpeed", characterController.velocity.y);
             }
         }
 
@@ -78,13 +78,13 @@ namespace CairoEngine.Drivers
         {
             //Interpolate the Angle of the Root Direction toward the current Moving Direction
             if (Mathf.Abs(movementInput.x) > 0.1 || Mathf.Abs(movementInput.z) > 0.1)
-                direction = Mathf.LerpAngle(direction, Mathf.Atan2(movementInput.x, movementInput.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y, template.turnRate);
-			movementSpeed = movementSpeed.Lerp(movementInput, interpolation);
-			//Get the Move Direction
-		 	moveDir = moveDir.Lerp(Quaternion.Euler(0, direction, 0) * Vector3.forward * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1),interpolation);
+                direction = Mathf.LerpAngle(direction, Mathf.Atan2(movementInput.x, movementInput.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y, template.characterControllerProperties.motion.turnRate);
+            movementSpeed = movementSpeed.Lerp(movementInput, interpolation);
+            //Get the Move Direction
+            moveDir = moveDir.Lerp(Quaternion.Euler(0, direction, 0) * Vector3.forward * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1), interpolation);
 
             //Add Movement Input to the Object's Velocity
-			core.velocity = core.velocity.Lerp(new Vector3(moveDir.normalized.x * template.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1), core.velocity.y, moveDir.normalized.z * template.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1)), interpolation);
+            core.velocity = core.velocity.Lerp(new Vector3(moveDir.normalized.x * template.characterControllerProperties.motion.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1), core.velocity.y, moveDir.normalized.z * template.characterControllerProperties.motion.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1)), interpolation);
 
             RaycastHit reflectHit;
             Vector3 reflect = moveDir;
@@ -97,7 +97,7 @@ namespace CairoEngine.Drivers
             //    root.velocity.z = Mathf.Lerp(root.velocity.z, reflect.z, (Mathf.Pow(reflect.y,3)/1000));
             //}
 
-            if(Physics.Raycast(characterController.transform.position+ new Vector3(0, characterController.height/2, 0), Vector3.up, out reflectHit, characterController.height))
+            if (Physics.Raycast(characterController.transform.position + new Vector3(0, characterController.height / 2, 0), Vector3.up, out reflectHit, characterController.height))
             {
                 if (core.velocity.y > 0)
                 {
@@ -106,7 +106,7 @@ namespace CairoEngine.Drivers
             }
 
             onGround = false;
-            RaycastHit[] hits = Physics.BoxCastAll(characterController.transform.position + new Vector3(0, characterController.radius, 0), new Vector3(characterController.radius/2, 0.1f, characterController.radius/2), Vector3.down);
+            RaycastHit[] hits = Physics.BoxCastAll(characterController.transform.position + new Vector3(0, characterController.radius, 0), new Vector3(characterController.radius / 2, 0.1f, characterController.radius / 2), Vector3.down);
             float groundSlopePercentage = 0;
 
 
@@ -116,17 +116,17 @@ namespace CairoEngine.Drivers
                 {
                     if (hit.distance <= characterController.radius && hit.collider.gameObject.tag != "Player")
                     {
-                        if(template.slopeAlignment && pivot != null)
+                        if (template.characterControllerProperties.features.slopeAlignment && pivot != null)
                             pivot.eulerAngles = pivot.eulerAngles.LerpAngle(Quaternion.FromToRotation(Vector3.up, hit.normal).eulerAngles, 0.25f);
 
-                         onGround = true;
+                        onGround = true;
 
                         reflect = Vector3.Reflect(core.velocity, reflectHit.normal);
                         groundSlopePercentage = Mathf.Lerp(core.velocity.x, reflect.x, (Mathf.Pow(Mathf.Clamp(Mathf.Abs(reflect.x) + Mathf.Abs(reflect.z), 0, 10), 3) / 1000));
                     }
                 }
             }
-            if (!onGround&&template.slopeAlignment && pivot != null)
+            if (!onGround && template.characterControllerProperties.features.slopeAlignment && pivot != null)
             {
                 pivot.eulerAngles = pivot.eulerAngles.LerpAngle(Vector3.zero, 0.1f);
             }
@@ -134,24 +134,24 @@ namespace CairoEngine.Drivers
             //TODO: Move Faster in the facing direction when getting closer to top speed, regardless of 
 
             //Apply Gravity in the Direction of the current Slope Angle, use the Slope Angle Percentage to find how much Gravity should be applied
-            if(template.slopeAlignment)
-	            core.velocity = core.velocity.Lerp(Quaternion.Euler(rootTransform.eulerAngles + new Vector3(0,180,0)) * Physics.gravity, template.fallRate);
-			else
-				core.velocity = core.velocity.Lerp(core.velocity + Physics.gravity, template.fallRate);
+            if (template.characterControllerProperties.features.slopeAlignment)
+                core.velocity = core.velocity.Lerp(Quaternion.Euler(rootTransform.eulerAngles + new Vector3(0, 180, 0)) * Physics.gravity, template.characterControllerProperties.airControl.fallRate);
+            else
+                core.velocity = core.velocity.Lerp(core.velocity + Physics.gravity, template.characterControllerProperties.airControl.fallRate);
 
-			if (onGround)
-			{
-			    if (core.velocity.y < 0)
-			    {
-					core.velocity.y = 0;
-					//core.velocity.y *= groundSlopePercentage / 9;
-					//core.velocity.y--;
-				}
-			}
+            if (onGround)
+            {
+                if (core.velocity.y < 0)
+                {
+                    core.velocity.y = 0;
+                    //core.velocity.y *= groundSlopePercentage / 9;
+                    //core.velocity.y--;
+                }
+            }
 
-			core.velocity = new Vector3((float)Math.Round(core.velocity.x, 2), (float)Math.Round(core.velocity.y, 2), (float)Math.Round(core.velocity.z, 2));
+            core.velocity = new Vector3((float)Math.Round(core.velocity.x, 2), (float)Math.Round(core.velocity.y, 2), (float)Math.Round(core.velocity.z, 2));
 
-			core.Move(core.velocity*Time.deltaTime);
+            core.Move(core.velocity * Time.deltaTime);
 
             //Update Pivot
             pivot.position = pivot.position.Lerp(characterController.transform.position, 0.95f);
@@ -195,7 +195,7 @@ namespace CairoEngine.Drivers
                 {
                     currentCayoteTime += Time.deltaTime;
 
-                    if (currentCayoteTime > root.template.cayoteTime*60)
+                    if (currentCayoteTime > root.template.characterControllerProperties.modifiers.cayoteTime * 60)
                     {
                         SetState("Falling");
                     }
@@ -205,7 +205,7 @@ namespace CairoEngine.Drivers
             public virtual void UpdatePhysics()
             {
                 //Move
-                root.Move(root.template.motionInterpolation);
+                root.Move(root.template.characterControllerProperties.motion.motionInterpolation);
             }
 
             public virtual void UpdateAnimator()
@@ -246,7 +246,7 @@ namespace CairoEngine.Drivers
                     root.onGround = false;
                 }
 
-                root.core.velocity.y += root.template.jumpStrength;
+                root.core.velocity.y += root.template.characterControllerProperties.motion.jumpStrength;
 
                 UpdateStates();
                 UpdatePhysics();
@@ -254,7 +254,7 @@ namespace CairoEngine.Drivers
 
             public virtual void UpdateStates()
             {
-                if(root.inputs["Jump"] > 0)
+                if (root.inputs["Jump"] > 0)
                 {
                     hangTime = 0;
                     sustain = true;
@@ -264,7 +264,7 @@ namespace CairoEngine.Drivers
                     hangTime += Time.deltaTime;
                     sustain = false;
 
-                    if(hangTime > root.template.hangTime * 60&&root.core.velocity.y<-1)
+                    if (hangTime > root.template.characterControllerProperties.modifiers.hangTime * 60 && root.core.velocity.y < -1)
                     {
                         SetState("Falling");
                     }
@@ -281,7 +281,7 @@ namespace CairoEngine.Drivers
                 {
                     if (-0.2f < root.core.velocity.y && root.core.velocity.y > 0.5)
                     {
-                        if (sustain && sustainTime < root.template.jumpSustain * 60)
+                        if (sustain && sustainTime < root.template.characterControllerProperties.modifiers.jumpSustain * 60)
                         {
                             sustainTime += Time.deltaTime;
                         }
@@ -298,7 +298,7 @@ namespace CairoEngine.Drivers
                 }
 
                 //Move
-                root.Move(root.template.motionInterpolation*root.template.airControl);
+                root.Move(root.template.characterControllerProperties.motion.motionInterpolation * root.template.characterControllerProperties.airControl.airControl);
             }
         }
 
@@ -323,7 +323,7 @@ namespace CairoEngine.Drivers
 
 
                 //Move
-                root.Move(root.template.motionInterpolation * root.template.airControl);
+                root.Move(root.template.characterControllerProperties.motion.motionInterpolation * root.template.characterControllerProperties.airControl.airControl);
             }
         }
     }

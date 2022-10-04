@@ -89,31 +89,14 @@ namespace CairoEngine.Drivers
         private void OnEnable()
         {
             //Set Default Class
-            this.driverClass = "CairoEngine.Drivers.Weapon";
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.Weapon";
 
             //Set Default Input
-            SetInputMap(new string[] { "Shoot" }, new string[] { "Shoot"});
+            SetInputTranslation(new string[] { "Shoot" }, new string[] { "Shoot" });
 
-            //Set Default Audio Clips
-            foreach(string clipName in "Equip, Charge, Fire, PutAway, Melee".TokenArray())
-            {
-                if (!audioTable.ContainsKey(clipName))
-                {
-                    audioTable.Add(clipName, new List<AudioClip>());
-                }
-                else if(audioTable[clipName] == null)
-                {
-                    audioTable[clipName] = new List<AudioClip>();
-                }
-            }
+            SetAnimationParameters("Equip, Charge, Fire, PutAway, Melee".TokenArray());
 
-            foreach (string defaultEvent in "Shot,Pickup,Putdown".TokenArray())
-            {
-                if (!scriptContainer.output.ContainsKey(defaultEvent))
-                    scriptContainer.output.Add(defaultEvent, null);
-                if (!scriptContainer.events.ContainsKey(defaultEvent))
-                    scriptContainer.events.Add(defaultEvent, null);
-            }
+            SetScriptingEvents("Shot,Pickup,Putdown".TokenArray());
         }
     }
 }

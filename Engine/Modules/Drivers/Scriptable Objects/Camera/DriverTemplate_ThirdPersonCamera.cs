@@ -16,10 +16,10 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverClass = "CairoEngine.Drivers.ThirdPersonCamera";
+            this.driverProperties.main.driverClass = "CairoEngine.Drivers.ThirdPersonCamera";
 
-            SetInputMap(new string[] { "XAxis", "YAxis" }, new string[] { "LookHorizontal", "LookVertical" });
-            
+            SetInputTranslation(new string[] { "XAxis", "YAxis" }, new string[] { "LookHorizontal", "LookVertical" });
+
         }
 
 

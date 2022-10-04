@@ -18,7 +18,7 @@ namespace CairoEngine.Drivers
         /// </summary>
         [Tooltip("The Driver Core's Tags, for Identification")]
         [Foldout("Properties")]
-		public List<string> tags = new List<string>();
+        public List<string> tags = new List<string>();
         /// <summary>
         /// The Template to use for the Driver Core
         /// </summary>
@@ -61,12 +61,12 @@ namespace CairoEngine.Drivers
         UnityEngine.CharacterController characterController;
 
         void Start()
-		{
+        {
             List<string> keyList = new List<string>();
             keyList.AddRange(template.states.Keys);
             currentState = keyList[0];
 
-            foreach(String state in template.states.Keys)
+            foreach (String state in template.states.Keys)
             {
                 //Add all the default Behaviours of the Driver Core
                 foreach (DriverTemplate driverTemplate in template.states[state])
@@ -77,14 +77,14 @@ namespace CairoEngine.Drivers
             characterController = GetComponent<UnityEngine.CharacterController>();
         }
 
-		void Update()
-		{
+        void Update()
+        {
             //Update the Drivers within each State
-            foreach(string key in states.Keys)
+            foreach (string key in states.Keys)
             {
-                if(key == currentState)
+                if (key == currentState)
                 {
-                    foreach(object driver in states[key])
+                    foreach (object driver in states[key])
                     {
                         ((MonoBehaviour)driver).enabled = true;
                         driver.CallMethod("SetInputs", new object[] { inputs });
@@ -98,7 +98,7 @@ namespace CairoEngine.Drivers
                     }
                 }
             }
-		}
+        }
 
         /// <summary>
         /// Get a Driver by it's Type and ID.
@@ -108,11 +108,11 @@ namespace CairoEngine.Drivers
         /// <typeparam name="T">The Type of the Driver</typeparam>
         public object GetDriver<T>(string ID)
         {
-            foreach(string key in states.Keys)
+            foreach (string key in states.Keys)
             {
-                foreach(object driver in states[key])
+                foreach (object driver in states[key])
                 {
-                    if(driver.GetType().Name == typeof(T).Name&&((DriverTemplate)driver.GetField("template")).ID == ID)
+                    if (driver.GetType().Name == typeof(T).Name && ((DriverTemplate)driver.GetField("template")).driverProperties.main.ID == ID)
                     {
                         return driver;
                     }
@@ -128,7 +128,7 @@ namespace CairoEngine.Drivers
         /// <typeparam name="T">The Type of the Driver to get</typeparam>
         public object GetDriver<T>()
         {
-            foreach(object driver in states[currentState])
+            foreach (object driver in states[currentState])
             {
                 if (driver.GetType().Name == typeof(T).Name)
                     return driver;
@@ -152,41 +152,41 @@ namespace CairoEngine.Drivers
             return null;
         }
 
-		/// <summary>
-		/// Enables all the Drivers in Core
-		/// </summary>
-		public void Enable()
-		{
-			foreach(object driver in states[currentState])
-			{
-				((MonoBehaviour)driver).enabled = true;
-			}
-		}
+        /// <summary>
+        /// Enables all the Drivers in Core
+        /// </summary>
+        public void Enable()
+        {
+            foreach (object driver in states[currentState])
+            {
+                ((MonoBehaviour)driver).enabled = true;
+            }
+        }
 
-		/// <summary>
-		/// Disables all the Drivers in the Core
-		/// </summary>
-		public void Disable()
-		{
-			foreach (object driver in states[currentState])
-			{
-				((MonoBehaviour)driver).enabled = false;
-			}
-		}
+        /// <summary>
+        /// Disables all the Drivers in the Core
+        /// </summary>
+        public void Disable()
+        {
+            foreach (object driver in states[currentState])
+            {
+                ((MonoBehaviour)driver).enabled = false;
+            }
+        }
 
-		public object SetProperty(string name, object value)
-		{
-			if (!properties.ContainsKey(name))
-				properties.Add(name, value);
-			else
-				properties[name] = value;
-			return value;
-		}
+        public object SetProperty(string name, object value)
+        {
+            if (!properties.ContainsKey(name))
+                properties.Add(name, value);
+            else
+                properties[name] = value;
+            return value;
+        }
 
-		public object GetProperty(string name)
-		{
-			return properties[name];
-		}
+        public object GetProperty(string name)
+        {
+            return properties[name];
+        }
 
         public void SetState(string state)
         {

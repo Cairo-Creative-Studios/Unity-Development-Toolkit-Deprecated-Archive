@@ -14,11 +14,11 @@ namespace CairoEngine.Drivers
 
         void Start()
         {
-			Camera.main.gameObject.AddComponent<CinemachineBrain>();
+            Camera.main.gameObject.AddComponent<CinemachineBrain>();
 
-            if (template.prefab != null)
+            if (template.driverProperties.main.prefab != null)
             {
-                freeLookObject = GameObject.Instantiate(template.prefab);
+                freeLookObject = GameObject.Instantiate(template.driverProperties.main.prefab);
                 freeLook = freeLookObject.GetComponent<CinemachineFreeLook>();
             }
 
@@ -49,7 +49,7 @@ namespace CairoEngine.Drivers
             freeLook.m_YAxis.m_InputAxisName = "";
 #endif
         }
-    
+
         void Update()
         {
             freeLook.m_XAxis.m_InputAxisValue = -inputs["XAxis"];

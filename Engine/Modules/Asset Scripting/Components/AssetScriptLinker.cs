@@ -55,18 +55,18 @@ namespace CairoEngine.AssetScripting
                 MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
                 foreach (MonoBehaviour behaviour in monoBehaviours)
                 {
-                    monoBehaviourList.Add(behaviour.GetType().FullName.TokenAt(behaviour.GetType().FullName.TokenCount('.')-1,'.'), behaviour.GetType().FullName);
+                    monoBehaviourList.Add(behaviour.GetType().FullName.TokenAt(behaviour.GetType().FullName.TokenCount('.') - 1, '.'), behaviour.GetType().FullName);
                 }
 
                 DriverCore driverCore = gameObject.GetComponent<DriverCore>();
                 DriverCoreTemplate template = driverCore?.template;
                 if (template != null)
                 {
-                    foreach(string state in template.states.Keys)
+                    foreach (string state in template.states.Keys)
                     {
-                        foreach(DriverTemplate driver in template.states[state])
+                        foreach (DriverTemplate driver in template.states[state])
                         {
-                            monoBehaviourList.Add("Runtime Generate Driver, " + driver.driverClass.TokenAt(driver.driverClass.TokenCount('.') - 1, '.'), driver.driverClass);
+                            monoBehaviourList.Add("Runtime Generate Driver, " + driver.driverProperties.main.driverClass.TokenAt(driver.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.driverProperties.main.driverClass);
                         }
                     }
                 }
@@ -84,11 +84,11 @@ namespace CairoEngine.AssetScripting
             DropdownList<string> fieldList = new DropdownList<string>();
             fieldList.Add("null", null);
 
-            if(monoBehaviour != "" && monoBehaviour != "null")
+            if (monoBehaviour != "" && monoBehaviour != "null")
             {
                 FieldInfo[] fieldInfos = Type.GetType(monoBehaviour)?.GetFields();
 
-                if(fieldInfos != null && fieldInfos.Length > 0)
+                if (fieldInfos != null && fieldInfos.Length > 0)
                 {
                     foreach (FieldInfo field in fieldInfos)
                     {

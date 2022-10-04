@@ -1,7 +1,7 @@
 ﻿//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
-using Homebrew;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace CairoEngine.Drivers
@@ -75,16 +75,16 @@ namespace CairoEngine.Drivers
 
         void OnEnable()
         {
-            if (template!=null&&template.forceDirection)
-                direction = template.startDirection;
+            if (template != null && template.bulletProperties.motion.forceDirection)
+                direction = template.bulletProperties.motion.startDirection;
         }
 
         void Start()
         {
             originalParent = transform.parent;
 
-            if (template.forceDirection)
-                direction = template.startDirection;
+            if (template.bulletProperties.motion.forceDirection)
+                direction = template.bulletProperties.motion.startDirection;
 
             if (direction.x == 0 && direction.y == 0 && direction.z == 0)
             {
@@ -102,35 +102,35 @@ namespace CairoEngine.Drivers
 
         void Update()
         {
-            if (template.autofire)
+            if (template.bulletProperties.state.autofire)
                 fired = true;
 
             if (fired)
             {
                 if (!fireTriggered)
                 {
-                    template.scriptContainer.events["Shot"].Invoke();
+                    template.driverProperties.scripting.scriptContainer.events["Shot"].Invoke();
                     fireTriggered = true;
-                    if (!template.setAngle)
-                        transform.eulerAngles = template.startingAngle;
+                    if (!template.bulletProperties.display.setAngle)
+                        transform.eulerAngles = template.bulletProperties.display.startingAngle;
                 }
 
                 transform.SetParent(null);
 
                 //Handle Display
-                if (template.setAngle)
+                if (template.bulletProperties.display.setAngle)
                 {
                     transform.eulerAngles = direction;
                 }
                 else
                 {
-                    transform.eulerAngles += template.rotation;
+                    transform.eulerAngles += template.bulletProperties.display.rotation;
                 }
 
                 //bool canMove = true;
 
                 Vector3 moveDir = Vector3.zero;
-                if (template.controllable)
+                if (template.bulletProperties.input.controllable)
                 {
                     //transform.eulerAngles += new Vector3(inputs["RotateX"],inputs["RotateY"] * Time.deltaTime, 0);
 
@@ -138,18 +138,18 @@ namespace CairoEngine.Drivers
                     inputSpeed = new Vector3(inputs["MoveHorizontal"], 0, 0);
                     inputDirection = Mathf.Atan2(inputSpeed.normalized.x, inputSpeed.normalized.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-                    moveDir = Quaternion.Euler(0, inputDirection, 0) * Vector3.forward * template.inputMaxSpeed.x;
+                    moveDir = Quaternion.Euler(0, inputDirection, 0) * Vector3.forward * template.bulletProperties.input.inputMaxSpeed.x;
                 }
 
-                speed = speed.Lerp(direction * template.speed, template.acceleration) + new Vector3(0,inputs["MoveVertical"],0);
+                speed = speed.Lerp(direction * template.bulletProperties.motion.speed, template.bulletProperties.motion.acceleration) + new Vector3(0, inputs["MoveVertical"], 0);
 
-                if (template.enableGravity)
+                if (template.bulletProperties.motion.enableGravity)
                     speed += Physics.gravity;
 
                 core.Move(speed + moveDir);
 
                 life += Time.deltaTime;
-                if (life > template.lifespan && template.lifespan > 0)
+                if (life > template.bulletProperties.state.lifespan && template.bulletProperties.state.lifespan > 0)
                 {
                     Timeout();
                 }
@@ -157,23 +157,23 @@ namespace CairoEngine.Drivers
 
             if (returnToHolder)
             {
-                transform.position = transform.position.Lerp(originalParent.position,0.3f);
+                transform.position = transform.position.Lerp(originalParent.position, 0.3f);
 
                 //Handle Display
-                if (template.setAngle)
+                if (template.bulletProperties.display.setAngle)
                 {
                     transform.eulerAngles = new Vector3(Mathf.Clamp(transform.position.x - originalParent.position.x, -1, 1), Mathf.Clamp(transform.position.y - originalParent.position.y, -1, 1), Mathf.Clamp(transform.position.z - originalParent.position.z, -1, 1));
                 }
                 else
                 {
-                    transform.eulerAngles += template.rotation;
+                    transform.eulerAngles += template.bulletProperties.display.rotation;
                 }
             }
         }
 
         void Timeout()
         {
-            switch (template.timeoutFunction)
+            switch (template.bulletProperties.state.timeoutFunction)
             {
                 case DriverTemplate_Bullet.TimeoutFunction.Destroy:
                     GameObject.Destroy(gameObject);
@@ -183,14 +183,14 @@ namespace CairoEngine.Drivers
                     fired = false;
                     break;
                 case DriverTemplate_Bullet.TimeoutFunction.CallEvent:
-                    template.scriptContainer.events["Timeout"].Invoke();
+                    template.driverProperties.scripting.scriptContainer.events["Timeout"].Invoke();
                     break;
             }
         }
 
         void OnTriggerEnter(Collider collider)
         {
-            if(collider.transform == originalParent && returnToHolder)
+            if (collider.transform == originalParent && returnToHolder)
             {
                 transform.SetParent(collider.transform);
                 returnToHolder = false;

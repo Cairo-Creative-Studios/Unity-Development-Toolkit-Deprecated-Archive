@@ -17,7 +17,7 @@ namespace CairoEngine.Drivers
     /// </summary>
     public class DriverModule : MonoBehaviour
     {
-		public bool initialize = true;
+        public bool initialize = true;
         private static GameObject driverObjectPool;
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace CairoEngine.Drivers
             GameObject.DontDestroyOnLoad(singletonObject);
             singletonObject.name = "Cairo Driver Module";
 
-			if (!singleton.initialize)
-				GameObject.Destroy(singletonObject);
-		}
+            if (!singleton.initialize)
+                GameObject.Destroy(singletonObject);
+        }
 
         /// <summary>
         /// Adds the Driver and passes the given Driver Type Info to it.
@@ -52,10 +52,10 @@ namespace CairoEngine.Drivers
         {
             //Get the Behavour Template and Driver
             DriverTemplate template = (DriverTemplate)Template;
-            object driverType = gameObject.AddComponent(Type.GetType(template.driverClass));
-            
-            driverType.SetField("template",template);
-			driverType.SetField("core", core);
+            object driverType = gameObject.AddComponent(Type.GetType(template.driverProperties.main.driverClass));
+
+            driverType.SetField("template", template);
+            driverType.SetField("core", core);
 
             //Get the Root Object Driver attached to the Game Object 
             if (!drivers.ContainsKey(gameObject))
@@ -65,7 +65,7 @@ namespace CairoEngine.Drivers
             }
 
             DriverCore driverCore = gameObject.GetComponent<DriverCore>();
-            if(driverCore == null)
+            if (driverCore == null)
                 driverCore = gameObject.AddComponent<DriverCore>();
 
             //Add the Driver to the Object's Driver List
@@ -96,9 +96,9 @@ namespace CairoEngine.Drivers
             }
 
             //Add all the Inputs to the Driver from the Input Translation Dictionary
-            foreach (string inputName in template.inputTranslation.Keys)
+            foreach (string inputName in template.driverProperties.input.inputTranslation.Keys)
             {
-                driverType.CallMethod("AddInput", new object[] { template.inputTranslation[inputName], inputName });
+                driverType.CallMethod("AddInput", new object[] { template.driverProperties.input.inputTranslation[inputName], inputName });
             }
 
             //Inherit the Script Container
@@ -112,7 +112,7 @@ namespace CairoEngine.Drivers
         /// <param name="message">Message.</param>
         /// <param name="parameters">Parameters.</param>
         /// <param name="driver">Driver.</param>
-        public static void Message(GameObject gameObject, string message,object[] parameters = null,string driver = "")
+        public static void Message(GameObject gameObject, string message, object[] parameters = null, string driver = "")
         {
             if (drivers.ContainsKey(gameObject))
             {
@@ -125,9 +125,9 @@ namespace CairoEngine.Drivers
                 }
                 else
                 {
-                    foreach(object driverType in drivers[gameObject].states[drivers[gameObject].currentState])
+                    foreach (object driverType in drivers[gameObject].states[drivers[gameObject].currentState])
                     {
-                        if(((DriverTemplate)driverType.GetField("template")).ID == driver)
+                        if (((DriverTemplate)driverType.GetField("template")).driverProperties.main.ID == driver)
                         {
                             driverType.CallMethod(message, parameters);
                         }
@@ -148,7 +148,7 @@ namespace CairoEngine.Drivers
         {
             GameObject selectedObject = cobject.gameObject;
 
-            foreach(object driver in cobject.states[cobject.currentState])
+            foreach (object driver in cobject.states[cobject.currentState])
             {
                 if (driver.GetType() == typeof(T))
                     return driver.CallMethod(message, parameters);
@@ -159,7 +159,7 @@ namespace CairoEngine.Drivers
 
         public static void MessageCore(GameObject gameObject, string message, object[] parameters)
         {
-            if(drivers.ContainsKey(gameObject))
+            if (drivers.ContainsKey(gameObject))
                 drivers[gameObject].CallMethod(message, parameters);
         }
 
