@@ -26,7 +26,7 @@ namespace CairoEngine.UI
         {
             List<UIItem> items = new List<UIItem>();
 
-            foreach(UIItem item in UIItems)
+            foreach (UIItem item in UIItems)
             {
                 UIItem returnedItem = item.Render();
                 if (returnedItem != null)
@@ -77,14 +77,14 @@ namespace CairoEngine.UI
                     return this;
                 }
             }
-            else if(enabledAsset.variable.value && !rendered)
+            else if (enabledAsset.variable.value && !rendered)
             {
                 renderedElement = UIDocument.CloneTree();
                 UIModule.singleton.root.Add(renderedElement);
                 rendered = true;
                 return this;
             }
-            if (renderedElement != null) 
+            if (renderedElement != null)
                 UpdateAssetBinds();
 
 
@@ -93,7 +93,7 @@ namespace CairoEngine.UI
 
         void QueryAssetBinds()
         {
-            foreach(UIBind bind in assetVariableBinds)
+            foreach (UIBind bind in assetVariableBinds)
             {
                 bind.element = renderedElement.Q(bind.elementID);
                 boundElements.Add(bind);
@@ -136,7 +136,7 @@ namespace CairoEngine.UI
         /// </summary>
         public void Destroy()
         {
-            if(renderedElement != null)
+            if (renderedElement != null)
             {
                 renderedElement.RemoveFromHierarchy();
                 renderedElement = null;
@@ -157,19 +157,7 @@ namespace CairoEngine.UI
 
         DropdownList<string> GetStyleProperties()
         {
-            VisualElement element = new VisualElement();
-
-            DropdownList<string> properties = new DropdownList<string>();
-            properties.Add("Text", "Text");
-
-            PropertyInfo[] fieldInfos = typeof(IStyle).GetProperties();
-            foreach (PropertyInfo field in fieldInfos)
-            {
-                if(field.Name.TokenCount('_') == 1)
-                    properties.Add(field.Name, field.Name);
-            }
-
-            return properties;
+            return UIModule.ValidateElementProperties();
         }
     }
 }

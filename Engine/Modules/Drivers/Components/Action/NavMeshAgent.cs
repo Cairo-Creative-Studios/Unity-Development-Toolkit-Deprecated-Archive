@@ -12,44 +12,23 @@ namespace CairoEngine.Drivers
     [Serializable]
     public class NavMeshAgent : Driver<DriverTemplate_NavMeshAgent>
     {
-        UnityEngine.AI.NavMeshAgent agent;
         Transform target;
-        NavMeshPath path;
 
         void Start()
         {
-            //Tries to get the Character Controller attached to the Object, otherwise Creates one
-            if (GetProperty("navMeshAgentComponent")==null)
-            {
-                SetProperty("navMeshAgentComponent", gameObject.transform.Find(template.agentPath).gameObject.GetComponent<UnityEngine.CharacterController>());
-
-                if (GetProperty("navMeshAgentComponent") == null)
-                    SetProperty("navMeshAgentComponent", gameObject.transform.Find(template.agentPath).gameObject.AddComponent<UnityEngine.AI.NavMeshAgent>());
-            }
-            //Get a local reference
-            agent = (UnityEngine.AI.NavMeshAgent)GetProperty("navMeshAgentComponent");
+            //Validate the Nav Mesh Agent and Set the Local Reference
+            core.navMeshAgent = (UnityEngine.AI.NavMeshAgent)ValidateComponentProperty("navMeshAgentComponent", template.agentPath, typeof(UnityEngine.AI.NavMeshAgent));
         }
-
 
         public virtual void Move()
         {
-            //If the Target property exists, Move
-            if (core.properties.ContainsKey("target"))
-            {
-                target = (Transform)core.properties["target"];
+            //Try to Get the Nav Mesh Agent's Target
+            target = (Transform)GetProperty("target");
+            if (target != null)
+                core.navMeshAgent.SetDestination(target.position);
 
-                agent.SetDestination(target.position);
-
-                //If the Object contains a Character Controller, pass movement on to the Character Controller instead of the NavMeshAgent
-                if (core.properties.ContainsKey("characterController"))
-                {
-                    GetProperty("characterController").CallMethod("Move", new object[] { (agent.desiredVelocity * Time.deltaTime) });
-                }
-                else
-                {
-                    agent.Move(agent.desiredVelocity * Time.deltaTime);
-                }
-            }
+            //Move to the Target
+            core.Move(core.navMeshAgent.desiredVelocity, DriverCore.MoveMethod.NavMeshAgent);
         }
 
         /// <summary>

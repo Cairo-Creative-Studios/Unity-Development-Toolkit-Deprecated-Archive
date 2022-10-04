@@ -185,14 +185,37 @@ namespace CairoEngine.Drivers
             return GetType().Name;
         }
 
+        /// <summary>
+        /// Gets the Property with the Given Name
+        /// </summary>
+        /// <returns>The property.</returns>
+        /// <param name="name">Name.</param>
         public object GetProperty(string name)
         {
             return core.GetProperty(name);
         }
 
+        /// <summary>
+        /// Sets the Property with the given Name
+        /// </summary>
+        /// <returns>The property.</returns>
+        /// <param name="name">Name.</param>
+        /// <param name="value">Value.</param>
         public object SetProperty(string name, object value)
         {
             return core.SetProperty(name, value);
+        }
+
+        /// <summary>
+        /// Ensures that the Component Property is Valid, and Returns it.
+        /// </summary>
+        /// <returns>The component property.</returns>
+        /// <param name="name">Name.</param>
+        /// <param name="path">Path.</param>
+        /// <param name="component">Component.</param>
+        public object ValidateComponentProperty(string name, string path, Type value)
+        {
+            return core.ValidateComponentProperty(name, path, value);
         }
 
         /// <summary>

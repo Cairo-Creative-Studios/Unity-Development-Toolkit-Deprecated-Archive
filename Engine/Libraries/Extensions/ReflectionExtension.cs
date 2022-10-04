@@ -6,6 +6,7 @@ using System.Reflection;
 using UnityEngine;
 using CairoData;
 using B83.Unity.Attributes;
+using System.Linq;
 
 namespace CairoEngine.Reflection
 {
@@ -33,6 +34,16 @@ namespace CairoEngine.Reflection
             }
 
             return desiredTypes.ToArray();
+        }
+
+        /// <summary>
+        /// Get's all Types that inherit from the given Base Type
+        /// </summary>
+        /// <returns>The inherited types.</returns>
+        /// <param name="Base">The Base Type</param>
+        public static Type[] GetInheritedTypes(this Type Base)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(domainAssembly => domainAssembly.GetTypes()).Where(type => Base.IsAssignableFrom(type)).ToArray();
         }
 
         /// <summary>
@@ -103,7 +114,7 @@ namespace CairoEngine.Reflection
             //Create the Classes Tree
             Tree<object> classes = new Tree<object>(instance);
             //Call the Generation Method for the Tree, passing this method's Parameters
-            NestSearchMethod(classes, classes.rootNode,baseClassName, instantiate, 0);
+            NestSearchMethod(classes, classes.rootNode, baseClassName, instantiate, 0);
             //Return the Tree
             return classes;
         }
@@ -131,22 +142,22 @@ namespace CairoEngine.Reflection
                 curIndex.AddRange(node.index);
                 curIndex.Add(index);
 
-                if(nestedType.BaseType.Name == baseClassName||baseClassName == "")
+                if (nestedType.BaseType.Name == baseClassName || baseClassName == "")
                 {
-                    if(instantiate)
-                        nestedNodes.Add(new Node<object>(tree,Activator.CreateInstance(nestedType), node, curIndex.ToArray()));
+                    if (instantiate)
+                        nestedNodes.Add(new Node<object>(tree, Activator.CreateInstance(nestedType), node, curIndex.ToArray()));
                     else
-                        nestedNodes.Add(new Node<object>(tree,nestedType, node, curIndex.ToArray()));
+                        nestedNodes.Add(new Node<object>(tree, nestedType, node, curIndex.ToArray()));
                 }
 
                 index++;
             }
 
             //Add the Node to the Tree, and calls this recursive Function again for the next Nodes
-            foreach(Node<object> child in nestedNodes)
+            foreach (Node<object> child in nestedNodes)
             {
                 tree.Add(child, node.index);
-                NestSearchMethod(tree, child, baseClassName, instantiate,count);
+                NestSearchMethod(tree, child, baseClassName, instantiate, count);
             }
         }
     }
@@ -165,7 +176,7 @@ namespace CairoEngine.Reflection
         {
             FieldInfo[] fieldInfos = type.GetType().GetFields();
 
-            foreach(FieldInfo fieldInfo in fieldInfos)
+            foreach (FieldInfo fieldInfo in fieldInfos)
             {
                 typeReferences.Add(fieldInfo.Name, new FieldReference(type, fieldInfo));
             }
@@ -197,7 +208,7 @@ namespace CairoEngine.Reflection
         //Serialization
         public virtual void OnBeforeSerialize()
         {
-            if(field != null && instance != null)
+            if (field != null && instance != null)
             {
                 name = field.Name;
                 value = instance.ToString();
@@ -246,7 +257,7 @@ namespace CairoEngine.Reflection
         /// <param name="value">Value.</param>
         public void Set<T>(T value)
         {
-            instance.SetField(field.Name,value);
+            instance.SetField(field.Name, value);
         }
 
         /// <summary>

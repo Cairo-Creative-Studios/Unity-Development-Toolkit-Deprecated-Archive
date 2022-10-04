@@ -42,9 +42,9 @@ namespace CairoEngine.Drivers
             DriverCore colliderCore = colliderGameObject.GetComponent<DriverCore>();
             Inventory inventory = colliderGameObject.GetComponent<Inventory>();
 
-            if (colliderCore != null&&inventory != null)
+            if (colliderCore != null && inventory != null)
             {
-                foreach (string selfTag in core.tags)
+                foreach (string selfTag in core.properties.tags)
                 {
                     foreach (string otherTag in inventory.template.pickupTags)
                     {
@@ -66,7 +66,7 @@ namespace CairoEngine.Drivers
             pickedUp = true;
 
             if (template.persist)
-                core.Message<Saveable>("Save",null);
+                core.Message<Saveable>("Save", null);
 
             if (pickedUp && template.destroyOnPickup)
                 GameObject.Destroy(gameObject);

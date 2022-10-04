@@ -50,26 +50,41 @@ namespace CairoEngine.AssetScripting
             DropdownList<string> monoBehaviourList = new DropdownList<string>();
             monoBehaviourList.Add("null", "null");
 
-            if (gameObject != null)
+            try
             {
-                MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
-                foreach (MonoBehaviour behaviour in monoBehaviours)
+                if (gameObject != null)
                 {
-                    monoBehaviourList.Add(behaviour.GetType().FullName.TokenAt(behaviour.GetType().FullName.TokenCount('.') - 1, '.'), behaviour.GetType().FullName);
-                }
-
-                DriverCore driverCore = gameObject.GetComponent<DriverCore>();
-                DriverCoreTemplate template = driverCore?.template;
-                if (template != null)
-                {
-                    foreach (string state in template.states.Keys)
+                    MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
+                    foreach (MonoBehaviour behaviour in monoBehaviours)
                     {
-                        foreach (ExpandableDriverTemplate driver in template.states[state])
+                        monoBehaviourList.Add(behaviour.GetType().FullName.TokenAt(behaviour.GetType().FullName.TokenCount('.') - 1, '.'), behaviour.GetType().FullName);
+                    }
+
+                    DriverCore driverCore = gameObject.GetComponent<DriverCore>();
+                    DriverCoreTemplate template = driverCore?.properties.template;
+                    if (template != null)
+                    {
+                        foreach (string state in template.states.Keys)
                         {
-                            monoBehaviourList.Add("Runtime Generate Driver, " + driver.template.driverProperties.main.driverClass.TokenAt(driver.template.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.template.driverProperties.main.driverClass);
+                            foreach (ExpandableDriverTemplate driver in template.states[state].drivers)
+                            {
+                                try
+                                {
+                                    if (driver.template != null)
+                                        monoBehaviourList.Add("Driver Component, " + driver.template.driverProperties.main.driverClass.TokenAt(driver.template.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.template.driverProperties.main.driverClass);
+                                }
+                                catch
+                                {
+                                    //
+                                }
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+                //
             }
 
             return monoBehaviourList;
@@ -102,8 +117,18 @@ namespace CairoEngine.AssetScripting
 
         public void Update()
         {
-            //Update the Value of the AssetVariable
-            ((object)asset)?.GetField("variable")?.SetField("value", (object)gameObject.GetComponent(monoBehaviour)?.GetField(field));
+            try
+            {
+                //Update the Value of the AssetVariable
+                if (field != "null" && field != "" && gameObject != null && gameObject.GetComponent(Type.GetType(monoBehaviour)) != null)
+                {
+                    ((object)asset)?.GetField("variable")?.SetField("value", (object)gameObject.GetComponent(Type.GetType(monoBehaviour))?.GetField(field));
+                }
+            }
+            catch
+            {
+                //
+            }
         }
     }
 }

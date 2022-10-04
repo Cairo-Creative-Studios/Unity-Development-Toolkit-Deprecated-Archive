@@ -1,7 +1,7 @@
-﻿    /*! \addtogroup uimodule UI Module
- *  Additional documentation for group 'UI Module'
- *  @{
- */
+﻿/*! \addtogroup uimodule UI Module
+*  Additional documentation for group 'UI Module'
+*  @{
+*/
 
 //Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 using System.Reflection;
+using NaughtyAttributes;
 
 namespace CairoEngine.UI
 {
@@ -35,6 +36,8 @@ namespace CairoEngine.UI
         /// The HUD infos that have are present in the Game.
         /// </summary>
         private static List<UITemplate> uiTemplates = new List<UITemplate>();
+
+        public static DropdownList<string> elementProperties = null;
 
         /// <summary>
         /// All the UI Binds in the Module, ordered by the Field Instances grouped with the Element that is to be modified
@@ -62,13 +65,34 @@ namespace CairoEngine.UI
             singleton.name = "UI Module";
         }
 
+        public static DropdownList<string> ValidateElementProperties()
+        {
+            if (elementProperties == null)
+            {
+                VisualElement element = new VisualElement();
+
+                DropdownList<string> properties = new DropdownList<string>();
+                properties.Add("Text", "Text");
+
+                PropertyInfo[] fieldInfos = typeof(IStyle).GetProperties();
+                foreach (PropertyInfo field in fieldInfos)
+                {
+                    if (field.Name.TokenCount('_') == 1)
+                        properties.Add(field.Name, field.Name);
+                }
+
+                elementProperties = properties;
+            }
+            return elementProperties;
+        }
+
         /// <summary>
         /// Resets the User Interface. Usually you'll want to do this at the beginning of Each Runtime State, and then Create/Link new UI Values.
         /// </summary>
         public static void Clear()
         {
             //Destroy all the Camera Overlays
-            foreach(GameObject overlay in overlays)
+            foreach (GameObject overlay in overlays)
             {
                 GameObject.Destroy(overlay);
             }
@@ -112,7 +136,7 @@ namespace CairoEngine.UI
                 Debug.LogWarning("Failed to set UI to nonexistent " + ID);
 
             //Render the UI Documents add to the UI 
-            foreach(VisualTreeAsset visualElement in ui.UXMLFiles.Keys)
+            foreach (VisualTreeAsset visualElement in ui.UXMLFiles.Keys)
             {
                 //Ge the Visual Element Tree from the current Visual Element Asset
                 VisualElement tree = new VisualElement();
@@ -139,7 +163,7 @@ namespace CairoEngine.UI
         /// <param name="ID">The HUD's ID</param>
         public static UITemplate GetUI(string ID)
         {
-            foreach(UITemplate ui in uiTemplates)
+            foreach (UITemplate ui in uiTemplates)
             {
                 if (ui.ID == ID)
                     return ui;
@@ -153,7 +177,7 @@ namespace CairoEngine.UI
         /// <param name="checkedObject">Checked object.</param>
         public static void CheckIn(GameObject checkedObject, GameObject prefab)
         {
-            if(currentTemplate != null)
+            if (currentTemplate != null)
             {
                 //Loop through all the Game Object Binds in the Template
                 foreach (GameObjectBind bind in currentTemplate.gameObjectBinds)
@@ -195,10 +219,10 @@ namespace CairoEngine.UI
                 singleton.root.Add(tree);
             }
 
-            if(item.styleSheet!=null)
+            if (item.styleSheet != null)
                 singleton.root.styleSheets.Add(item.styleSheet);
 
-            if(item.UIDocument != null)
+            if (item.UIDocument != null)
                 elements.Add(tree);
 
             return elements.ToArray();
@@ -210,7 +234,7 @@ namespace CairoEngine.UI
         /// <param name="elements">Elements.</param>
         public static void DestroyUI(List<UIItem> items)
         {
-            foreach(UIItem item in items)
+            foreach (UIItem item in items)
             {
                 item.Destroy();
             }

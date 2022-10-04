@@ -76,9 +76,9 @@ namespace CairoEngine.Drivers
             Collider[] hitColliders = Physics.OverlapSphere(damageSource, radius);
             foreach (Collider collider in hitColliders)
             {
-				DriverCore damageReciever = collider.GetComponent<DriverCore>();
-                if(damageReciever != null)
-                    damageReciever.properties["health"] = (float)damageReciever.properties["health"] - damage;
+                DriverCore damageReciever = collider.GetComponent<DriverCore>();
+                if (damageReciever != null)
+                    damageReciever.scope.properties["health"] = (float)damageReciever.scope.properties["health"] - damage;
             }
         }
     }

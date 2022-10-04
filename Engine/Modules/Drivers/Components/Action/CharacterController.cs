@@ -26,29 +26,7 @@ namespace CairoEngine.Drivers
 
         void Start()
         {
-            if (template.characterControllerProperties.componentPaths.controllerPath != "")
-            {
-                if (gameObject.transform.Find(template.characterControllerProperties.componentPaths.controllerPath).gameObject.GetComponent<UnityEngine.CharacterController>() == null)
-                {
-                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.transform.Find(template.characterControllerProperties.componentPaths.controllerPath).gameObject.AddComponent<UnityEngine.CharacterController>());
-                }
-                else
-                {
-                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.transform.Find(template.characterControllerProperties.componentPaths.controllerPath).gameObject.GetComponent<UnityEngine.CharacterController>());
-                }
-            }
-            else
-            {
-                if (gameObject.GetComponent<UnityEngine.CharacterController>() == null)
-                {
-                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.AddComponent<UnityEngine.CharacterController>());
-                }
-                else
-                {
-                    characterController = (UnityEngine.CharacterController)SetProperty("characterControllerComponent", gameObject.GetComponent<UnityEngine.CharacterController>());
-                    Debug.Log(characterController);
-                }
-            }
+            characterController = (UnityEngine.CharacterController)ValidateComponentProperty("characterControllerComponent", template.characterControllerProperties.componentPaths.controllerPath, typeof(UnityEngine.CharacterController));
 
             //Get a local reference
             StateMachineModule.AddComponent(gameObject, StateMachineModule.CreateStateMachine(this));
@@ -64,7 +42,7 @@ namespace CairoEngine.Drivers
 
             if (animator != null)
             {
-                SetAnimationParameter("HorizontalSpeed", Mathf.Abs(core.velocity.x) + Mathf.Abs(core.velocity.z));
+                SetAnimationParameter("HorizontalSpeed", Mathf.Abs(core.scope.velocity.x) + Mathf.Abs(core.scope.velocity.z));
                 SetAnimationParameter("isGrounded", onGround);
                 SetAnimationParameter("VerticalSpeed", characterController.velocity.y);
             }
@@ -84,7 +62,7 @@ namespace CairoEngine.Drivers
             moveDir = moveDir.Lerp(Quaternion.Euler(0, direction, 0) * Vector3.forward * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1), interpolation);
 
             //Add Movement Input to the Object's Velocity
-            core.velocity = core.velocity.Lerp(new Vector3(moveDir.normalized.x * template.characterControllerProperties.motion.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1), core.velocity.y, moveDir.normalized.z * template.characterControllerProperties.motion.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1)), interpolation);
+            core.scope.velocity = core.scope.velocity.Lerp(new Vector3(moveDir.normalized.x * template.characterControllerProperties.motion.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1), core.scope.velocity.y, moveDir.normalized.z * template.characterControllerProperties.motion.speed * Mathf.Clamp(Mathf.Abs(movementInput.x) + Mathf.Abs(movementInput.z), 0, 1)), interpolation);
 
             RaycastHit reflectHit;
             Vector3 reflect = moveDir;
@@ -99,9 +77,9 @@ namespace CairoEngine.Drivers
 
             if (Physics.Raycast(characterController.transform.position + new Vector3(0, characterController.height / 2, 0), Vector3.up, out reflectHit, characterController.height))
             {
-                if (core.velocity.y > 0)
+                if (core.scope.velocity.y > 0)
                 {
-                    core.velocity.y = -1;
+                    core.scope.velocity.y = -1;
                 }
             }
 
@@ -121,8 +99,8 @@ namespace CairoEngine.Drivers
 
                         onGround = true;
 
-                        reflect = Vector3.Reflect(core.velocity, reflectHit.normal);
-                        groundSlopePercentage = Mathf.Lerp(core.velocity.x, reflect.x, (Mathf.Pow(Mathf.Clamp(Mathf.Abs(reflect.x) + Mathf.Abs(reflect.z), 0, 10), 3) / 1000));
+                        reflect = Vector3.Reflect(core.scope.velocity, reflectHit.normal);
+                        groundSlopePercentage = Mathf.Lerp(core.scope.velocity.x, reflect.x, (Mathf.Pow(Mathf.Clamp(Mathf.Abs(reflect.x) + Mathf.Abs(reflect.z), 0, 10), 3) / 1000));
                     }
                 }
             }
@@ -135,23 +113,23 @@ namespace CairoEngine.Drivers
 
             //Apply Gravity in the Direction of the current Slope Angle, use the Slope Angle Percentage to find how much Gravity should be applied
             if (template.characterControllerProperties.features.slopeAlignment)
-                core.velocity = core.velocity.Lerp(Quaternion.Euler(rootTransform.eulerAngles + new Vector3(0, 180, 0)) * Physics.gravity, template.characterControllerProperties.airControl.fallRate);
+                core.scope.velocity = core.scope.velocity.Lerp(Quaternion.Euler(rootTransform.eulerAngles + new Vector3(0, 180, 0)) * Physics.gravity, template.characterControllerProperties.airControl.fallRate);
             else
-                core.velocity = core.velocity.Lerp(core.velocity + Physics.gravity, template.characterControllerProperties.airControl.fallRate);
+                core.scope.velocity = core.scope.velocity.Lerp(core.scope.velocity + Physics.gravity, template.characterControllerProperties.airControl.fallRate);
 
             if (onGround)
             {
-                if (core.velocity.y < 0)
+                if (core.scope.velocity.y < 0)
                 {
-                    core.velocity.y = 0;
+                    core.scope.velocity.y = 0;
                     //core.velocity.y *= groundSlopePercentage / 9;
                     //core.velocity.y--;
                 }
             }
 
-            core.velocity = new Vector3((float)Math.Round(core.velocity.x, 2), (float)Math.Round(core.velocity.y, 2), (float)Math.Round(core.velocity.z, 2));
+            core.scope.velocity = new Vector3((float)Math.Round(core.scope.velocity.x, 2), (float)Math.Round(core.scope.velocity.y, 2), (float)Math.Round(core.scope.velocity.z, 2));
 
-            core.Move(core.velocity * Time.deltaTime);
+            core.Move(core.scope.velocity * Time.deltaTime);
 
             //Update Pivot
             pivot.position = pivot.position.Lerp(characterController.transform.position, 0.95f);
@@ -224,7 +202,7 @@ namespace CairoEngine.Drivers
 
             public virtual void Enter()
             {
-                root.core.velocity.y = 1;
+                root.core.scope.velocity.y = 1;
                 waitTime = 0;
                 hangTime = 0;
                 sustain = false;
@@ -246,7 +224,7 @@ namespace CairoEngine.Drivers
                     root.onGround = false;
                 }
 
-                root.core.velocity.y += root.template.characterControllerProperties.motion.jumpStrength;
+                root.core.scope.velocity.y += root.template.characterControllerProperties.motion.jumpStrength;
 
                 UpdateStates();
                 UpdatePhysics();
@@ -264,13 +242,13 @@ namespace CairoEngine.Drivers
                     hangTime += Time.deltaTime;
                     sustain = false;
 
-                    if (hangTime > root.template.characterControllerProperties.modifiers.hangTime * 60 && root.core.velocity.y < -1)
+                    if (hangTime > root.template.characterControllerProperties.modifiers.hangTime * 60 && root.core.scope.velocity.y < -1)
                     {
                         SetState("Falling");
                     }
                 }
 
-                if (root.onGround && root.core.velocity.y < 0 && waited)
+                if (root.onGround && root.core.scope.velocity.y < 0 && waited)
                     SetState("Grounded");
             }
 
@@ -279,7 +257,7 @@ namespace CairoEngine.Drivers
 
                 if (waited)
                 {
-                    if (-0.2f < root.core.velocity.y && root.core.velocity.y > 0.5)
+                    if (-0.2f < root.core.scope.velocity.y && root.core.scope.velocity.y > 0.5)
                     {
                         if (sustain && sustainTime < root.template.characterControllerProperties.modifiers.jumpSustain * 60)
                         {
@@ -292,7 +270,7 @@ namespace CairoEngine.Drivers
                     }
                     else
                     {
-                        if (root.inputs["Jump"] < 0 && root.core.velocity.y < 0)
+                        if (root.inputs["Jump"] < 0 && root.core.scope.velocity.y < 0)
                             SetState("Falling");
                     }
                 }

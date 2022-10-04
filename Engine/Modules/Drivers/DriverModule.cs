@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using CairoEngine.Reflection;
+using NaughtyAttributes;
 
 namespace CairoEngine.Drivers
 {
@@ -31,6 +32,9 @@ namespace CairoEngine.Drivers
 
         public static DriverModule singleton;
 
+
+        [HideInInspector] public static DropdownList<string> driverTypes = null;
+
         [RuntimeInitializeOnLoadMethod]
         public static void Init()
         {
@@ -41,6 +45,21 @@ namespace CairoEngine.Drivers
 
             if (!singleton.initialize)
                 GameObject.Destroy(singletonObject);
+        }
+
+        public static DropdownList<string> ValidateDriverTypes()
+        {
+            if (driverTypes == null)
+            {
+                driverTypes = new DropdownList<string>();
+                Type[] DriverTypes = typeof(DriverTemplate).GetInheritedTypes();
+
+                foreach (Type type in DriverTypes)
+                {
+                    driverTypes.Add(type.Name, type.FullName);
+                }
+            }
+            return driverTypes;
         }
 
         /// <summary>
@@ -69,23 +88,23 @@ namespace CairoEngine.Drivers
                 driverCore = gameObject.AddComponent<DriverCore>();
 
             //Add the Driver to the Object's Driver List
-            if (!driverCore.states.ContainsKey(state))
-                driverCore.states.Add(state, new List<object>());
-            driverCore.states[state].Add(driverType);
+            if (!driverCore.properties.states.ContainsKey(state))
+                driverCore.properties.states.Add(state, new List<object>());
+            driverCore.properties.states[state].Add(driverType);
 
             //Set Driver Properties
             driverType.SetField("gameObject", gameObject);
             driverType.SetField("transform", gameObject.transform);
 
             //Get the Root Transform and Animator using the Paths in the Template, to child objects instanced with the Prefab
-            if (driverCore.template != null)
+            if (driverCore.properties.template != null)
             {
-                if (driverCore.template.rootPath != "")
-                    driverType.SetField("rootTransform", driverCore.transform.Find(driverCore.template.rootPath));
+                if (driverCore.properties.template.paths.rootPath != "")
+                    driverType.SetField("rootTransform", driverCore.transform.Find(driverCore.properties.template.paths.rootPath));
                 else
                     driverType.SetField("rootTransform", driverCore.transform);
-                if (driverCore.template.animatorPath != "")
-                    driverType.SetField("animator", driverCore.transform.Find(driverCore.template.animatorPath).gameObject.GetComponent<Animator>());
+                if (driverCore.properties.template.paths.animatorPath != "")
+                    driverType.SetField("animator", driverCore.transform.Find(driverCore.properties.template.paths.animatorPath).gameObject.GetComponent<Animator>());
                 else
                     driverType.SetField("animator", driverCore.GetComponent<Animator>());
             }
@@ -118,14 +137,14 @@ namespace CairoEngine.Drivers
             {
                 if (driver == "")
                 {
-                    foreach (object driverType in drivers[gameObject].states[drivers[gameObject].currentState])
+                    foreach (object driverType in drivers[gameObject].properties.states[drivers[gameObject].properties.currentState])
                     {
                         driverType.CallMethod(message, parameters);
                     }
                 }
                 else
                 {
-                    foreach (object driverType in drivers[gameObject].states[drivers[gameObject].currentState])
+                    foreach (object driverType in drivers[gameObject].properties.states[drivers[gameObject].properties.currentState])
                     {
                         if (((DriverTemplate)driverType.GetField("template")).driverProperties.main.ID == driver)
                         {
@@ -148,7 +167,7 @@ namespace CairoEngine.Drivers
         {
             GameObject selectedObject = cobject.gameObject;
 
-            foreach (object driver in cobject.states[cobject.currentState])
+            foreach (object driver in cobject.properties.states[cobject.properties.currentState])
             {
                 if (driver.GetType() == typeof(T))
                     return driver.CallMethod(message, parameters);
