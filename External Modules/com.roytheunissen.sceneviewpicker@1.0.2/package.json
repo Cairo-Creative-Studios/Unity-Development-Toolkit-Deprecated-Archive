@@ -1,0 +1,32 @@
+{
+  "name": "com.roytheunissen.sceneviewpicker",
+  "displayName": "Scene View Picker",
+  "version": "1.0.2",
+  "unity": "2019.1",
+  "description": "Extension that lets you assign any Object field by picking it from the scene view.",
+  "keywords": [
+    "scene view",
+    "sceneview",
+    "reference",
+    "field",
+    "picker",
+    "extension",
+    "object",
+    "assign",
+    "assignment"
+  ],
+  "author": {
+    "name": "Roy Theunissen",
+    "url": "https://www.roytheunissen.com"
+  },
+  "category": "editor extensions",
+  "homepage": "https://github.com/RoyTheunissen/Scene-View-Picker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoyTheunissen/Scene-View-Picker.git"
+  },
+  "bugs": "https://github.com/RoyTheunissen/Scene-View-Picker/issues",
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  }
+}

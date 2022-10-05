@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="Condition" src="project://database/Assets/Cairo%20Engine/Editor/Editors/EventSheetTemplates/ACES/Condition.uxml?fileID=9197481963319205126&amp;guid=2df98987d676967989cf894caaa41d02&amp;type=3#Condition" />
+    <ui:Template name="Actions" src="project://database/Assets/Cairo%20Engine/Editor/Editors/EventSheetTemplates/ACES/Actions.uxml?fileID=9197481963319205126&amp;guid=edd86e4ba1859031ebf33be395e233ea&amp;type=3#Actions" />
+    <ui:GroupBox name="Event" style="overflow: visible; align-items: auto; flex-direction: row; flex-wrap: nowrap; flex-grow: 0; flex-basis: auto; -unity-background-scale-mode: stretch-to-fill; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-top: 0; padding-bottom: 0;">
+        <ui:VisualElement name="Conditions" style="left: auto; width: -217px; right: auto; position: relative; align-items: auto; flex-direction: row; background-color: rgb(36, 74, 115); padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; -unity-background-scale-mode: stretch-to-fill; overflow: visible; flex-grow: 1; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;">
+            <ui:Instance template="Condition" name="Condition" style="width: 100%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Actions" style="left: auto; width: auto; align-items: auto; flex-direction: row; justify-content: flex-start; overflow: visible; background-color: rgba(255, 55, 0, 0.24); padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; max-width: none; min-width: auto; flex-wrap: nowrap; flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118);">
+            <ui:Instance template="Actions" name="Actions" />
+        </ui:VisualElement>
+    </ui:GroupBox>
+</ui:UXML>
