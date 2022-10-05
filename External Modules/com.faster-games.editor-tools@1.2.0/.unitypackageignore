@@ -1,9 +1,0 @@
-.git/
-.github/
-dist/
-Documentation~/
-node_modules/
-.gitignore
-.gitattributes
-.releaserc.json
-docfx.json
