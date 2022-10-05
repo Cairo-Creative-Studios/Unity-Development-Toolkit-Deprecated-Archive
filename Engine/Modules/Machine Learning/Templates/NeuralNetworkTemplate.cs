@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine.MachineLearning;
+using UDT.MachineLearning;
 
-namespace CairoEngine
+namespace UDT
 {
     [CreateAssetMenu(menuName = "Cairo Game/Machine Learning/Neural Network")]
     public class NeuralNetworkTemplate : ScriptableObject
@@ -20,7 +20,7 @@ namespace CairoEngine
         /// <summary>
         /// The amount of Neurons in each Layer of the Network
         /// </summary>
-        public List<int> neurons = new List<int>(){14,7};
+        public List<int> neurons = new List<int>() { 14, 7 };
         /// <summary>
         /// The Sensers to use for the Network
         /// </summary>

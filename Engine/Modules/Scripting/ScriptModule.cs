@@ -7,9 +7,9 @@
 
 using System;
 using System.Collections.Generic;
-using CairoEngine.Reflection;
+using UDT.Reflection;
 
-namespace CairoEngine.Scripting
+namespace UDT.Scripting
 {
     /// <summary>
     /// The Script Module uses an Event Sheet Scripting interface for constructing Gameplay Scenarios
@@ -43,7 +43,7 @@ namespace CairoEngine.Scripting
             string acesName = acesInstance.GetType().Name;
             List<Type> types = (List<Type>)acesInstance.GetField("types");
 
-            foreach(Type type in types)
+            foreach (Type type in types)
             {
                 switch (acesName.TokenAt(0, '_'))
                 {

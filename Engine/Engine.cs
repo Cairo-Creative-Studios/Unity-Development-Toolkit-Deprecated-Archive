@@ -18,20 +18,20 @@ using UnityEngine;
 using System.Reflection;
 using UnityEngine.SceneManagement;
 using B83.Unity.Attributes;
-using CairoEngine.Reflection;
+using UDT.Reflection;
 
 //Modules
-using CairoEngine.StateMachine;
-using CairoEngine.Controllers;
-using CairoEngine.Objects;
-using CairoEngine.Drivers;
-using CairoEngine.UI;
-using CairoEngine.MachineLearning;
-using CairoEngine.SaveSystem;
-using CairoEngine.InventoryManagement;
-using CairoEngine.Scripting;
+using UDT.StateMachine;
+using UDT.Controllers;
+using UDT.Objects;
+using UDT.Drivers;
+using UDT.UI;
+using UDT.MachineLearning;
+using UDT.SaveSystem;
+using UDT.InventoryManagement;
+using UDT.Scripting;
 
-namespace CairoEngine
+namespace UDT
 {
     /// <summary>
     /// The Engine class acts as a hub for all Components, Modules, and Objects. 
@@ -40,7 +40,7 @@ namespace CairoEngine
     public class Engine : MonoBehaviour
     {
         public delegate void InitializeEngine();
-        public static event InitializeEngine EngineInitialized; 
+        public static event InitializeEngine EngineInitialized;
 
         public static Engine singleton;
         /// <summary>
@@ -52,13 +52,7 @@ namespace CairoEngine
 
         public SDictionary<string, GameObject> enginePrefabs = new SDictionary<string, GameObject>();
 
-        public static RuntimeTemplate runtimeTemplate;
-
         public static bool started = false;
-        /// <summary>
-        /// The Runtime controls the overall flow of the Game by interacting with the Engine. 
-        /// </summary>
-        public Runtime runtime;
 
         /// <summary>
         /// Inialize the Game Engine.

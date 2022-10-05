@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using B83.Unity.Attributes;
 
-namespace CairoEngine.Controllers
+namespace UDT.Controllers
 {
     [CreateAssetMenu(menuName = "Cairo Game/Gameplay/Controller")]
     public class ControllerTemplate : ScriptableObject

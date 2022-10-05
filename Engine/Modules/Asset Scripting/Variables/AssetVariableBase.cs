@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine.Reflection;
+using UDT.Reflection;
 
-namespace CairoEngine.AssetScripting
+namespace UDT.AssetScripting
 {
     public class AssetVariableBase : ScriptableObject
     {

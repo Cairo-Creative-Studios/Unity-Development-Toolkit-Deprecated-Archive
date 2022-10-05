@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine;
-using CairoEngine.MachineLearning;
-using CairoEngine.MachineLearning.Sensers;
+using UDT;
+using UDT.MachineLearning;
+using UDT.MachineLearning.Sensers;
 using B83.Unity.Attributes;
 
-namespace CairoEngine.MachineLearning
+namespace UDT.MachineLearning
 {
     /// <summary>
     /// A base Senser class to use for 
@@ -36,7 +36,7 @@ namespace CairoEngine.MachineLearning
         /// <summary>
         /// Properties to pass to the Senser Script
         /// </summary>
-        public Dictionary<string,string> properties = new Dictionary<string, string>();
+        public Dictionary<string, string> properties = new Dictionary<string, string>();
         /// <summary>
         /// The Inputs used for the Senser
         /// </summary>

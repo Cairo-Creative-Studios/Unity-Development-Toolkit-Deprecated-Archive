@@ -3,11 +3,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine;
-using CairoEngine.MachineLearning;
-using CairoEngine.MachineLearning.Sensers.Children;
+using UDT;
+using UDT.MachineLearning;
+using UDT.MachineLearning.Sensers.Children;
 
-namespace CairoEngine.MachineLearning.Sensers
+namespace UDT.MachineLearning.Sensers
 {
     public class Senser_ShiftGrid : Senser
     {
@@ -75,22 +75,22 @@ namespace CairoEngine.MachineLearning.Sensers
             shift = shift % shiftGridInfo.blockSize;
 
             Vector3 shiftPosition = new Vector3();
-            shiftPosition.x = agentObject.transform.position.x - shiftGridInfo.blockSize/2 + shift/shiftGridInfo.blockSize;
-            shiftPosition.y = agentObject.transform.position.y - shiftGridInfo.blockSize/2 + shift/shiftGridInfo.blockSize;
-            shiftPosition.z = agentObject.transform.position.z - shiftGridInfo.blockSize/2 + shift/shiftGridInfo.blockSize;
+            shiftPosition.x = agentObject.transform.position.x - shiftGridInfo.blockSize / 2 + shift / shiftGridInfo.blockSize;
+            shiftPosition.y = agentObject.transform.position.y - shiftGridInfo.blockSize / 2 + shift / shiftGridInfo.blockSize;
+            shiftPosition.z = agentObject.transform.position.z - shiftGridInfo.blockSize / 2 + shift / shiftGridInfo.blockSize;
 
             return (double)shift;
         }
 
         void Check()
         {
-            int gridSize = shiftGridInfo.gridsize * shiftGridInfo.gridsize* shiftGridInfo.gridsize;
+            int gridSize = shiftGridInfo.gridsize * shiftGridInfo.gridsize * shiftGridInfo.gridsize;
             for (int i = 0; i < gridSize; i++)
             {
                 int collider = 0;
-                foreach(string colliderTag in shiftGridInfo.tags)
+                foreach (string colliderTag in shiftGridInfo.tags)
                 {
-                    if(colliderTag == gridUnits[i].collidingObject.tag)
+                    if (colliderTag == gridUnits[i].collidingObject.tag)
                     {
                         inputs[inputNames[GetGridInputName(i)]] = collider / shiftGridInfo.tags.Count;
                     }

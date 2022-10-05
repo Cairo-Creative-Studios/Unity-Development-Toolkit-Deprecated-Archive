@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using CairoEngine.MachineLearning;
-using CairoEngine.MachineLearning.Sensers;
+using UDT.MachineLearning;
+using UDT.MachineLearning.Sensers;
 
-namespace CairoEngine
+namespace UDT
 {
     public class NeuralNetworkBehaviour : MonoBehaviour
     {

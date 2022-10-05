@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using CairoEngine.Reflection;
+using UDT.Reflection;
 using System.Collections.Generic;
 
-namespace CairoEngine.AssetScripting
+namespace UDT.AssetScripting
 {
     [CreateAssetMenu(menuName = "Asset Scripting/Method")]
     public class AssetMethod : ScriptableObject
@@ -44,7 +44,7 @@ namespace CairoEngine.AssetScripting
         /// <param name="parameters">Parameters.</param>
         public object Call(object[] parameters = null)
         {
-            foreach(object instance in subscribers)
+            foreach (object instance in subscribers)
             {
                 return instance.CallMethod(method, parameters);
             }

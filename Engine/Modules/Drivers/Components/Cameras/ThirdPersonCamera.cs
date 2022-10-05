@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [Serializable]
     public class ThirdPersonCamera : Driver<DriverTemplate_ThirdPersonCamera>

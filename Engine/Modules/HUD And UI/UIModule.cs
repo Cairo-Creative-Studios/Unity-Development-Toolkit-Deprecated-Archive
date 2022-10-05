@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 using System.Reflection;
 using NaughtyAttributes;
 
-namespace CairoEngine.UI
+namespace UDT.UI
 {
     /// <summary>
     /// Controls Display of User Interfaces, with many tools for simplifying display of Information. 
@@ -59,9 +59,9 @@ namespace CairoEngine.UI
         {
             GameObject singletonObject = new GameObject();
             singleton = singletonObject.AddComponent<UIModule>();
-            GameObject uiContainer = GameObject.Instantiate(singleton.UIContainerPrefab);
+            GameObject uiContainer = Instantiate(singleton.UIContainerPrefab);
             singleton.root = uiContainer.GetComponent<UIDocument>().rootVisualElement;
-            GameObject.DontDestroyOnLoad(singletonObject);
+            DontDestroyOnLoad(singletonObject);
             singleton.name = "UI Module";
         }
 
@@ -94,30 +94,9 @@ namespace CairoEngine.UI
             //Destroy all the Camera Overlays
             foreach (GameObject overlay in overlays)
             {
-                GameObject.Destroy(overlay);
+                Destroy(overlay);
             }
-            //Clear the UXML Root
-            //root = new VisualElement();
-
-            ////Empty the current Binds list
-            //binds = new List<ElementBind>();
         }
-
-        /// <summary>
-        /// Binds a class's field to an Element's property
-        /// </summary>
-        /// <param name="boundClass">Bound class.</param>
-        /// <param name="field">The name of the Field to Bind</param>
-        /// <param name="elementName">The Element to Bind to</param>
-        /// <param name="property">The Element's Property</param>
-        //public static void Bind(object boundClass, string field, string elementName, PropertyType property)
-        //{
-        //    //Get the Element from the current Visual Element Tree
-        //    //VisualElement element = root.Q<VisualElement>(elementName);
-
-        //    //Add the bind to the bind List
-        //    //binds.Add(new ElementBind(boundClass, field, element, property));
-        //}
 
         /// <summary>
         /// Sets the user interface to the Specified UI Object
@@ -199,7 +178,7 @@ namespace CairoEngine.UI
         /// Renders the given UI Information from the UI Template, and returns an Object Array of all the elements that will have to be Discarded when disabling the UI
         /// </summary>
         /// <returns>The user interface.</returns>
-        /// <param name="UI">User interface.</param>
+        /// <param name="item">The UI Item to Render</param>
         public static VisualElement[] RenderUI(UIItem item)
         {
             List<VisualElement> elements = new List<VisualElement>();
@@ -231,7 +210,7 @@ namespace CairoEngine.UI
         /// <summary>
         /// Destroy the given UI Items
         /// </summary>
-        /// <param name="elements">Elements.</param>
+        /// <param name="items">The UI Items to Destroy.</param>
         public static void DestroyUI(List<UIItem> items)
         {
             foreach (UIItem item in items)

@@ -2,7 +2,7 @@
 
 using UnityEngine.SceneManagement;
 
-namespace CairoEngine.Scripting
+namespace UDT.Scripting
 {
     /// <summary>
     /// Picks all Game Objects within the Scene

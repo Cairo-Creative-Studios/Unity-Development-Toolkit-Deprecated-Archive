@@ -3,11 +3,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine.Reflection;
-using CairoEngine.AssetScripting;
+using UDT.Reflection;
+using UDT.AssetScripting;
 using NaughtyAttributes;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     /// <summary>
     /// The Driver Driver MonoDriver is a Controller of other Components/MonoDrivers that have been attached to a Game Object. 
@@ -210,12 +210,12 @@ namespace CairoEngine.Drivers
         /// Ensures that the Component Property is Valid, and Returns it.
         /// </summary>
         /// <returns>The component property.</returns>
-        /// <param name="name">Name.</param>
-        /// <param name="path">Path.</param>
-        /// <param name="component">Component.</param>
-        public object ValidateComponentProperty(string name, string path, Type value)
+        /// <param name="name">The Name of the Component Property.</param>
+        /// <param name="path">The Path to the Component within the Hierarchy of the Game Object.</param>
+        /// <param name="type">The Type of the Component that the Property will be Set to</param>
+        public object ValidateComponentProperty(string name, string path, Type type)
         {
-            return core.ValidateComponentProperty(name, path, value);
+            return core.ValidateComponentProperty(name, path, type);
         }
 
         /// <summary>

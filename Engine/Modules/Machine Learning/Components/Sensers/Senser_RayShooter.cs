@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine;
-using CairoEngine.MachineLearning;
+using UDT;
+using UDT.MachineLearning;
 
-namespace CairoEngine.MachineLearning.Sensers
+namespace UDT.MachineLearning.Sensers
 {
     public class Senser_RayShooter : Senser
     {

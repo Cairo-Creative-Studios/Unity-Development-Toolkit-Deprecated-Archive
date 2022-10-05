@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Action/APin", fileName = "[DRIVER] Pin")]
     public class DriverTemplate_Pin : DriverTemplate
@@ -26,7 +26,7 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.AudoSource";
+            this.driverProperties.main.driverClass = "UDT.Drivers.AudoSource";
             SetScriptingEvents("Played,Stopped".TokenArray());
         }
     }

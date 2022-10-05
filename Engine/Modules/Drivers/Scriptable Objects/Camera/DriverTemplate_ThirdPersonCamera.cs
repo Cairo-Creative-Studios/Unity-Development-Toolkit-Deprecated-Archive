@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using CairoEngine;
+using UDT;
 using Cinemachine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Cameras/Third Person", fileName = "[DRIVER] Third Person Camera")]
     public class DriverTemplate_ThirdPersonCamera : DriverTemplate
@@ -16,7 +16,7 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.ThirdPersonCamera";
+            this.driverProperties.main.driverClass = "UDT.Drivers.ThirdPersonCamera";
 
             SetInputTranslation(new string[] { "XAxis", "YAxis" }, new string[] { "LookHorizontal", "LookVertical" });
 

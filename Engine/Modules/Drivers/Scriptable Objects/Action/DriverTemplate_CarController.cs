@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine;
+using UDT;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Action/Car Controller", fileName = "[DRIVER] Car Controller")]
     public class DriverTemplate_CarController : DriverTemplate
@@ -21,7 +21,7 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.CarController";
+            this.driverProperties.main.driverClass = "UDT.Drivers.CarController";
             SetInputTranslation(new string[] { "Steer", "Accel", "Brake" }, new string[] { "Driver_MoveHorizontal", "Driver_LeftZAxis", "Driver_RightZAxis" });
             SetScriptingEvents("Accelerate, Brake, Stopped, Hit".TokenArray());
         }

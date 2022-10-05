@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine.Objects
+namespace UDT.Objects
 {
     [CreateAssetMenu(menuName = "Cairo Game/Object")]
     public class ObjectTemplate : ScriptableObject

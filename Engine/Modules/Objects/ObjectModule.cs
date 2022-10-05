@@ -8,14 +8,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine.Objects
+namespace UDT.Objects
 {
     /// <summary>
     /// The Object Module interfaces with Cairo Objects, and enables simple creation of complex Objects within the game, with very little input from the user. Using Scriptable Objects, the Toolkit can be used to create pretty much any kind of Gameplay scenario without any code at all.
     /// </summary>
     public class ObjectModule : MonoBehaviour
     {
-		public bool initialize = true;
+        public bool initialize = true;
         /// <summary>
         /// The Object Module Singleton
         /// </summary>
@@ -34,7 +34,7 @@ namespace CairoEngine.Objects
         /// The Game Objects that have been added to the Spawn Pool
         /// </summary>
         [Tooltip("The Spawn Pools controlled by the Object Module")]
-        [SerializeField] private Dictionary<string,Queue<GameObject>> spawnPool = new Dictionary<string,Queue<GameObject>>();
+        [SerializeField] private Dictionary<string, Queue<GameObject>> spawnPool = new Dictionary<string, Queue<GameObject>>();
         /// <summary>
         /// Tags for Objects that have been created with Object Extensions
         /// </summary>
@@ -57,10 +57,10 @@ namespace CairoEngine.Objects
             GameObject singletonObject = new GameObject();
             singleton = singletonObject.AddComponent<ObjectModule>();
             singletonObject.name = "Cairo Object Module";
-            GameObject.DontDestroyOnLoad(singletonObject);
-			if (!singleton.initialize)
-				GameObject.Destroy(singletonObject);
-		}
+            DontDestroyOnLoad(singletonObject);
+            if (!singleton.initialize)
+                Object.Destroy(singletonObject);
+        }
 
         #region Objects
         ///<summary>
@@ -157,7 +157,6 @@ namespace CairoEngine.Objects
                     spawnedObject.transform.position = spawner.position;
                     spawnedObject.transform.eulerAngles = spawner.eulerAngles;
                     ObjectExtension objectBehaviour = spawnedObject.AddComponent<ObjectExtension>();
-                    objectBehaviour.template = template;
                     objectBehaviour.poolID = template.poolID;
                     return spawnedObject;
                 }
@@ -175,43 +174,10 @@ namespace CairoEngine.Objects
             string ID = gameObject.GetComponent<ObjectExtension>().poolID;
 
             if (!singleton.spawnPool.ContainsKey(ID))
-                singleton.spawnPool.Add(ID,new Queue<GameObject>());
+                singleton.spawnPool.Add(ID, new Queue<GameObject>());
 
             singleton.spawnPool[ID].Enqueue(gameObject);
             gameObject.SetActive(false);
-        }
-
-        /// <summary>
-        /// Activates the tags.
-        /// </summary>
-        /// <param name="instance">Instance.</param>
-        public static void ActivateTags(ObjectExtension instance)
-        {
-            foreach(string tag in instance.template.tags)
-            {
-                if (singleton.activeTags.ContainsKey(tag))
-                {
-                    if (!singleton.activeTags[tag].Contains(instance))
-                        singleton.activeTags[tag].Add(instance);
-                }
-                else
-                {
-                    singleton.activeTags.Add(tag, new List<ObjectExtension>());
-                    singleton.activeTags[tag].Add(instance);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the Object from Active Tags
-        /// </summary>
-        /// <param name="instance">Instance.</param>
-        public static void RemoveTags(ObjectExtension instance)
-        {
-            foreach(string tag in instance.template.tags)
-            {
-                singleton.activeTags[tag].Remove(instance);
-            }
         }
     }
 }

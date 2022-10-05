@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine;
+using UDT;
 
-namespace CairoEngine.MachineLearning.Sensers
+namespace UDT.MachineLearning.Sensers
 {
     /// <summary>
     /// The Behaviour of the Object's Senser
@@ -19,7 +19,7 @@ namespace CairoEngine.MachineLearning.Sensers
         /// <summary>
         /// The index/value of the Inputs within the Neural Network
         /// </summary>
-        [ReadOnly] public SDictionary<int,double> inputs = new SDictionary<int, double>();
+        [ReadOnly] public SDictionary<int, double> inputs = new SDictionary<int, double>();
         /// <summary>
         /// The Inputs along with their names
         /// </summary>
@@ -40,7 +40,7 @@ namespace CairoEngine.MachineLearning.Sensers
         void Update()
         {
             life++;
-            if((life%template.updateDelay) == 0)
+            if ((life % template.updateDelay) == 0)
             {
                 Sense();
                 SetInputs();
@@ -72,7 +72,7 @@ namespace CairoEngine.MachineLearning.Sensers
             double[][] curInputs = agentNetwork.GetInput();
 
             //Loop through the Current Inputs and Update the Inputs belonging to this Senser
-            for(int i = 0; i < curInputs.Length; i++)
+            for (int i = 0; i < curInputs.Length; i++)
             {
                 //If the Input belongs to this senser, set it to the Senser's Input Value
                 if (inputs.ContainsKey(i))

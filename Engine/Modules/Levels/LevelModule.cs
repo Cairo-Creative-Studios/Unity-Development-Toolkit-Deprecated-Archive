@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CairoEngine
+namespace UDT
 {
     /// <summary>
     /// The Level Manager is a layer on top of Scene Management that allows you to spawn and manipulate the Scene as a whole. Levels are also used for Level Streaming, Saving and Loading Level States, and Level specific objects like Spawners.

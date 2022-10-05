@@ -2,11 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using CairoEngine.InventoryManagement;
+using UDT.InventoryManagement;
 using Homebrew;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [Serializable]
     public class InventoryItem : Driver<DriverTemplate_InventoryItem>

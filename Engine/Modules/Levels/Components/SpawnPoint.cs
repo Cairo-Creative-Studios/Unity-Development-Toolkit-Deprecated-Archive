@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     public class SpawnPoint : MonoBehaviour
     {

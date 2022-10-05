@@ -7,18 +7,18 @@
 
 using System;
 using System.Collections.Generic;
-using CairoEngine.MachineLearning;
-using CairoEngine.MachineLearning.Sensers;
+using UDT.MachineLearning;
+using UDT.MachineLearning.Sensers;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     /// <summary>
     /// The Machine Learning Module simplifies the creation and manipulation of Machine Learning Agents, allowing them to be used with very little input from the user by modularizing Training Data and mapping it to the rest of the Toolkit. Despite it's surface level simiplicity, it comes with a ton of features, and can be used for any application.
     /// </summary>
     public class MLModule : MonoBehaviour
     {
-		public bool initialize = false;
+        public bool initialize = false;
 
         //Specimen information
         private static Dictionary<string, GenePool> genePools = new Dictionary<string, GenePool>();
@@ -39,7 +39,7 @@ namespace CairoEngine
             List<NeuralNetworkTemplate> neuralNetworkInfosList = new List<NeuralNetworkTemplate>();
             neuralNetworkInfosList.AddRange(Resources.LoadAll<NeuralNetworkTemplate>(""));
 
-            foreach(NeuralNetworkTemplate info in neuralNetworkInfosList)
+            foreach (NeuralNetworkTemplate info in neuralNetworkInfosList)
             {
                 genePools.Add(info.ID, new GenePool(info));
             }
@@ -47,13 +47,13 @@ namespace CairoEngine
             //Create the Machine Learning Module Singleton
             GameObject singletonObject = new GameObject();
             singleton = singletonObject.AddComponent<MLModule>();
-			singleton.name = "Machine Learning Module";
+            singleton.name = "Machine Learning Module";
 
             GameObject.DontDestroyOnLoad(singletonObject);
 
-			if (!singleton.initialize)
-				GameObject.Destroy(singletonObject);
-		}
+            if (!singleton.initialize)
+                GameObject.Destroy(singletonObject);
+        }
 
         /// <summary>
         /// Update the Machine Learning Module
@@ -61,10 +61,10 @@ namespace CairoEngine
         public void Update()
         {
             //Loop through all the Neural Networks and Update them.
-            foreach(GenePool pool in genePools.Values)
+            foreach (GenePool pool in genePools.Values)
             {
                 int i = 0;
-                foreach(NeuralNetwork network in pool.networks)
+                foreach (NeuralNetwork network in pool.networks)
                 {
                     //Update the Network and increase it's Lifespan
                     network.Update();
@@ -89,11 +89,11 @@ namespace CairoEngine
 
                         //Loop through the Info's Generated List of Inputs and Add them to the Neural Network Behaviour's List of Inputs
                         int j = 0;
-                        foreach(string key in pool.info.tempInputs)
+                        foreach (string key in pool.info.tempInputs)
                         {
                             //Set the value of the selected Input in the Dictionary to the Network's Input value
                             objectBehaviour.inputs.Add(key, inputs[j][0]);
-                            if(j < pool.info.tempInputs.Count-2)
+                            if (j < pool.info.tempInputs.Count - 2)
                                 j++;
                         }
                         j = 0;
@@ -159,7 +159,7 @@ namespace CairoEngine
                 SetupNetworkObject(info, network, networkObject, behaviour);
 
             //Return the Created Network
-            return genePools[NetworkID].networks[genePools[NetworkID].networks.Count-1];
+            return genePools[NetworkID].networks[genePools[NetworkID].networks.Count - 1];
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace CairoEngine
         {
             //Network Object Properties
             GameObject networkObject = GameObject.Instantiate(info.prefab);
-            
+
             NeuralNetworkBehaviour behaviour = networkObject.AddComponent<NeuralNetworkBehaviour>();
 
             //If the Object has sensers
@@ -179,7 +179,7 @@ namespace CairoEngine
             {
                 //Clear the Temporary Inputs and Add the user defined Variable Inputs
                 info.tempInputs.Clear();
-                info.tempInputs.AddRange(info.variableInputs.GetRange(0,info.variableInputs.Count));
+                info.tempInputs.AddRange(info.variableInputs.GetRange(0, info.variableInputs.Count));
 
                 //Loop through all the Senser Templates to add them to the Object
                 foreach (SenserTemplate senserInfo in info.sensers)
@@ -211,7 +211,7 @@ namespace CairoEngine
                         senserBehaviour.inputs.Add(info.tempInputs.Count, 0.0);
                         //Add the Senser Behaviour to the Senser's Input Names List with it's index in the Network Info's Temp Inputs List 
                         senserBehaviour.inputNames.Add(recievedInputs[i], info.tempInputs.Count);
-                    
+
                         //FINAL NOTE: This system allows Named Inputs to be added to the Network and Senser independently to set Input values by name.
                     }
                 }
@@ -257,7 +257,7 @@ namespace CairoEngine
             List<double> inputList = new List<double>();
             inputList.AddRange(currentInputs);
 
-            foreach(SenserTemplate senserInfo in network.info.sensers)
+            foreach (SenserTemplate senserInfo in network.info.sensers)
             {
 
             }
@@ -272,7 +272,7 @@ namespace CairoEngine
         public static void Kill(NeuralNetwork network)
         {
             genePools[network.info.ID].networks.Remove(network);
-            if(network.gameObject != null)
+            if (network.gameObject != null)
             {
                 GameObject.Destroy(network.gameObject);
             }

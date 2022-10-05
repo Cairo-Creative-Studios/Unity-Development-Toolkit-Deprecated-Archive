@@ -52,10 +52,11 @@ namespace RVP
 
         void OnEnable()
         {
-            CairoEngine.Engine.flags.Add("CarSimStarted");
+            UDT.Engine.flags.Add("CarSimStarted");
         }
 
-        void Start() {
+        void Start()
+        {
             initialFixedTime = Time.fixedDeltaTime;
             // Set static variables
             wheelCastMaskStatic = wheelCastMask;
@@ -69,10 +70,13 @@ namespace RVP
             tireFadeTimeStatic = tireFadeTime;
         }
 
-        void Update() {
+        void Update()
+        {
             // Quickly restart scene with a button press
-            if (quickRestart) {
-                if (Input.GetButtonDown("Restart")) {
+            if (quickRestart)
+            {
+                if (Input.GetButtonDown("Restart"))
+                {
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                     Time.timeScale = 1;
                     Time.fixedDeltaTime = initialFixedTime;
@@ -80,7 +84,8 @@ namespace RVP
             }
         }
 
-        void FixedUpdate() {
+        void FixedUpdate()
+        {
             // Set global up direction
             worldUpDir = Physics.gravity.sqrMagnitude == 0 ? Vector3.up : -Physics.gravity.normalized;
         }

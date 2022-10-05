@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CairoEngine.StateMachine
+namespace UDT.StateMachine
 {
     public class StateMachineComponent : MonoBehaviour
     {

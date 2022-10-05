@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     /// <summary>
     /// Teams can represent individual teams in a Multiplayer game, or the Player's friends and Enemies in singleplayer.

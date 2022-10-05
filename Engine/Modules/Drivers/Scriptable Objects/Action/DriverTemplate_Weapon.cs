@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Action/AWeapon", fileName = "[DRIVER] Weapon")]
     public class DriverTemplate_Weapon : DriverTemplate
@@ -89,7 +89,7 @@ namespace CairoEngine.Drivers
         private void OnEnable()
         {
             //Set Default Class
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.Weapon";
+            this.driverProperties.main.driverClass = "UDT.Drivers.Weapon";
 
             //Set Default Input
             SetInputTranslation(new string[] { "Shoot" }, new string[] { "Shoot" });

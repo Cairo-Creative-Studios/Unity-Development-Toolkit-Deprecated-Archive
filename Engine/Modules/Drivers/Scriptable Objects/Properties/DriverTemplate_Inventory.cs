@@ -2,7 +2,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Properties/Inventory", fileName = "[DRIVER] Inventory")]
     public class DriverTemplate_Inventory : DriverTemplate
@@ -15,7 +15,7 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.Inventory";
+            this.driverProperties.main.driverClass = "UDT.Drivers.Inventory";
             SetScriptingEvents("Pickup,Putdown".TokenArray());
         }
     }

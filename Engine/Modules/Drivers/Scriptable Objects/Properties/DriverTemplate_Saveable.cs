@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Properties/Saveable", fileName = "[DRIVER] Saveable")]
     public class DriverTemplate_Saveable : DriverTemplate
@@ -18,7 +18,7 @@ namespace CairoEngine.Drivers
         //Initialize the Behaviour Class for this Behaviour
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.Saveable";
+            this.driverProperties.main.driverClass = "UDT.Drivers.Saveable";
         }
     }
 }

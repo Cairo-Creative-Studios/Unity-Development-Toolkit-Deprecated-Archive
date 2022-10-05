@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     [CreateAssetMenu(menuName = "Cairo Game/Input Map")]
     public class InputMap : ScriptableObject
     {
         public string mapID = "Default Input";
-        public SDictionary<string,Input> inputs = new SDictionary<string, Input>();
+        public SDictionary<string, Input> inputs = new SDictionary<string, Input>();
     }
 }

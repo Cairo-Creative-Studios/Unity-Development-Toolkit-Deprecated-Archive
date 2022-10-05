@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CairoEngine.Scripting;
+using UDT.Scripting;
 
 [CustomEditor(typeof(EventSheet), true)]
 public class EventSheetEditor : EditorWindow
@@ -71,14 +71,14 @@ public class EventSheetEditor : EditorWindow
         // Each editor window contains a root VisualElement object
         root = contentTemplate.Instantiate();
         root = root[0];
-        root.RegisterCallback<MouseDownEvent, object[]>(ElementClicked, new object[] {  });
+        root.RegisterCallback<MouseDownEvent, object[]>(ElementClicked, new object[] { });
         rootVisualElement.Add(root);
         //contentContainer = blockTemplate.Instantiate();
         //root.Add(contentContainer);
     }
 
     void OnGUI()
-    {   
+    {
         e = Event.current;
         mousePosition = e.mousePosition;
 
@@ -95,8 +95,8 @@ public class EventSheetEditor : EditorWindow
     /// <param name="type">Type.</param>
     VisualElement CreateElement(ElementType type, VisualElement parent)
     {
-        VisualElement createdElement=null;
-        
+        VisualElement createdElement = null;
+
         //Run Initialization Code for each created Element
         switch (type)
         {
@@ -136,7 +136,7 @@ public class EventSheetEditor : EditorWindow
     /// <param name="parameters">Parameters Passed with the Callback.</param>
     void ElementClicked(MouseDownEvent evt, object[] parameters)
     {
-        if(evt.button == 1)
+        if (evt.button == 1)
         {
             ShowContext((VisualElement)evt.target);
         }
@@ -175,7 +175,7 @@ public class EventSheetEditor : EditorWindow
                 {
                     selectedElement = selectedElement.parent;
                 }
-                if(selectedElement != root)
+                if (selectedElement != root)
                     return selectedElement;
             }
         }

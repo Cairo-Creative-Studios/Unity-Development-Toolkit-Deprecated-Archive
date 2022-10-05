@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Properties/Damageable", fileName = "[DRIVER] Damageable")]
     public class DriverTemplate_Damageable : DriverTemplate
@@ -32,7 +32,7 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.Damageable";
+            this.driverProperties.main.driverClass = "UDT.Drivers.Damageable";
 
             SetScriptingEvents("Hit,HealthDepleted".TokenArray());
         }

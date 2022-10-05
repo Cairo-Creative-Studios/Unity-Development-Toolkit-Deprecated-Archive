@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [Serializable]
     public class Weapon : Driver<DriverTemplate_Weapon>
@@ -89,7 +89,7 @@ namespace CairoEngine.Drivers
             if (!template.customFireState)
                 canShoot = true;
 
-            if (inputs["Shoot"] > 0&&canShoot&&ammo>0)
+            if (inputs["Shoot"] > 0 && canShoot && ammo > 0)
             {
                 if (cooldown > template.fireRate * 60)
                 {
@@ -103,9 +103,9 @@ namespace CairoEngine.Drivers
                         projectile = GameObject.Instantiate(template.projectile);
                     }
 
-                    if(projectile != null)
+                    if (projectile != null)
                     {
-                        if(!template.attached)
+                        if (!template.attached)
                             projectile.transform.position = muzzle.position;
 
                         projectile.transform.rotation = muzzle.rotation;

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoData
+namespace UDT.Data
 {
     [Serializable]
     public class Node<T>
@@ -31,7 +31,7 @@ namespace CairoData
             foreach (int i in index)
             {
                 hiearchy.Add(lastNode);
-                if(lastNode.parent != null)
+                if (lastNode.parent != null)
                     lastNode = lastNode.parent;
             }
 
@@ -43,7 +43,7 @@ namespace CairoData
             Node<T>[] hiearchy = GetHiearchy();
             List<T> values = new List<T>();
 
-            for(int i = hiearchy.Length - 1; i > -1; i--)
+            for (int i = hiearchy.Length - 1; i > -1; i--)
             {
                 values.Add(hiearchy[i].value);
             }

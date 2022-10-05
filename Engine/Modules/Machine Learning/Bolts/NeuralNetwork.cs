@@ -3,13 +3,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoEngine.MachineLearning;
+using UDT.MachineLearning;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
 using System.Linq;
 using NMatrix;
 
-namespace CairoEngine.MachineLearning
+namespace UDT.MachineLearning
 {
     public class NeuralNetwork
     {
@@ -45,7 +45,7 @@ namespace CairoEngine.MachineLearning
 
             if (info.tempInputs.Count == 0)
             {
-                Debug.LogWarning("The input List for "+info.ID+" is empty. A Neural Network can't be Created with an empty Input List.");
+                Debug.LogWarning("The input List for " + info.ID + " is empty. A Neural Network can't be Created with an empty Input List.");
             }
 
             if (info.tempInputs.Count == 0)
@@ -76,7 +76,7 @@ namespace CairoEngine.MachineLearning
             //Apply the Info for this Network
             this.info = firstParent.info;
             //Keep track of the Network's Generation
-            this.generation = firstParent.generation+1;
+            this.generation = firstParent.generation + 1;
             Debug.Log("New Child " + generation);
 
             //Set the Size of the Input and Output Matrices to the Size of the Info's I/O Lists
@@ -92,7 +92,7 @@ namespace CairoEngine.MachineLearning
             //Pass on Neurons randomly from the two Parents
             for (int i = 0; i < _neuralNetwork.Layers.Length; i++)
             {
-                for(int j = 0; j < _neuralNetwork.Layers[i].Neurons.Length; j++)
+                for (int j = 0; j < _neuralNetwork.Layers[i].Neurons.Length; j++)
                 {
                     if (UnityEngine.Random.Range(0, 1) > 0.5)
                         _neuralNetwork.Layers[i].Neurons[j] = firstParent._neuralNetwork.Layers[i].Neurons[j];
@@ -134,7 +134,7 @@ namespace CairoEngine.MachineLearning
             //Compute the current Inputs of the Network
             Compute(inputs.GetColumnArray(0));
 
-            if(trained)
+            if (trained)
                 _neuralTeacher.RunEpoch(trainingInputs.ToArray(), trainingOutputs.ToArray());
         }
 

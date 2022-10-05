@@ -2,10 +2,10 @@
 
 using System;
 using UnityEngine;
-using CairoEngine;
-using CairoEngine.MachineLearning;
+using UDT;
+using UDT.MachineLearning;
 
-namespace CairoEngine.MachineLearning.Sensers.Children
+namespace UDT.MachineLearning.Sensers.Children
 {
     public class GridUnit : MonoBehaviour
     {

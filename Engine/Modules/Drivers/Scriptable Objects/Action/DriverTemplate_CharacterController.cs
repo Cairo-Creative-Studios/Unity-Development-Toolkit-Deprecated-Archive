@@ -2,11 +2,11 @@
 
 using System;
 using UnityEngine;
-using CairoEngine;
+using UDT;
 using System.Collections.Generic;
 using NaughtyAttributes;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Action/Character Controller", fileName = "[DRIVER] Character Controller")]
     public class DriverTemplate_CharacterController : DriverTemplate
@@ -184,7 +184,7 @@ namespace CairoEngine.Drivers
         private void OnEnable()
         {
             //Set Default Class
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.CharacterController";
+            this.driverProperties.main.driverClass = "UDT.Drivers.CharacterController";
 
             //Set Default Inputs
             SetInputTranslation(new string[] { "Horizontal", "Vertical", "Jump" }, new string[] { "MoveHorizontal", "MoveVertical", "Jump" });

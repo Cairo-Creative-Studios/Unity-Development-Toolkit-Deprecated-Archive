@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using CairoEngine.Reflection;
-using CairoEngine.Drivers;
+using UDT.Reflection;
+using UDT.Drivers;
 using NaughtyAttributes;
 using UnityEngine;
 using System.Reflection;
 
-namespace CairoEngine.AssetScripting
+namespace UDT.AssetScripting
 {
     /// <summary>
     /// The Asset Script Linker accesses the Members of MonoBehaviours attached to the Game Object it is also attached to, in order to connect Asset Variables and Methods with the Members within the Behaviour
@@ -50,41 +50,27 @@ namespace CairoEngine.AssetScripting
             DropdownList<string> monoBehaviourList = new DropdownList<string>();
             monoBehaviourList.Add("null", "null");
 
-            try
+            if (gameObject != null)
             {
-                if (gameObject != null)
+                MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
+                foreach (MonoBehaviour behaviour in monoBehaviours)
                 {
-                    MonoBehaviour[] monoBehaviours = gameObject.GetComponents<MonoBehaviour>();
-                    foreach (MonoBehaviour behaviour in monoBehaviours)
-                    {
-                        monoBehaviourList.Add(behaviour.GetType().FullName.TokenAt(behaviour.GetType().FullName.TokenCount('.') - 1, '.'), behaviour.GetType().FullName);
-                    }
+                    monoBehaviourList.Add(behaviour.GetType().FullName.TokenAt(behaviour.GetType().FullName.TokenCount('.') - 1, '.'), behaviour.GetType().FullName);
+                }
 
-                    DriverCore driverCore = gameObject.GetComponent<DriverCore>();
-                    DriverCoreTemplate template = driverCore?.properties.template;
-                    if (template != null)
+                DriverCore driverCore = gameObject.GetComponent<DriverCore>();
+                DriverCoreTemplate template = driverCore?.properties.template;
+                if (template != null)
+                {
+                    foreach (string state in template.states.Keys)
                     {
-                        foreach (string state in template.states.Keys)
+                        foreach (ExpandableDriverTemplate driver in template.states[state].drivers)
                         {
-                            foreach (ExpandableDriverTemplate driver in template.states[state].drivers)
-                            {
-                                try
-                                {
-                                    if (driver.template != null)
-                                        monoBehaviourList.Add("Driver Component, " + driver.template.driverProperties.main.driverClass.TokenAt(driver.template.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.template.driverProperties.main.driverClass);
-                                }
-                                catch
-                                {
-                                    //
-                                }
-                            }
+                            if (driver.template != null)
+                                monoBehaviourList.Add("Driver Component, " + driver.template.driverProperties.main.driverClass.TokenAt(driver.template.driverProperties.main.driverClass.TokenCount('.') - 1, '.'), driver.template.driverProperties.main.driverClass);
                         }
                     }
                 }
-            }
-            catch
-            {
-                //
             }
 
             return monoBehaviourList;
@@ -105,9 +91,9 @@ namespace CairoEngine.AssetScripting
 
                 if (fieldInfos != null && fieldInfos.Length > 0)
                 {
-                    foreach (FieldInfo field in fieldInfos)
+                    foreach (FieldInfo fieldInfo in fieldInfos)
                     {
-                        fieldList.Add(field.Name, field.Name);
+                        fieldList.Add(fieldInfo.Name, fieldInfo.Name);
                     }
                 }
             }
@@ -127,7 +113,8 @@ namespace CairoEngine.AssetScripting
             }
             catch
             {
-                //
+                //"Empty general catch clause suppresses any error"
+                //Yes, that was the point
             }
         }
     }

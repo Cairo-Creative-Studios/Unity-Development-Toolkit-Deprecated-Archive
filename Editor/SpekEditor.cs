@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace CairoEngine
+namespace UDT
 {
     [InitializeOnLoad]
     public class Editor

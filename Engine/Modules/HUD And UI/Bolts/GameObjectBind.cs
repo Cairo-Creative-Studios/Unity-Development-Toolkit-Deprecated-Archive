@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using B83.Unity.Attributes;
 
-namespace CairoEngine.UI
+namespace UDT.UI
 {
     /// <summary>
     /// Binds a field within a Game Object to a Property of a UI Element.

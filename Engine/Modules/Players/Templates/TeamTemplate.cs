@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     [CreateAssetMenu(menuName = "Cairo Game/Gameplay/Team Template")]
     public class TeamTemplate : ScriptableObject

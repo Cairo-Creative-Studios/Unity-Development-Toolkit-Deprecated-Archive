@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CairoData;
+using UDT.Data;
 
-namespace CairoEngine.StateMachine
+namespace UDT.StateMachine
 {
     [Serializable]
     public class Machine

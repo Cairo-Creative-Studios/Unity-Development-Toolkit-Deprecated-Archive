@@ -6,55 +6,55 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoData;
-using CairoEngine.StateMachine;
-using CairoEngine.Reflection;
+using UDT.Data;
+using UDT.StateMachine;
+using UDT.Reflection;
 
-namespace CairoEngine
+namespace UDT.StateMachine
 {
     /// <summary>
     /// The State Machine Modules allows Hierarchical, Class Based State Machines to be constructed within any class. The Module handles Method calls within the Nested State Class Instances that are generated for Scripts that are State Machine Enabled.
     /// </summary>
     public class StateMachineModule : MonoBehaviour
     {
-        	/// <summary>
-        	/// All the Machines in the State Machine Module
-        	/// </summary>
-		[Tooltip("All the State Machines that have been created with the State Machine Module")]
-        	private List<Machine> machines = new List<Machine>();
-		/// <summary>
-		/// All the State Machine Components that have been created with the State Machine Module
-		/// </summary>
-		[Tooltip("All the State Machine Components that have been created with the State Machine Module")]
-        	private List<StateMachineComponent> components = new List<StateMachineComponent>();
+        /// <summary>
+        /// All the Machines in the State Machine Module
+        /// </summary>
+        [Tooltip("All the State Machines that have been created with the State Machine Module")]
+        private List<Machine> machines = new List<Machine>();
+        /// <summary>
+        /// All the State Machine Components that have been created with the State Machine Module
+        /// </summary>
+        [Tooltip("All the State Machine Components that have been created with the State Machine Module")]
+        private List<StateMachineComponent> components = new List<StateMachineComponent>();
 
-		private static StateMachineModule singleton;
+        private static StateMachineModule singleton;
 
-		[RuntimeInitializeOnLoadMethod]
-		public static void Init()
-		{
-			GameObject singletonObject = new GameObject();
-			GameObject.DontDestroyOnLoad(singletonObject);
-			singletonObject.name = "State Machine Module";
-			singleton = singletonObject.AddComponent<StateMachineModule>();
-		}
-
-		/// <summary>
-		/// Update the State Machine Module
-		/// </summary>
-		void Update()
+        [RuntimeInitializeOnLoadMethod]
+        public static void Init()
         {
-            foreach(StateMachineComponent component in components)
+            GameObject singletonObject = new GameObject();
+            DontDestroyOnLoad(singletonObject);
+            singletonObject.name = "State Machine Module";
+            singleton = singletonObject.AddComponent<StateMachineModule>();
+        }
+
+        /// <summary>
+        /// Update the State Machine Module
+        /// </summary>
+        void Update()
+        {
+            foreach (StateMachineComponent component in components)
             {
                 //Get the Current State Hiearchy as a String
                 string asString = component.machine.states.currentNode.GetValuesInHiearchy().ConvertToString('/');
                 //Set the Current State Value as the Hiearchy with the Root Class cut out
-                component.currentState = asString.PopAtIndex(0,'/');
+                component.currentState = asString.PopAtIndex(0, '/');
                 //Set the Watching value (The Class the Component is monitoring) as the Root of the Hiearchy, which is the Root Class for the State Machine
                 component.watching = asString.TokenAt(0, '/');
             }
 
-            foreach(Machine machine in machines)
+            foreach (Machine machine in machines)
             {
                 machine.states.currentNode.value.CallMethod("Update");
             }
@@ -95,7 +95,7 @@ namespace CairoEngine
         {
             StateMachineComponent component = gameObject.AddComponent<StateMachineComponent>();
             component.machine = machine;
-			singleton.components.Add(component);
+            singleton.components.Add(component);
             return component;
         }
 
@@ -119,7 +119,7 @@ namespace CairoEngine
         /// <param name="root">Root.</param>
         private static Machine GetMachine(object root)
         {
-            foreach(Machine machine in singleton.machines)
+            foreach (Machine machine in singleton.machines)
             {
                 if (machine.root == root)
                     return machine;

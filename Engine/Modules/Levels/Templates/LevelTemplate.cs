@@ -4,12 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     [CreateAssetMenu(menuName = "Cairo Game/Gameplay/Level")]
     public class LevelTemplate : ScriptableObject
     {
-		public string ID = "Default";
+        public string ID = "Default";
         public string sceneName = "Test Scene";
     }
 }

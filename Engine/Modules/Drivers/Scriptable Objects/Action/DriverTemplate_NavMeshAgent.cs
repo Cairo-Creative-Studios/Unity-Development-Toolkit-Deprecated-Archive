@@ -2,7 +2,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [CreateAssetMenu(menuName = "Drivers/Action/ANav Mesh Agent", fileName = "[DRIVER] Nav Mesh Agent")]
     public class DriverTemplate_NavMeshAgent : DriverTemplate
@@ -26,7 +26,7 @@ namespace CairoEngine.Drivers
         //Initialize the driver Class for this driver
         private void OnEnable()
         {
-            this.driverProperties.main.driverClass = "CairoEngine.Drivers.NavMeshAgent";
+            this.driverProperties.main.driverClass = "UDT.Drivers.NavMeshAgent";
             SetScriptingEvents("Following, Stopped, Arrived".TokenArray());
         }
     }

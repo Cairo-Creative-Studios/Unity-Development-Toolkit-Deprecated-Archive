@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using CairoData;
-using CairoEngine.Reflection;
+using UDT.Data;
+using UDT.Reflection;
 
-namespace CairoEngine.StateMachine
+namespace UDT.StateMachine
 {
     [Serializable]
     public class State<T>
@@ -52,7 +52,7 @@ namespace CairoEngine.StateMachine
             List<object> activeStates = new List<object>();
             object lastState = tree.currentNode.value;
 
-            for(int i = 0; i < statePath.TokenCount('/'); i++)
+            for (int i = 0; i < statePath.TokenCount('/'); i++)
             {
                 if (exists)
                 {
@@ -63,7 +63,7 @@ namespace CairoEngine.StateMachine
                 else
                 {
                     //If the Requested State wasn't found, call an error set the Active State back to this one and end the Search
-                    Debug.LogError("Given State Path is invalid, the given State Hiearchy does not exist: ("+statePath+")");
+                    Debug.LogError("Given State Path is invalid, the given State Hiearchy does not exist: (" + statePath + ")");
                     tree.currentNode = node;
                     return;
                 }
@@ -83,7 +83,7 @@ namespace CairoEngine.StateMachine
         {
             Node<object>[] hiearchy = node.GetHiearchy();
 
-            foreach(Node<object> parent in hiearchy)
+            foreach (Node<object> parent in hiearchy)
             {
                 return parent.value.GetField(fieldName);
             }

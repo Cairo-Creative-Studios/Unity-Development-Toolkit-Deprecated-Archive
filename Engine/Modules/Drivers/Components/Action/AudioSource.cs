@@ -3,7 +3,7 @@
 using System;
 using UnityEngine;
 
-namespace CairoEngine.Drivers
+namespace UDT.Drivers
 {
     [Serializable]
     public class AudioSource : Driver<DriverTemplate_AudioSource>
@@ -15,11 +15,11 @@ namespace CairoEngine.Drivers
             //Initialize the Audio Source Component
             audioSource = (UnityEngine.AudioSource)GetProperty("audioSourceComponent");
 
-            if(audioSource == null)
+            if (audioSource == null)
             {
                 audioSource = (UnityEngine.AudioSource)SetProperty("audioSourceComponent", rootTransform.Find(template.audioSourcePath).gameObject.GetComponent<UnityEngine.AudioSource>());
-            
-                if(audioSource == null)
+
+                if (audioSource == null)
                 {
                     audioSource = (UnityEngine.AudioSource)SetProperty("audioSourceComponent", rootTransform.Find(template.audioSourcePath).gameObject.AddComponent<UnityEngine.AudioSource>());
                 }
@@ -42,7 +42,7 @@ namespace CairoEngine.Drivers
         public void PlayOneShot(string clipName)
         {
             if (template.audioClips.ContainsKey(clipName))
-                audioSource.PlayOneShot(template.audioClips[clipName][UnityEngine.Random.Range(0, template.audioClips[clipName].Count-1)]);
+                audioSource.PlayOneShot(template.audioClips[clipName][UnityEngine.Random.Range(0, template.audioClips[clipName].Count - 1)]);
         }
     }
 }

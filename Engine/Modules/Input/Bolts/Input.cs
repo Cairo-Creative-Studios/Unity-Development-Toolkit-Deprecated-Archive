@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 
 #if ENABLE_INPUT_SYSTEM
-namespace CairoEngine
+namespace UDT
 {
     [Serializable]
     public class Input
@@ -27,7 +27,7 @@ namespace CairoEngine
     }
 }
 #elif ENABLE_LEGACY_INPUT_MANAGER
-namespace CairoEngine
+namespace UDT
 {
     public class Input
     {

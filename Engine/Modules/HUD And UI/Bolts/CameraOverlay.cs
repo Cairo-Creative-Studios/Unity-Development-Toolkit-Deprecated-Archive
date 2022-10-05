@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine.UI
+namespace UDT.UI
 {
     [Serializable]
     public class CameraOverlay

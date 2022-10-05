@@ -11,7 +11,7 @@ public static class String_Ops
     /// <returns>The <see cref="T:System.String"/>.</returns>
     /// <param name="checkedString">The string we're searching for a Token.</param>
     /// <param name="index">The Index to find the token at.</param>
-    /// <param name="seperater">What character Seperated Tokens in the String?.</param>
+    /// <param name="itemDelimiter">What character Seperated Tokens in the String?.</param>
     public static string TokenAt(this string checkedString, int index, char itemDelimiter = ',')
     {
         char[] characters = checkedString.ToCharArray();
@@ -19,9 +19,9 @@ public static class String_Ops
         int token = 0;
         string returnValue = "";
 
-        foreach(char character in characters)
+        foreach (char character in characters)
         {
-            if(token == index)
+            if (token == index)
             {
                 if (character == itemDelimiter)
                     break;
@@ -43,7 +43,7 @@ public static class String_Ops
     /// </summary>
     /// <returns>The count.</returns>
     /// <param name="checkedString">Checked string.</param>
-    /// <param name="seperater">Seperater.</param>
+    /// <param name="itemDelimiter">Seperater.</param>
     public static int TokenCount(this string checkedString, char itemDelimiter = ',')
     {
         char[] characters = checkedString.ToCharArray();
@@ -63,13 +63,13 @@ public static class String_Ops
     /// Gets an Array of Tokens from the given String
     /// </summary>
     /// <returns>The array.</returns>
-    /// <param name="checkedString">Checked string.</param>
-    /// <param name="seperater">Seperater.</param>
+    /// <param name="listString">Checked string.</param>
+    /// <param name="itemDelimiter">Seperater.</param>
     public static string[] TokenArray(this string listString, char itemDelimiter = ',')
     {
         List<string> tokens = new List<string>();
 
-        for(int i = 0; i < TokenCount(listString, itemDelimiter); i++)
+        for (int i = 0; i < TokenCount(listString, itemDelimiter); i++)
         {
             tokens.Add(listString.TokenAt(i, itemDelimiter));
         }
@@ -86,7 +86,7 @@ public static class String_Ops
     {
         string returnedString = "";
 
-        for(int i = 0; i < listString.TokenCount(itemDelimiter);i++)
+        for (int i = 0; i < listString.TokenCount(itemDelimiter); i++)
         {
             if (i == index)
                 returnedString = returnedString + value;
@@ -113,13 +113,13 @@ public static class String_Ops
     {
         string returnedString = "";
 
-        for(int i = 0; i < listString.TokenCount(itemDelimiter); i++)
+        for (int i = 0; i < listString.TokenCount(itemDelimiter); i++)
         {
             if (i != index)
             {
                 returnedString = returnedString + listString.TokenAt(i, itemDelimiter);
 
-                if (i != listString.TokenCount(itemDelimiter)-1)
+                if (i != listString.TokenCount(itemDelimiter) - 1)
                     returnedString = returnedString + itemDelimiter;
             }
         }
@@ -158,7 +158,7 @@ public static class String_Ops
         string result = "";
         bool start = true;
 
-        foreach(T1 item in dictionary)
+        foreach (T1 item in dictionary)
         {
             if (!start)
                 result = result + ", ";

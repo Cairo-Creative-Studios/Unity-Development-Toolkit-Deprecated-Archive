@@ -1,8 +1,8 @@
 ﻿using System;
-namespace CairoEngine.SaveSystem
+namespace UDT.SaveSystem
 {
-	public class ProfileTemplate
-	{
-		public string ID = "Default";
-	}
+    public class ProfileTemplate
+    {
+        public string ID = "Default";
+    }
 }

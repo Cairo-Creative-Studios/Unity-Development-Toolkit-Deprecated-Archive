@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CairoEngine.UI
+namespace UDT.UI
 {
-    [CreateAssetMenu(menuName ="Cairo Game/UI Template")]
+    [CreateAssetMenu(menuName = "Cairo Game/UI Template")]
     public class UITemplate : ScriptableObject
     {
-		public string ID = "Default";
+        public string ID = "Default";
         /// <summary>
         /// The UXML files to use for rendering the UI.
         /// </summary>

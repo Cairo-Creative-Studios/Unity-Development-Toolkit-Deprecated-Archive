@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoData
+namespace UDT.Data
 {
     [Serializable]
     public class Tree<T>
@@ -86,9 +86,9 @@ namespace CairoData
             {
                 Node<T>[] nodeArray = ToArray();
 
-                foreach(Node<T> node in nodeArray)
+                foreach (Node<T> node in nodeArray)
                 {
-                    if((object)node.value == (object)nodeValue)
+                    if ((object)node.value == (object)nodeValue)
                     {
                         return node;
                     }
@@ -104,14 +104,14 @@ namespace CairoData
         /// <param name="root">Root.</param>
         public Tree(T root)
         {
-            rootNode = new Node<T>(this, root, null, new int[]{0});
+            rootNode = new Node<T>(this, root, null, new int[] { 0 });
             currentNode = rootNode;
         }
 
         //todo: Finish Operation Methods
         public bool StepBack()
         {
-            if(currentNode.parent != null)
+            if (currentNode.parent != null)
             {
                 currentNode = currentNode.parent;
                 return true;
@@ -142,7 +142,7 @@ namespace CairoData
         {
             Node<T> lastNode = currentNode;
 
-            foreach(Node<T> node in lastNode.children)
+            foreach (Node<T> node in lastNode.children)
             {
                 if ((object)node.value == (object)value)
                 {
@@ -162,7 +162,7 @@ namespace CairoData
         {
             Node<T> lastNode = currentNode;
 
-            foreach (Node<T>  node in lastNode.children)
+            foreach (Node<T> node in lastNode.children)
             {
                 if (node.value.ToString() == valueToString)
                 {
@@ -190,7 +190,7 @@ namespace CairoData
             bool searchedRoot = false;
 
             Node<T> curNode = null;
-            
+
             foreach (int token in index)
             {
                 if (!searchedRoot)
@@ -198,8 +198,8 @@ namespace CairoData
                     curNode = rootNode;
                 }
                 else
-                    if(curNode.children.Count>token)
-                        curNode = curNode.GetNode(token);
+                    if (curNode.children.Count > token)
+                    curNode = curNode.GetNode(token);
 
                 searchedRoot = true;
             }
@@ -236,7 +236,7 @@ namespace CairoData
         {
             string result = "";
             result = result + "{\n\t\"tree\": [\n\t\t";
-            result = StringifyNode(result, 0, rootNode)+"\n\t]\n}";
+            result = StringifyNode(result, 0, rootNode) + "\n\t]\n}";
             return result;
 
         }
@@ -250,9 +250,9 @@ namespace CairoData
         /// <param name="node">Node.</param>
         private string StringifyNode(string result, int depth, Node<T> node)
         {
-            result = result + "\n"+"\t".MultiplyString(depth+2)+"{\n"+ "\t".MultiplyString(depth + 2)+node.value.ToString();
+            result = result + "\n" + "\t".MultiplyString(depth + 2) + "{\n" + "\t".MultiplyString(depth + 2) + node.value.ToString();
 
-            foreach(Node<T> child in node.children)
+            foreach (Node<T> child in node.children)
             {
                 result = result + ":";
                 StringifyNode(result, depth++, child);
@@ -270,11 +270,11 @@ namespace CairoData
         /// <param name="node">Node.</param>
         private void AddChildren(List<Node<T>> list, Node<T> node)
         {
-            foreach(Node<T> child in node.children)
+            foreach (Node<T> child in node.children)
             {
                 list.Add(child);
             }
-            foreach(Node<T> child in node.children)
+            foreach (Node<T> child in node.children)
             {
                 AddChildren(list, child);
             }

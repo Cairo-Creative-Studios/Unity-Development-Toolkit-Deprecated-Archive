@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using CairoEngine.AssetScripting;
+using UDT.AssetScripting;
 
-namespace CairoEngine.UI
+namespace UDT.UI
 {
     public class UIComponent : MonoBehaviour
     {

@@ -3,13 +3,13 @@
  *  @{
  */
 
- //Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
+//Script Developed for The Cairo Engine, by Richy Mackro (Chad Wolfe), on behalf of Cairo Creative Studios
 
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CairoEngine
+namespace UDT
 {
     /// <summary>
     /// Simplifies Unity Input Systems, by mapping both the default Input System and the new one, to a vastly simplified system, that's built to be easily applicable to any gameplay scenario.
@@ -26,7 +26,7 @@ namespace CairoEngine
             //Preload all Input Maps in the Project
             inputMaps.AddRange(Resources.LoadAll<InputMap>(""));
 
-            foreach(InputMap inputMap in inputMaps)
+            foreach (InputMap inputMap in inputMaps)
             {
                 foreach (Input inputValue in inputMap.inputs.Values)
                 {
@@ -78,7 +78,7 @@ namespace CairoEngine
         /// <param name="ID">Identifier.</param>
         private static InputMap GetInputMap(string ID)
         {
-            foreach(InputMap inputMap in inputMaps)
+            foreach (InputMap inputMap in inputMaps)
             {
                 if (inputMap.mapID == ID)
                     return inputMap;
